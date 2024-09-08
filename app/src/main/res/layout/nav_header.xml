@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="176dp"
+    android:gravity="bottom"
+    android:padding="16dp"
+    android:background="@color/custom_bg"
+    android:theme="@style/ThemeOverlay.AppCompat.Dark">
+
+    <ImageView
+        android:layout_width="87dp"
+        android:layout_height="87dp"
+        android:src="@drawable/logogym" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="WMROGER"
+        android:textColor="@color/white"
+        android:textStyle="bold"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Luva.jimenez.swu@phinmaed.com"
+        android:textColor="@color/white"
+        android:textSize="14sp"
+        android:layout_marginBottom="16dp"/>
+
+</LinearLayout>
