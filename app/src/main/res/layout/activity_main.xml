@@ -8,7 +8,7 @@
     android:layout_height="match_parent"
     android:background="#1E1E1E"
     android:fitsSystemWindows="true"
-    tools:context=".MainActivity"
+    tools:context=".Heavy_Metals.Home_LandingPage.MainActivity"
     tools:openDrawer="start">
 
     <!-- Main Content Layout -->

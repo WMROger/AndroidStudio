@@ -1,4 +1,4 @@
-package com.example.navigationdrawer;
+package com.example.navigationdrawer.Heavy_Metals.Home_LandingPage;
 
 import com.example.navigationdrawer.R;
 
@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
 
-        toggle.getDrawerArrowDrawable().setColor(getResources().getColor(R.color.custom_orange)); // Set to white
+        toggle.getDrawerArrowDrawable().setColor(getResources().getColor(R.color.custom_orange));
 
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new HomeFragment()).commit();
