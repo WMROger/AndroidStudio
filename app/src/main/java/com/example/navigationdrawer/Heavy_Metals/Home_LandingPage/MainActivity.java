@@ -1,5 +1,6 @@
-package com.example.navigationdrawer;
+package com.example.navigationdrawer.Heavy_Metals.Home_LandingPage;
 
+import com.example.navigationdrawer.Heavy_Metals.Login_RegisterPage.AuthenticationActivity;
 import com.example.navigationdrawer.R;
 
 import androidx.annotation.NonNull;
@@ -9,6 +10,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -35,7 +37,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
 
-        toggle.getDrawerArrowDrawable().setColor(getResources().getColor(R.color.custom_orange)); // Set to white
+        toggle.getDrawerArrowDrawable().setColor(getResources().getColor(R.color.custom_orange));
 
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new HomeFragment()).commit();
@@ -60,6 +62,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FaqFragment()).commit();
         } else if (itemId == R.id.nav_logout) {
             Toast.makeText(this, "Logout!", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(MainActivity.this, AuthenticationActivity.class);
+            startActivity(intent);
         }
 
         drawerLayout.closeDrawer(GravityCompat.START);
