@@ -15,6 +15,6 @@
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
         <!--DEFAULT FONT FAMILY STYLE-->
-        <item name="android:fontFamily">@font/koulen</item>
+        <item name="android:fontFamily">@font/konkhmer_sleokchher</item>
     </style>
 </resources>

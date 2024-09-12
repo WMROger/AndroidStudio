@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <shape xmlns:android="http://schemas.android.com/apk/res/android">
     <!-- Background color -->
-    <solid android:color="#000000" /> <!-- Black background -->
+    <solid android:color="@color/custom_bg" /> <!-- Black background -->
 
     <!-- Border with orange color -->
     <stroke
         android:width="2dp"
-        android:color="#FFA500" /> <!-- Orange color for the corners -->
+        android:color="@color/custom_orange" /> <!-- Orange color for the corners -->
 
     <!-- Corner radius for rounded edges -->
     <corners android:radius="16dp" /> <!-- Same radius as the button -->

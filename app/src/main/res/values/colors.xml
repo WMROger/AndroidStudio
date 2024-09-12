@@ -10,4 +10,6 @@
     <color name="lavender">#8692f7</color>
     <color name="custom_orange">#DE612B</color>
     <color name="custom_bg">#1E1E1E</color>
+    <color name="colorHover">#FF0000</color> <!-- Change to your desired hover color -->
+    <color name="gray">#808080</color>
 </resources>

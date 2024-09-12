@@ -42,5 +42,13 @@ public class AuthenticationActivity extends AppCompatActivity {
             startActivity(intent);
             finish();
         });
+
+        registerButton.setOnClickListener(v -> {
+            // Perform login operation
+            // After successful login, transition to MainActivity
+            Intent intent = new Intent(AuthenticationActivity.this, RegisterActivity.class);
+            startActivity(intent);
+            finish();
+        });
     }
 }

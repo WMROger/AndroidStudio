@@ -3,6 +3,6 @@
     <font
         android:fontStyle="normal"
         android:fontWeight="400"
-        android:font="@font/koulen" />
+        android:font="@font/konkhmer_sleokchher" />
     <!-- Add bold, italic, etc., if needed -->
 </font-family>
