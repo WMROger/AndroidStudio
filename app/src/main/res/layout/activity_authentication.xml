@@ -15,10 +15,23 @@
         android:layout_height="990dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.517"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.501"
         app:srcCompat="@drawable/loginpage" />
+
+    <TextView
+        android:id="@+id/textView9"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:letterSpacing="-0.1"
+        android:text="__________________________________________________________________"
+        android:textColor="@color/custom_orange"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/Auth_login_button"
+        app:layout_constraintVertical_bias="0.3" />
 
     <TextView
         android:id="@+id/textView"
@@ -49,15 +62,14 @@
         android:id="@+id/Auth_register_button"
         android:layout_width="360dp"
         android:layout_height="53dp"
-        android:layout_marginBottom="168dp"
         android:letterSpacing="0.00000001"
         android:text="SIGN UP"
         android:textColor="#000000"
         android:textSize="20sp"
         app:cornerRadius="10dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/textView3"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.509"
+        app:layout_constraintHorizontal_bias="0.49"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView5"
         app:layout_constraintVertical_bias="1.0" />
@@ -66,49 +78,47 @@
         android:id="@+id/textView11"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="-5dp"
-        android:text="ALREADY HAVE AN ACCOUNT?"
+        android:text="DON'T HAVE AN ACCOUNT?"
         android:textColor="@color/white"
         android:textSize="13sp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/Auth_register_button"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/Auth_register_button"
-        app:layout_constraintVertical_bias="0.034" />
+        app:layout_constraintTop_toBottomOf="@+id/Auth_login_button"
+        app:layout_constraintVertical_bias="1.0" />
 
     <Button
         android:id="@+id/Auth_login_button"
         android:layout_width="360dp"
         android:layout_height="53dp"
-        android:layout_marginBottom="72dp"
         android:letterSpacing="0.00000001"
         android:text="LOG IN"
         android:textColor="#000000"
         android:textSize="20sp"
-        app:cornerRadius="10dp"
+        app:cornerRadius="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.49"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView11"
-        app:layout_constraintVertical_bias="0.4" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.741" />
 
     <TextView
         android:id="@+id/textView3"
         android:layout_width="352dp"
         android:layout_height="46dp"
         android:gravity="center"
-        android:lineSpacingExtra="-10sp"
-        android:text="by Continuing, you acknowledge that you have accepted our terms of services and privacy"
+        android:lineSpacingExtra="-8sp"
+        android:text="BY CONTINUING, YOU ACKNOWLEDGE THAT YOU HAVE ACCEPTED OUR TERMS OF SERVICES AND PRIVACY."
         android:textColor="@color/white"
-        android:textSize="13sp"
+        android:textSize="10sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.491"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/Auth_login_button"
-        app:layout_constraintVertical_bias="0.567" />
+        app:layout_constraintVertical_bias="0.875" />
     />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

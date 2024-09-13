@@ -5,4 +5,39 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="underline_signup"><u>Sign up</u></string>
     <string name="terms_conditions"><u>Terms and Conditions</u></string>
+    <string name="terms_and_conditions_1">The Heavy Metal App is designed to provide guidance and support for physical exercise and general fitness goals. However, the content provided, including workout routines, nutritional advice, and health tips, is for informational purposes only and should not be considered a substitute for professional medical advice, diagnosis, or treatment.
+    \n\nBefore starting any fitness program, consult a qualified healthcare provider, especially if you have any pre-existing medical conditions or concerns.
+
+    \n\nBy using the app, you acknowledge that engaging in physical activities carries inherent risks, including but not limited to injury, strain, or physical discomfort. The app and its developers are not liable for any injuries, health problems, or other damages that may occur
+as a result of your use of the app.
+
+\n\nSafety Instructions:
+
+\n\nConsult Your Doctor: Before beginning any new fitness program, especially if you have medical conditions, injuries, or are new to exercise, consult with a healthcare professional.
+
+\n\nWarm Up and Cool Down: Always warm up before and cool down after your workouts to prevent injury.
+
+\n\nListen to Your Body: If you experience pain, dizziness, shortness of breath, or discomfort, stop immediately and seek medical advice.
+
+\n\nStay Hydrated: Drink plenty of water before, during, and after exercise.
+
+\n\nUse Proper Form: Follow the app’s instructions carefully to maintain correct posture and technique during exercises.
+
+\n\nProgress Gradually: Start with beginner levels if you are new to fitness, and gradually increase the intensity and duration of workouts as your strength and endurance improve.
+
+\n\nUse Appropriate Equipment: Ensure that you have the right fitness equipment and that it is in good condition to avoid injury.
+
+\n\nBe Aware of Your Surroundings: If performing exercises outdoors or in shared spaces, ensure you have enough room and a safe environment to avoid accidents.
+
+\n\nBy proceeding with the use of this app, you agree to do so at your own risk.
+    </string>
+<string name="ConfirmationTnC">I Confirm I  have read and understood this disclaimer</string>
+    <string name="Profile_Add"><u>Add a Profile Picture</u></string>
+
+
+
+
+
+
+    <string name="Disclaimer">Disclaimer &amp; Safety \nInstructions</string>
 </resources>
