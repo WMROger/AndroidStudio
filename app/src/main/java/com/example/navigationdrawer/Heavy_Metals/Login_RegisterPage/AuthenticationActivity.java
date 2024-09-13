@@ -11,8 +11,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import com.example.navigationdrawer.Heavy_Metals.Home_LandingPage.HomeFragment;
-import com.example.navigationdrawer.Heavy_Metals.Home_LandingPage.MainActivity;
+import com.example.navigationdrawer.Heavy_Metals.Login_RegisterPage.RegisterPage.RegisterActivity;
 import com.example.navigationdrawer.R;
 
 public class AuthenticationActivity extends AppCompatActivity {
