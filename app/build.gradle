@@ -1,0 +1,52 @@
+plugins {
+    id 'com.android.application' version '8.5.2'
+}
+
+android {
+    namespace 'com.example.heavymetals'
+    compileSdk 34
+
+    defaultConfig {
+        applicationId "com.example.heavymetals"
+        minSdk 24
+        targetSdk 34
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+dependencies {
+    // AndroidX libraries
+    implementation libs.appcompat.v131
+    implementation libs.material.v140
+    implementation libs.activity.v123
+    implementation libs.constraintlayout.v210
+
+    // Retrofit for network calls
+    implementation libs.retrofit
+    // Gson for JSON parsing
+    implementation libs.converter.gson
+
+    // Volley for networking (optional, if needed)
+    implementation libs.volley
+
+    // Testing dependencies
+    implementation libs.material.v190
+
+    testImplementation libs.junit
+    androidTestImplementation libs.junit.v113
+    androidTestImplementation libs.espresso.core.v340
+}
