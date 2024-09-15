@@ -1,0 +1,282 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_gradient"
+    tools:context=".profile_fitnessDeclaration">
+
+
+    <LinearLayout
+        android:id="@+id/linearLayout4"
+        android:layout_width="307dp"
+        android:layout_height="28dp"
+
+
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.032">
+
+
+        <TextView
+            android:id="@+id/textView1"
+            android:layout_width="71dp"
+            android:layout_height="30dp"
+            android:layout_weight="1"
+            android:letterSpacing="-0.1"
+            android:text="__________________________________________________________________"
+            android:textColor="@color/gray_orange"
+            android:textStyle="bold" />
+
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="71dp"
+            android:layout_height="30dp"
+            android:layout_marginLeft="20dp"
+            android:layout_weight="1"
+            android:letterSpacing="-0.1"
+            android:text="__________________________________________________________________"
+            android:textColor="@color/custom_orange"
+            android:textStyle="bold" />
+
+
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="71dp"
+            android:layout_height="30dp"
+            android:layout_marginLeft="20dp"
+            android:layout_weight="1"
+            android:letterSpacing="-0.1"
+            android:text="__________________________________________________________________"
+            android:textColor="@color/gray_orange"
+            android:textStyle="bold" />
+
+
+        <TextView
+            android:id="@+id/textView4"
+            android:layout_width="71dp"
+            android:layout_height="30dp"
+            android:layout_marginLeft="20dp"
+            android:layout_weight="1"
+            android:letterSpacing="-0.1"
+            android:text="__________________________________________________________________"
+            android:textColor="@color/gray_orange"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+
+    <TextView
+        android:id="@+id/textView24"
+        android:layout_width="320dp"
+        android:layout_height="49dp"
+        android:layout_marginTop="124dp"
+        android:gravity="center"
+        android:text="Please select the following goals you want to achieve:"
+        android:textColor="@color/white"
+        android:textSize="13sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.51"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <TextView
+        android:id="@+id/textView22"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="120dp"
+        android:fontFamily="@font/konkhmer_sleokchher"
+        android:text="What are your Goals?"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@+id/textView24"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0" />
+
+
+    <LinearLayout
+        android:id="@+id/linearLayout3"
+        android:layout_width="333dp"
+        android:layout_height="445dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView24"
+        app:layout_constraintVertical_bias="0.0">
+
+
+        <Button
+            android:id="@+id/button"
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:layout_marginTop="2dp"
+            android:backgroundTint="#000000"
+            android:clickable="true"
+            android:fontFamily="@font/konkhmer_sleokchher"
+            android:includeFontPadding="false"
+            android:paddingLeft="16dp"
+            android:paddingTop="16dp"
+            android:paddingRight="0dp"
+            android:paddingBottom="16dp"
+            android:text="Lose Weight"
+            android:textAlignment="viewStart"
+            android:textAllCaps="false"
+            app:cornerRadius="10dp"
+            app:icon="@drawable/lose_weight_bar_icon"
+            app:iconTint="#DE612B"
+            app:strokeColor="#DE612B"
+            app:strokeWidth="1dp" />
+
+
+        <Button
+            android:id="@+id/button6"
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:layout_marginTop="2dp"
+            android:backgroundTint="#000000"
+            android:fontFamily="@font/konkhmer_sleokchher"
+            android:includeFontPadding="false"
+            android:paddingLeft="16dp"
+            android:paddingTop="16dp"
+            android:paddingRight="0dp"
+            android:paddingBottom="16dp"
+            android:text="Increase Strength"
+            android:textAlignment="viewStart"
+            android:textAllCaps="false"
+            app:cornerRadius="10dp"
+            app:icon="@drawable/increase_strength"
+            app:iconTint="#DE612B"
+            app:strokeColor="#DE612B"
+            app:strokeWidth="1dp" />
+
+
+        <Button
+            android:id="@+id/button7"
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:layout_marginTop="2dp"
+            android:backgroundTint="#000000"
+            android:fontFamily="@font/konkhmer_sleokchher"
+            android:includeFontPadding="false"
+            android:paddingLeft="16dp"
+            android:paddingTop="16dp"
+            android:paddingRight="0dp"
+            android:paddingBottom="16dp"
+            android:text="Build Muscle"
+            android:textAlignment="viewStart"
+            android:textAllCaps="false"
+            android:textIsSelectable="false"
+            app:cornerRadius="10dp"
+            app:icon="@drawable/build_muscle"
+            app:iconTint="#DE612B"
+            app:strokeColor="#DE612B"
+            app:strokeWidth="1dp" />
+
+
+        <Button
+            android:id="@+id/button8"
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:layout_marginTop="2dp"
+            android:backgroundTint="#000000"
+            android:fontFamily="@font/konkhmer_sleokchher"
+            android:includeFontPadding="false"
+            android:paddingLeft="16dp"
+            android:paddingTop="16dp"
+            android:paddingRight="0dp"
+            android:paddingBottom="16dp"
+            android:text="Mobility"
+            android:textAlignment="viewStart"
+            android:textAllCaps="false"
+            app:cornerRadius="10dp"
+            app:icon="@drawable/mobility"
+            app:iconTint="#DE612B"
+            app:strokeColor="#DE612B"
+            app:strokeWidth="1dp" />
+
+
+        <Button
+            android:id="@+id/button9"
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:layout_marginTop="2dp"
+            android:backgroundTint="#000000"
+            android:fontFamily="@font/konkhmer_sleokchher"
+            android:includeFontPadding="false"
+            android:paddingLeft="16dp"
+            android:paddingTop="16dp"
+            android:paddingRight="0dp"
+            android:paddingBottom="16dp"
+            android:text="Wellness and Reduce Stress"
+            android:textAlignment="viewStart"
+            android:textAllCaps="false"
+            app:cornerRadius="10dp"
+            app:icon="@drawable/wellness_and_reduce_stress"
+            app:iconTint="#DE612B"
+            app:strokeColor="#DE612B"
+            app:strokeWidth="1dp" />
+
+
+        <Button
+            android:id="@+id/button14"
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:layout_marginTop="2dp"
+            android:backgroundTint="#000000"
+            android:fontFamily="@font/konkhmer_sleokchher"
+            android:includeFontPadding="false"
+            android:paddingLeft="16dp"
+            android:paddingTop="16dp"
+            android:paddingRight="0dp"
+            android:paddingBottom="16dp"
+            android:text="Fitness"
+            android:textAlignment="viewStart"
+            android:textAllCaps="false"
+            app:cornerRadius="10dp"
+            app:icon="@drawable/functional_fitness"
+            app:iconTint="#DE612B"
+            app:strokeColor="#DE612B"
+            app:strokeWidth="1dp" />
+
+
+    </LinearLayout>
+
+
+    <TextView
+        android:id="@+id/textView21"
+        android:layout_width="347dp"
+        android:layout_height="26dp"
+        android:layout_weight="1"
+        android:letterSpacing="-0.1"
+        android:text="__________________________________________________________________"
+        android:textColor="@color/custom_orange"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.876" />
+
+
+    <Button
+        android:id="@+id/btnPFDnext"
+        android:layout_width="265dp"
+        android:layout_height="49dp"
+        android:layout_marginBottom="36dp"
+        android:text="Next"
+        app:cornerRadius="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

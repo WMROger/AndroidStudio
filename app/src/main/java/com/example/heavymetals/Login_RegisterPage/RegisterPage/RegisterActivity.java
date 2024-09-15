@@ -30,7 +30,7 @@ import org.json.JSONObject;
 
 public class RegisterActivity extends AppCompatActivity {
     EditText firstName, lastName, email, passwordEditText, passwordConfirmationEditText;
-    TextView loginTxt;
+    TextView loginTxt,TnC;
     Button btnDone;
     String url_register = "https://heavymetals.scarlet2.io/HeavyMetals/register_user.php";// Your registration URL
 
@@ -39,6 +39,7 @@ public class RegisterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
+        TnC = findViewById(R.id.Signup_Terms_Conditions);
         firstName = findViewById(R.id.Signup_FirstName);
         lastName = findViewById(R.id.Signup_LastName);
         email = findViewById(R.id.Signup_Email);
@@ -61,9 +62,16 @@ public class RegisterActivity extends AppCompatActivity {
         });
 
 
+
         // Login button/text function
         loginTxt.setOnClickListener(v -> {
             Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
+            startActivity(intent);
+            finish();
+        });
+
+        TnC.setOnClickListener(v -> {
+            Intent intent = new Intent(RegisterActivity.this, TermsConditionsActivity.class);
             startActivity(intent);
             finish();
         });
@@ -71,87 +79,104 @@ public class RegisterActivity extends AppCompatActivity {
 
     private boolean validateInputs(String firstName, String lastName, String email, String password, String passwordConfirmation) {
         if (firstName.isEmpty() || lastName.isEmpty() || email.isEmpty() || password.isEmpty() || passwordConfirmation.isEmpty()) {
+            Log.d("RegisterActivity", "Validation Error: All fields are required.");
             Toast.makeText(this, "All fields are required.", Toast.LENGTH_SHORT).show();
             return false;
         }
 
         if (!firstName.matches("[a-zA-Z ]+")) {
+            Log.d("RegisterActivity", "Validation Error: Invalid first name.");
             Toast.makeText(this, "First name can only contain letters.", Toast.LENGTH_SHORT).show();
             return false;
         }
 
         if (!lastName.matches("[a-zA-Z ]+")) {
+            Log.d("RegisterActivity", "Validation Error: Invalid last name.");
             Toast.makeText(this, "Last name can only contain letters.", Toast.LENGTH_SHORT).show();
             return false;
         }
 
         if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            Log.d("RegisterActivity", "Validation Error: Invalid email address.");
             Toast.makeText(this, "Invalid email address.", Toast.LENGTH_SHORT).show();
             return false;
         }
 
         if (password.length() < 8) {
+            Log.d("RegisterActivity", "Validation Error: Password too short.");
             Toast.makeText(this, "Password must be at least 8 characters long.", Toast.LENGTH_SHORT).show();
             return false;
         }
 
         if (!password.equals(passwordConfirmation)) {
+            Log.d("RegisterActivity", "Validation Error: Passwords do not match.");
             Toast.makeText(this, "Passwords do not match.", Toast.LENGTH_SHORT).show();
             return false;
         }
-        Log.d("RegisterActivity", "First Name: " + firstName);
-        Log.d("RegisterActivity", "Last Name: " + lastName);
-        Log.d("RegisterActivity", "Email: " + email);
-        Log.d("RegisterActivity", "Password: " + password);
-        Log.d("RegisterActivity", "Password Confirmation: " + passwordConfirmation);
 
         return true;
     }
+
 
     private void registerUser(String firstName, String lastName, String email, String password, String passwordConfirmation) {
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url_register,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        Log.d("RegisterActivity", "Server Response: " + response);
-
                         try {
-                            JSONObject jsonResponse = new JSONObject(response);
-                            boolean success = jsonResponse.getInt("success") == 1;
-                            String message = jsonResponse.getString("message");
+                            // Log the full server response for debugging
+                            Log.d("RegisterResponse", "Server Response: " + response);
 
-                            if (success) {
+                            // Parse the response to JSON
+                            JSONObject jsonResponse = new JSONObject(response);
+
+                            // Extract 'success' and 'message' fields
+                            int success = jsonResponse.optInt("success", 0);
+                            String message = jsonResponse.optString("message", "No message provided");
+
+                            // Log the parsed response details
+                            Log.d("RegisterActivity", "Success: " + success + ", Message: " + message);
+
+                            // Handle the response based on success flag
+                            if (success == 1) {
                                 // Registration successful
                                 Toast.makeText(RegisterActivity.this, "Registration Successful", Toast.LENGTH_LONG).show();
                                 Intent intent = new Intent(RegisterActivity.this, TermsConditionsActivity.class);
                                 startActivity(intent);
                                 finish();
                             } else {
-                                // Registration failed or email already taken
+                                // Registration failed (e.g., email already taken)
+                                Log.d("RegisterActivity", "Registration failed with message: ");
                                 Toast.makeText(RegisterActivity.this, message, Toast.LENGTH_LONG).show();
 
-                                // Optionally, you can redirect to LoginActivity if you want
-                                // Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
-                                // startActivity(intent);
-                                // finish();
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
                             Toast.makeText(RegisterActivity.this, "Error parsing server response.", Toast.LENGTH_LONG).show();
+                            Log.e("RegisterActivity", "Error parsing JSON response", e);
+
                         }
                     }
+
+
+
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
+                        // Log the error details
                         String errorMessage = (error.networkResponse != null && error.networkResponse.data != null)
                                 ? new String(error.networkResponse.data) : error.getMessage();
 
-                        Toast.makeText(RegisterActivity.this, "Error: " + errorMessage, Toast.LENGTH_LONG).show();
                         Log.e("RegisterActivity", "Volley Error: " + errorMessage);
+
+                        // Display error message
+                        Toast.makeText(RegisterActivity.this, "Error: " + errorMessage, Toast.LENGTH_LONG).show();
                     }
+
                 }
         ) {
+
             @Override
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<>();
@@ -164,9 +189,8 @@ public class RegisterActivity extends AppCompatActivity {
             }
         };
 
+
         RequestQueue queue = Volley.newRequestQueue(this);
         queue.add(stringRequest);
     }
-
-
 }

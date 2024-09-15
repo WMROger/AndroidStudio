@@ -2,6 +2,7 @@ package com.example.heavymetals.Login_RegisterPage.RegisterPage;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 
@@ -12,6 +13,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.heavymetals.Login_RegisterPage.AuthenticationActivity;
+import com.example.heavymetals.Login_RegisterPage.RegisterPage.ProfileCreation.FitnessDeclaration;
 import com.example.heavymetals.Login_RegisterPage.RegisterPage.ProfileCreation.ProfileCreation;
 import com.example.heavymetals.R;
 
@@ -42,9 +44,12 @@ public class TermsConditionsActivity extends AppCompatActivity {
         });
 
         //button to go next
-        tncIagree.setOnClickListener(view -> {
-            Intent intent = new Intent(TermsConditionsActivity.this, ProfileCreation.class);
-           startActivity(intent);
+        tncIagree.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(TermsConditionsActivity.this, FitnessDeclaration.class);
+                startActivity(intent);
+            }
         });
     }
 }

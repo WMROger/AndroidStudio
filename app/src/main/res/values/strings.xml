@@ -31,12 +31,8 @@ as a result of your use of the app.
 
 \n\nBy proceeding with the use of this app, you agree to do so at your own risk.
     </string>
-<string name="ConfirmationTnC">I Confirm I  have read and understood this disclaimer</string>
+    <string name="ConfirmationTnC">I Confirm I  have read and understood this disclaimer</string>
     <string name="Profile_Add"><u>Add a Profile Picture</u></string>
-
-
-
-
 
 
     <string name="Disclaimer">Disclaimer &amp; Safety \nInstructions</string>
