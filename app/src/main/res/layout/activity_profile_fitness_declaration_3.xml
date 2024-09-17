@@ -78,7 +78,7 @@
 
 
         <TextView
-            android:id="@+id/textView3"
+            android:id="@+id/Fitness_Declaration_2"
             android:layout_width="71dp"
             android:layout_height="30dp"
             android:layout_marginLeft="20dp"
