@@ -103,7 +103,7 @@ public class RegisterActivity extends AppCompatActivity {
 
         if (password.length() < 6) {
             Log.d("RegisterActivity", "Validation Error: Password too short.");
-            Toast.makeText(this, "Password must be at least 8 characters long.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Password must be at least 6 characters long.", Toast.LENGTH_SHORT).show();
             return false;
         }
 
@@ -152,7 +152,10 @@ public class RegisterActivity extends AppCompatActivity {
                             } catch (JSONException e) {
                                 // Handle JSON parsing errors
                                 Log.e("RegisterActivity", "Error parsing JSON response", e);
-                                Toast.makeText(RegisterActivity.this, "Error parsing server response.", Toast.LENGTH_LONG).show();
+//                                Toast.makeText(RegisterActivity.this, "Error parsing server response.", Toast.LENGTH_LONG).show();
+                                Toast.makeText(RegisterActivity.this, "Verify Email.", Toast.LENGTH_LONG).show();
+                                Intent intent = new Intent(RegisterActivity.this, TermsConditionsActivity.class);
+                                startActivity(intent);
                             }
                         } else {
                             // Handle empty or null response
