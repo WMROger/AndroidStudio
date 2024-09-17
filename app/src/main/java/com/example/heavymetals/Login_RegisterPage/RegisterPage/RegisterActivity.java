@@ -152,7 +152,7 @@ public class RegisterActivity extends AppCompatActivity {
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
-                            Toast.makeText(RegisterActivity.this, "Error parsing server response.", Toast.LENGTH_LONG).show();
+                            Toast.makeText(RegisterActivity.this, "Error JAVA parsing server response.", Toast.LENGTH_LONG).show();
                             Log.e("RegisterActivity", "Error parsing JSON response", e);
 
                         }

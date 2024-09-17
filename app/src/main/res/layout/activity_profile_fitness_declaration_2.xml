@@ -13,32 +13,32 @@
 
 
     <Button
-        android:id="@+id/button17"
+        android:id="@+id/btnPFDnext2"
         android:layout_width="265dp"
         android:layout_height="49dp"
-        android:layout_marginBottom="60dp"
+        android:layout_marginTop="3dp"
+        android:layout_marginBottom="28dp"
         android:text="Next"
         app:cornerRadius="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.503"
         app:layout_constraintStart_toStartOf="parent"
-        />
-
+        app:layout_constraintTop_toBottomOf="@+id/textView26" />
 
     <TextView
         android:id="@+id/textView26"
         android:layout_width="347dp"
         android:layout_height="26dp"
+        android:layout_marginTop="12dp"
         android:layout_weight="1"
         android:letterSpacing="-0.1"
         android:text="__________________________________________________________________"
         android:textColor="@color/custom_orange"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/button17"
+
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/scrollView2"
         app:layout_constraintVertical_bias="1.0" />
 
     <LinearLayout
@@ -213,6 +213,7 @@
 
 
     <ScrollView
+        android:id="@+id/scrollView2"
         android:layout_width="361dp"
         android:layout_height="440dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -232,7 +233,6 @@
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="40.10dp"
-                android:textSize="15sp"
                 android:height="38.10dp"
                 android:background="@drawable/bg_blackgradient"
                 android:hint="Body Weight (kg)"
@@ -240,13 +240,13 @@
                 android:paddingLeft="15dp"
                 android:paddingTop="5dp"
                 android:textColor="#FDFDFD"
-                android:textColorHint="#FFFFFF" />
+                android:textColorHint="#FFFFFF"
+                android:textSize="15sp" />
 
 
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="40.10dp"
-                android:textSize="15sp"
                 android:layout_marginTop="10dp"
                 android:height="38.10dp"
                 android:background="@drawable/bg_blackgradient"
@@ -255,13 +255,13 @@
                 android:paddingLeft="15dp"
                 android:paddingTop="5dp"
                 android:textColor="#FFFFFF"
-                android:textColorHint="#F2F2F2" />
+                android:textColorHint="#F2F2F2"
+                android:textSize="15sp" />
 
 
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="40.10dp"
-                android:textSize="15sp"
                 android:layout_marginTop="10dp"
                 android:height="38.10dp"
                 android:background="@drawable/bg_blackgradient"
@@ -270,13 +270,13 @@
                 android:paddingLeft="15dp"
                 android:paddingTop="5dp"
                 android:textColor="#FFFFFF"
-                android:textColorHint="#FFFFFF" />
+                android:textColorHint="#FFFFFF"
+                android:textSize="15sp" />
 
 
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="40.10dp"
-                android:textSize="15sp"
                 android:layout_marginTop="10dp"
                 android:height="38.10dp"
                 android:background="@drawable/bg_blackgradient"
@@ -285,13 +285,13 @@
                 android:paddingLeft="15dp"
                 android:paddingTop="5dp"
                 android:textColor="#FFFFFF"
-                android:textColorHint="#FFFFFF" />
+                android:textColorHint="#FFFFFF"
+                android:textSize="15sp" />
 
 
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="40.10dp"
-                android:textSize="15sp"
                 android:layout_marginTop="10dp"
                 android:height="38.10dp"
                 android:background="@drawable/bg_blackgradient"
@@ -300,12 +300,12 @@
                 android:paddingLeft="15dp"
                 android:paddingTop="5dp"
                 android:textColor="#FFFFFF"
-                android:textColorHint="#FFFFFF" />
+                android:textColorHint="#FFFFFF"
+                android:textSize="15sp" />
 
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="40.10dp"
-                android:textSize="15sp"
                 android:layout_marginTop="10dp"
                 android:height="38.10dp"
                 android:background="@drawable/bg_blackgradient"
@@ -314,7 +314,8 @@
                 android:paddingLeft="15dp"
                 android:paddingTop="5dp"
                 android:textColor="#FFFFFF"
-                android:textColorHint="#FFFFFF" />
+                android:textColorHint="#FFFFFF"
+                android:textSize="15sp" />
 
 
             <GridLayout
@@ -330,7 +331,6 @@
                 <EditText
                     android:layout_width="173dp"
                     android:layout_height="40.10dp"
-                    android:textSize="15sp"
                     android:layout_row="0"
                     android:layout_column="0"
                     android:layout_columnWeight="0"
@@ -344,13 +344,13 @@
                     android:paddingTop="5dp"
                     android:textAlignment="textStart"
                     android:textColor="#FFFFFF"
-                    android:textColorHint="#E4E4E4" />
+                    android:textColorHint="#E4E4E4"
+                    android:textSize="15sp" />
 
 
                 <EditText
                     android:layout_width="173dp"
                     android:layout_height="40.10dp"
-                    android:textSize="15sp"
                     android:layout_columnWeight="0"
                     android:layout_marginTop="10dp"
                     android:height="38dp"
@@ -361,13 +361,13 @@
                     android:paddingTop="5dp"
                     android:textAlignment="textStart"
                     android:textColor="#FFFFFF"
-                    android:textColorHint="#FFFFFF" />
+                    android:textColorHint="#FFFFFF"
+                    android:textSize="15sp" />
 
 
                 <EditText
                     android:layout_width="173dp"
                     android:layout_height="40.10dp"
-                    android:textSize="15sp"
                     android:layout_columnWeight="0"
                     android:layout_marginTop="10dp"
                     android:layout_marginRight="15dp"
@@ -379,13 +379,13 @@
                     android:paddingTop="5dp"
                     android:textAlignment="textStart"
                     android:textColor="#FFFFFF"
-                    android:textColorHint="#E4E4E4" />
+                    android:textColorHint="#E4E4E4"
+                    android:textSize="15sp" />
 
 
                 <EditText
                     android:layout_width="173dp"
                     android:layout_height="40.10dp"
-                    android:textSize="15sp"
                     android:layout_columnWeight="0"
                     android:layout_marginTop="10dp"
                     android:height="38dp"
@@ -396,13 +396,13 @@
                     android:paddingTop="5dp"
                     android:textAlignment="textStart"
                     android:textColor="#FFFFFF"
-                    android:textColorHint="#FFFFFF" />
+                    android:textColorHint="#FFFFFF"
+                    android:textSize="15sp" />
 
 
                 <EditText
                     android:layout_width="173dp"
                     android:layout_height="40.10dp"
-                    android:textSize="15sp"
                     android:layout_columnWeight="0"
                     android:layout_marginTop="10dp"
                     android:layout_marginRight="10dp"
@@ -414,13 +414,13 @@
                     android:paddingTop="5dp"
                     android:textAlignment="textStart"
                     android:textColor="#FFFFFF"
-                    android:textColorHint="#E4E4E4" />
+                    android:textColorHint="#E4E4E4"
+                    android:textSize="15sp" />
 
 
                 <EditText
                     android:layout_width="173dp"
                     android:layout_height="40.10dp"
-                    android:textSize="15sp"
                     android:layout_columnWeight="0"
                     android:layout_marginTop="10dp"
                     android:height="38dp"
@@ -431,7 +431,8 @@
                     android:paddingTop="5dp"
                     android:textAlignment="textStart"
                     android:textColor="#FFFFFF"
-                    android:textColorHint="#FFFFFF" />
+                    android:textColorHint="#FFFFFF"
+                    android:textSize="15sp" />
 
 
             </GridLayout>
