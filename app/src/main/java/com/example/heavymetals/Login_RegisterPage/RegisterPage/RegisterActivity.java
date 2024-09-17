@@ -103,7 +103,7 @@ public class RegisterActivity extends AppCompatActivity {
 
         if (password.length() < 6) {
             Log.d("RegisterActivity", "Validation Error: Password too short.");
-            Toast.makeText(this, "Password must be at least 8 characters long.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Password must be at least 6 characters long.", Toast.LENGTH_SHORT).show();
             return false;
         }
 
@@ -122,56 +122,36 @@ public class RegisterActivity extends AppCompatActivity {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        // Log the full server response for debugging
-                        Log.d("RegisterResponse", "Server Response: " + response);
+                        try {
+                            // Parse the response to JSON
+                            JSONObject jsonResponse = new JSONObject(response);
 
-                        // Check if response is valid and not empty
-                        if (response != null && !response.isEmpty()) {
-                            try {
-                                // Parse the response to JSON
-                                JSONObject jsonResponse = new JSONObject(response);
+                            // Extract 'success' and 'message' fields
+                            int success = jsonResponse.optInt("success", 0);
+                            String message = jsonResponse.optString("message", "No message provided");
 
-                                // Extract 'success' and 'message' fields
-                                int success = jsonResponse.optInt("success", 0);
-                                String message = jsonResponse.optString("message", "No message provided");
-
-                                // Log the parsed response details
-                                Log.d("RegisterActivity", "Success: " + success + ", Message: " + message);
-
-                                // Handle the response based on success flag
-                                if (success == 1) {
-                                    // Registration successful
-                                    Toast.makeText(RegisterActivity.this, "Registration Successful", Toast.LENGTH_LONG).show();
-                                    Intent intent = new Intent(RegisterActivity.this, TermsConditionsActivity.class);
-                                    startActivity(intent);
-                                    finish();
-                                } else {
-                                    // Registration failed (e.g., email already taken)
-                                    Toast.makeText(RegisterActivity.this, "Registration failed: " + message, Toast.LENGTH_LONG).show();
-                                }
-                            } catch (JSONException e) {
-                                // Handle JSON parsing errors
-                                Log.e("RegisterActivity", "Error parsing JSON response", e);
-                                Toast.makeText(RegisterActivity.this, "Error parsing server response.", Toast.LENGTH_LONG).show();
+                            // Handle the response based on success flag
+                            if (success == 1) {
+                                // Registration successful
+                                Toast.makeText(RegisterActivity.this, "Registration Successful", Toast.LENGTH_LONG).show();
+                                Intent intent = new Intent(RegisterActivity.this, TermsConditionsActivity.class);
+                                startActivity(intent);
+                                finish();
+                            } else {
+                                // Registration failed (e.g., email already taken)
+                                Toast.makeText(RegisterActivity.this, "Registration failed: " + message, Toast.LENGTH_LONG).show();
                             }
-                        } else {
-                            // Handle empty or null response
-                            Log.e("RegisterActivity", "Empty or null response received.");
-                            Toast.makeText(RegisterActivity.this, "Server returned an empty response.", Toast.LENGTH_LONG).show();
+                        } catch (JSONException e) {
+                            // Handle JSON parsing errors
+                            Toast.makeText(RegisterActivity.this, "Error parsing server response.", Toast.LENGTH_LONG).show();
                         }
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        // Log the error details
-                        String errorMessage = (error.networkResponse != null && error.networkResponse.data != null)
-                                ? new String(error.networkResponse.data) : error.getMessage();
-
-                        Log.e("RegisterActivity", "Volley Error: " + errorMessage);
-
-                        // Display error message
-                        Toast.makeText(RegisterActivity.this, "Error: " + errorMessage, Toast.LENGTH_LONG).show();
+                        // Display a general error message
+                        Toast.makeText(RegisterActivity.this, "An error occurred. Please try again.", Toast.LENGTH_LONG).show();
                     }
                 }
         ) {

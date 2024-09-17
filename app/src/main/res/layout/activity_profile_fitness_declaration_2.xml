@@ -56,7 +56,7 @@
 
 
         <TextView
-            android:id="@+id/textView1"
+            android:id="@+id/Profile_Declaration_1"
             android:layout_width="71dp"
             android:layout_height="30dp"
             android:layout_weight="1"
@@ -67,7 +67,7 @@
 
 
         <TextView
-            android:id="@+id/textView2"
+            android:id="@+id/Profile_Declaration_2"
             android:layout_width="71dp"
             android:layout_height="30dp"
             android:layout_marginLeft="20dp"
