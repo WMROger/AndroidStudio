@@ -13,5 +13,7 @@
     <color name="colorHover">#FF0000</color> <!-- Change to your desired hover color -->
     <color name="gray">#808080</color>
     <color name="gray_orange">#63493E</color>
+    <color name="selected_color">#FFEB3B</color> <!-- Example highlight color -->
+    <color name="unselected_color">#FFFFFF</color> <!-- Example unhighlight color -->
 
 </resources>
