@@ -1,6 +1,8 @@
 package com.example.heavymetals.Login_RegisterPage.RegisterPage.ProfileCreation;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
@@ -11,6 +13,8 @@ import com.example.heavymetals.R;
 
 public class FitnessDeclaration2 extends AppCompatActivity {
 
+    Button btnPFDnext2;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -19,6 +23,13 @@ public class FitnessDeclaration2 extends AppCompatActivity {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
+        });
+
+        btnPFDnext2 = findViewById(R.id.btnPFDnext2);
+
+        btnPFDnext2.setOnClickListener(v -> {
+            Intent intent = new Intent(FitnessDeclaration2.this, FitnessDeclaration3.class);
+            startActivity(intent);
         });
     }
 }
