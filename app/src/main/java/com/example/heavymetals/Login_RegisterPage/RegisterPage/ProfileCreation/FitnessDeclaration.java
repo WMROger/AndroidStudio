@@ -26,7 +26,7 @@ public class FitnessDeclaration extends AppCompatActivity {
             return insets;
         });
 
-        btnPFDnext = findViewById(R.id.btnPFDnext);
+        btnPFDnext = findViewById(R.id.btnPFDnext1);
 
         btnPFDnext.setOnClickListener(v -> {
             Intent intent = new Intent(FitnessDeclaration.this, FitnessDeclaration2.class);

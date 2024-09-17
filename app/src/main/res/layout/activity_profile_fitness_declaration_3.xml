@@ -12,33 +12,32 @@
         android:id="@+id/textView31"
         android:layout_width="245dp"
         android:layout_height="45dp"
-        android:layout_marginTop="124dp"
         android:fontFamily="@font/konkhmer_sleokchher"
         android:gravity="center"
         android:lineSpacingExtra="-10dp"
         android:text="Please enter the information below to personalize your experience."
         android:textColor="@color/white"
         android:textSize="13sp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.51"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.18" />
 
 
     <TextView
         android:id="@+id/textView30"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="84dp"
         android:fontFamily="@font/konkhmer_sleokchher"
         android:text="Body Data"
         android:textColor="@color/white"
         android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.501"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.12" />
 
     <LinearLayout
         android:id="@+id/linearLayout4"
@@ -78,7 +77,7 @@
 
 
         <TextView
-            android:id="@+id/textView3"
+            android:id="@+id/Fitness_Declaration_2"
             android:layout_width="71dp"
             android:layout_height="30dp"
             android:layout_marginLeft="20dp"
@@ -110,11 +109,12 @@
         android:text="Have you ever worked out?"
         android:textColor="#FFFFFF"
         android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.236"
+        app:layout_constraintHorizontal_bias="0.26"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView31" />
-
+        app:layout_constraintTop_toBottomOf="@+id/textView31"
+        app:layout_constraintVertical_bias="0.0" />
 
     <LinearLayout
         android:id="@+id/linearLayout5"
@@ -122,10 +122,11 @@
         android:layout_height="58dp"
         android:layout_marginTop="8dp"
         android:orientation="horizontal"
+        app:layout_constraintBottom_toTopOf="@+id/button28"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.509"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView32">
+        app:layout_constraintTop_toBottomOf="@+id/textView32"
+        app:layout_constraintVertical_bias="0.0">
 
 
         <Button
@@ -154,9 +155,6 @@
             app:strokeWidth="1dp" />
     </LinearLayout>
 
-
-
-
     <TextView
         android:id="@+id/textView33"
         android:layout_width="301dp"
@@ -166,11 +164,12 @@
         android:layout_marginEnd="51dp"
         android:text="How experienced are you with strength training?"
         android:textColor="#FFFFFF"
+        app:layout_constraintBottom_toTopOf="@+id/button28"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout5" />
-
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout5"
+        app:layout_constraintVertical_bias="0.136" />
 
     <Spinner
         android:id="@+id/spinner2"
@@ -181,9 +180,12 @@
         android:layout_marginEnd="48dp"
         android:layout_weight="1"
         android:background="@drawable/bg_blackgradient"
+        app:layout_constraintBottom_toTopOf="@+id/button28"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView33" />
+        app:layout_constraintTop_toBottomOf="@+id/textView33"
+        app:layout_constraintVertical_bias="0.0" />
 
 
     <TextView
@@ -195,10 +197,12 @@
         android:layout_marginEnd="50dp"
         android:text="How many training sessions per week would you like to perform"
         android:textColor="#FFFFFF"
+        app:layout_constraintBottom_toTopOf="@+id/button28"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/spinner2" />
-
+        app:layout_constraintTop_toBottomOf="@+id/spinner2"
+        app:layout_constraintVertical_bias="0.127" />
 
     <Button
         android:id="@+id/button27"
@@ -212,12 +216,13 @@
         android:text="1-2 days"
         android:textAllCaps="false"
         app:cornerRadius="10dp"
+        app:layout_constraintBottom_toTopOf="@+id/button28"
         app:layout_constraintEnd_toStartOf="@+id/button29"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView34"
+        app:layout_constraintVertical_bias="1.0"
         app:strokeColor="#DE612B"
         app:strokeWidth="1dp" />
-
 
     <Button
         android:id="@+id/button28"
@@ -229,12 +234,14 @@
         android:text="5+"
         android:textAllCaps="false"
         app:cornerRadius="10dp"
+        app:layout_constraintBottom_toTopOf="@+id/textView26"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.469"
         app:strokeColor="#DE612B"
         app:strokeWidth="1dp" />
-
 
     <Button
         android:id="@+id/button29"
@@ -248,24 +255,27 @@
         android:text="3-4 days"
         android:textAllCaps="false"
         app:cornerRadius="10dp"
+        app:layout_constraintBottom_toTopOf="@+id/button28"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/button27"
         app:layout_constraintTop_toBottomOf="@+id/textView34"
+        app:layout_constraintVertical_bias="1.0"
         app:strokeColor="#DE612B"
         app:strokeWidth="1dp" />
-
 
     <Button
         android:id="@+id/btnPFDnext3"
         android:layout_width="265dp"
         android:layout_height="49dp"
+        android:layout_marginTop="5dp"
         android:layout_marginBottom="28dp"
         android:text="Next"
         app:cornerRadius="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.503"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView26" />
 
 
     <TextView

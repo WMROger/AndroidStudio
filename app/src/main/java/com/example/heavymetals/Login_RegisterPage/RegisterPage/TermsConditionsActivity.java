@@ -47,7 +47,7 @@ public class TermsConditionsActivity extends AppCompatActivity {
         tncIagree.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(TermsConditionsActivity.this, FitnessDeclaration.class);
+                Intent intent = new Intent(TermsConditionsActivity.this, ProfileCreation.class);
                 startActivity(intent);
             }
         });

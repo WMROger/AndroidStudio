@@ -11,7 +11,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import com.example.heavymetals.Login_RegisterPage.RegisterPage.ProfileCreation.FitnessDeclaration;
+import com.example.heavymetals.Login_RegisterPage.LoginPage.LoginActivity;
 import com.example.heavymetals.Login_RegisterPage.RegisterPage.RegisterActivity;
 import com.example.heavymetals.R;
 

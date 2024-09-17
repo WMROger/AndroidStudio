@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    >
 
     <uses-permission android:name="android.permission.INTERNET" />
 
@@ -14,29 +15,41 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.NavigationDrawer"
         android:usesCleartextTraffic="true"
+        android:windowSoftInputMode="adjustPan"
         tools:targetApi="31">
         <activity
+            android:name=".Login_RegisterPage.RegisterPage.ProfileCreation.ProfileFinish"
+            android:exported="false"
+            android:windowSoftInputMode="adjustPan"/>
+        <activity
             android:name=".Login_RegisterPage.RegisterPage.ProfileCreation.FitnessDeclaration3"
-            android:exported="false" />
+            android:exported="false"
+            android:windowSoftInputMode="adjustPan"/>
         <activity
             android:name=".Login_RegisterPage.RegisterPage.ProfileCreation.FitnessDeclaration"
-            android:exported="false" />
+            android:exported="false"
+            android:windowSoftInputMode="adjustPan"/>
         <activity
             android:name=".Login_RegisterPage.RegisterPage.ProfileCreation.FitnessDeclaration2"
-            android:exported="false" />
+            android:exported="false"
+            android:windowSoftInputMode="adjustPan"/>
         <activity
             android:name=".Login_RegisterPage.RegisterPage.ProfileCreation.ProfileCreation"
-            android:exported="false" />
+            android:exported="false"
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".Login_RegisterPage.RegisterPage.TermsConditionsActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".Login_RegisterPage.RegisterPage.RegisterActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".SplashActivity"
             android:exported="true"
-            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar">
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"
+            android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -45,13 +58,16 @@
         </activity>
         <activity
             android:name=".Login_RegisterPage.AuthenticationActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:windowSoftInputMode="adjustPan"/>
         <activity
             android:name=".Home_LandingPage.MainActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:windowSoftInputMode="adjustPan"/>
         <activity
-            android:name=".Login_RegisterPage.LoginActivity"
-            android:exported="false" />
+            android:name=".Login_RegisterPage.LoginPage.LoginActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustPan"/>
     </application>
 
 </manifest>
