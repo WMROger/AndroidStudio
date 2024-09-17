@@ -23,13 +23,14 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView26" />
+        app:layout_constraintTop_toBottomOf="@+id/textView26"
+        app:layout_constraintVertical_bias="0.0" />
 
     <TextView
         android:id="@+id/textView26"
         android:layout_width="347dp"
         android:layout_height="26dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="4dp"
         android:layout_weight="1"
         android:letterSpacing="-0.1"
         android:text="__________________________________________________________________"
@@ -38,8 +39,7 @@
 
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/scrollView2"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintTop_toBottomOf="@+id/scrollView2" />
 
     <LinearLayout
         android:id="@+id/linearLayout4"
@@ -56,7 +56,7 @@
 
 
         <TextView
-            android:id="@+id/textView1"
+            android:id="@+id/Profile_Declaration_1"
             android:layout_width="71dp"
             android:layout_height="30dp"
             android:layout_weight="1"
@@ -67,7 +67,7 @@
 
 
         <TextView
-            android:id="@+id/textView2"
+            android:id="@+id/Profile_Declaration_2"
             android:layout_width="71dp"
             android:layout_height="30dp"
             android:layout_marginLeft="20dp"

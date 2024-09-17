@@ -16,6 +16,9 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".Login_RegisterPage.RegisterPage.ProfileCreation.ProfileFinish"
+            android:exported="false" />
+        <activity
             android:name=".Login_RegisterPage.RegisterPage.ProfileCreation.FitnessDeclaration3"
             android:exported="false" />
         <activity
@@ -50,7 +53,7 @@
             android:name=".Home_LandingPage.MainActivity"
             android:exported="false" />
         <activity
-            android:name=".Login_RegisterPage.LoginActivity"
+            android:name=".Login_RegisterPage.LoginPage.LoginActivity"
             android:exported="false" />
     </application>
 

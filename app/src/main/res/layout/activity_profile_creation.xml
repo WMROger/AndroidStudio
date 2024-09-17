@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
@@ -8,21 +9,21 @@
     android:background="@drawable/bg_gradient"
     tools:context=".Login_RegisterPage.RegisterPage.ProfileCreation.ProfileCreation">
 
-
+    <!-- Progress Bar Section -->
     <LinearLayout
         android:layout_width="307dp"
         android:layout_height="28dp"
         android:orientation="horizontal"
-
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.032">
 
+        <!-- Each progress bar TextView represents a step in the profile creation -->
         <TextView
             android:id="@+id/textView1"
-            android:layout_width="71dp"
+            android:layout_width="0dp"
             android:layout_height="30dp"
             android:layout_weight="1"
             android:letterSpacing="-0.1"
@@ -32,38 +33,39 @@
 
         <TextView
             android:id="@+id/textView2"
-            android:layout_width="71dp"
+            android:layout_width="0dp"
             android:layout_height="30dp"
-            android:layout_marginLeft="20dp"
             android:layout_weight="1"
+            android:layout_marginStart="20dp"
             android:letterSpacing="-0.1"
             android:text="__________________________________________________________________"
             android:textColor="@color/gray_orange"
-            android:textStyle="bold"/>
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/textView3"
-            android:layout_width="71dp"
+            android:layout_width="0dp"
             android:layout_height="30dp"
-            android:layout_marginLeft="20dp"
             android:layout_weight="1"
+            android:layout_marginStart="20dp"
             android:letterSpacing="-0.1"
             android:text="__________________________________________________________________"
             android:textColor="@color/gray_orange"
-            android:textStyle="bold"/>
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/textView4"
-            android:layout_width="71dp"
+            android:layout_width="0dp"
             android:layout_height="30dp"
-            android:layout_marginLeft="20dp"
             android:layout_weight="1"
+            android:layout_marginStart="20dp"
             android:letterSpacing="-0.1"
             android:text="__________________________________________________________________"
             android:textColor="@color/gray_orange"
-            android:textStyle="bold"/>
+            android:textStyle="bold" />
     </LinearLayout>
 
+    <!-- Title for Profile Creation -->
     <TextView
         android:id="@+id/textView22"
         android:layout_width="wrap_content"
@@ -72,22 +74,25 @@
         android:text="Create your Profile"
         android:textColor="@color/white"
         android:textSize="20sp"
-        app:layout_constraintBottom_toTopOf="@+id/textView24"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0" />
 
+    <!-- Profile Image -->
+
+    <!-- Subtitle with instructions -->
+
     <ImageView
         android:id="@+id/imageView7"
         android:layout_width="100dp"
         android:layout_height="107dp"
+        android:layout_marginTop="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.334"
+        app:layout_constraintTop_toBottomOf="@+id/textView24"
+        app:layout_constraintVertical_bias="0.0"
         app:srcCompat="@mipmap/ic_launcher_round" />
 
     <TextView
@@ -99,24 +104,120 @@
         android:text="Tell us about yourself so we can provide you a more personalized experience."
         android:textColor="@color/white"
         android:textSize="13sp"
-        app:layout_constraintBottom_toTopOf="@+id/imageView7"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.494"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toTopOf="parent" />
 
+    <!-- Add Profile TextView with Icon -->
     <TextView
         android:id="@+id/textView25"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:drawableLeft="@drawable/edit_icon"
+        android:drawablePadding="5sp"
         android:text="@string/Profile_Add"
         android:textColor="@color/custom_orange"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView7"
         app:layout_constraintVertical_bias="0.033" />
+
+    <!-- Input Fields LinearLayout -->
+    <LinearLayout
+        android:id="@+id/linearLayout2"
+        android:layout_width="413dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:isScrollContainer="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView25"
+        app:layout_constraintVertical_bias="0.229">
+
+        <!-- First Name Input -->
+        <TextView
+            android:id="@+id/textView35"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="1sp"
+            android:fontFamily="@font/konkhmer_sleokchher"
+            android:text="First Name"
+            android:textColor="#FFFFFF"
+            android:textSize="12sp" />
+
+        <EditText
+            android:id="@+id/PCFirstName"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginBottom="10sp"
+            android:background="@drawable/button_background"
+            android:fontFamily="@font/konkhmer_sleokchher"
+            android:hint="First Name"
+            android:inputType="text"
+            android:paddingLeft="20sp"
+            android:textColorHint="#FDFDFD" />
+
+        <!-- Last Name Input -->
+        <TextView
+            android:id="@+id/textView28"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Last Name"
+            android:textColor="#FFFFFF"
+            android:textSize="12sp" />
+
+        <EditText
+            android:id="@+id/PCLastName"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginBottom="10sp"
+            android:background="@drawable/button_background"
+            android:hint="Last Name"
+            android:inputType="text"
+            android:paddingLeft="20sp"
+            android:textColorHint="#FDFDFD" />
+
+        <!-- Date of Birth Input -->
+        <TextView
+            android:id="@+id/textView38"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Date of Birth"
+            android:textColor="#FFFFFF"
+            android:textSize="12sp" />
+
+        <EditText
+            android:id="@+id/editTextText6"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginBottom="10sp"
+            android:background="@drawable/button_background"
+            android:drawableLeft="@drawable/calendar_icon"
+            android:drawablePadding="10sp"
+            android:hint="Pick a date"
+            android:inputType="text"
+            android:paddingLeft="20sp"
+            android:textColor="#FFFFFF"
+            android:textColorHint="#FDFDFD"
+            android:focusable="false"
+            android:clickable="true" />
+    </LinearLayout>
+
+    <!-- Next Button -->
+    <Button
+        android:id="@+id/btnPFDnext"
+        android:layout_width="290dp"
+        android:layout_height="48dp"
+        android:text="Next"
+        android:textAllCaps="false"
+        app:cornerRadius="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout2"
+        app:layout_constraintVertical_bias="0.337" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
