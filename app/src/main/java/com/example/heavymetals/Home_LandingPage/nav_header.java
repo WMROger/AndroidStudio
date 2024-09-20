@@ -32,25 +32,23 @@ public class nav_header extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.nav_header, container, false);
 
-        // Initialize views
         Username = view.findViewById(R.id.Menu_User_Firstname);
         Email = view.findViewById(R.id.Menu_User_Email);
 
-        // Check if TextViews are properly initialized
-        if (Username == null || Email == null) {
-            Log.e(TAG, "TextViews are null. Initialization failed.");
-        } else {
-            Log.d(TAG, "TextViews initialized successfully.");
-        }
+        // Retrieve the email passed from MainActivity
+        Bundle arguments = getArguments();
+        if (arguments != null) {
+            String userEmail = arguments.getString("user_email", "Default Email");
 
-        // Fetch user data
-        fetchUserData();
+            // Set the email in the TextView
+            Email.setText(userEmail);
+        }
 
         return view;
     }
+
 
     private void fetchUserData() {
         RequestQueue requestQueue = Volley.newRequestQueue(requireContext());

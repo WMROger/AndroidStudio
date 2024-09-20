@@ -50,7 +50,7 @@
         app:layout_constraintVertical_bias="1.0" />
 
     <TextView
-        android:id="@+id/textView12"
+        android:id="@+id/Login_ForgetPassPage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="FORGOT PASSWORD?"
@@ -80,7 +80,7 @@
         android:layout_width="384dp"
         android:layout_height="120dp"
         android:orientation="vertical"
-        app:layout_constraintBottom_toTopOf="@+id/textView12"
+        app:layout_constraintBottom_toTopOf="@+id/Login_ForgetPassPage"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.481"
         app:layout_constraintStart_toStartOf="parent"

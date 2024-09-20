@@ -32,7 +32,7 @@ public class LoginActivity extends AppCompatActivity {
     // Initialize Variables
     EditText email, passwordEditText;
     Button loginBtn;
-    TextView signUp;
+    TextView signUp, ForgetPassword;
     String url_login = "https://heavymetals.scarlet2.io/HeavyMetals/login_user.php"; // Ensure this is correct
 
     @Override
@@ -43,6 +43,7 @@ public class LoginActivity extends AppCompatActivity {
         // Find views by ID
         email = findViewById(R.id.Login_UserEmail);
         passwordEditText = findViewById(R.id.Password_Usertext);
+        ForgetPassword = findViewById(R.id.Login_ForgetPassPage);
         loginBtn = findViewById(R.id.Login_LoginButton);
         signUp = findViewById(R.id.LoginSignUpTxt);
 
@@ -58,6 +59,13 @@ public class LoginActivity extends AppCompatActivity {
 
             // Perform network request for authentication
             authenticateUser(emailInput, passwordInput);
+
+        });
+
+        ForgetPassword.setOnClickListener(v -> {
+            Intent intent = new Intent(LoginActivity.this, ForgetPasswordActivity.class);
+            startActivity(intent);
+            finish();
         });
 
         // Set sign-up button behavior
@@ -96,9 +104,8 @@ public class LoginActivity extends AppCompatActivity {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        Log.d("LoginActivity", "Raw server response: " + response); // Log the raw response for debugging
+                        Log.d("LoginActivity", "Raw server response: " + response);
 
-                        // Check if the response is valid JSON
                         if (response.startsWith("{")) {
                             try {
                                 JSONObject jsonResponse = new JSONObject(response);
@@ -109,11 +116,13 @@ public class LoginActivity extends AppCompatActivity {
                                         String token = jsonResponse.getString("token");
                                         saveToken(token);
 
-                                        // Start MainActivity
+                                        // Pass the email to MainActivity via Intent
                                         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                        intent.putExtra("user_email", email); // Pass email to MainActivity
                                         startActivity(intent);
                                         finish(); // Close LoginActivity
+
                                     } else {
                                         Log.d("LoginActivity", "Token not found in response");
                                     }
@@ -136,7 +145,7 @@ public class LoginActivity extends AppCompatActivity {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         Toast.makeText(LoginActivity.this, "Network error: " + error.getMessage(), Toast.LENGTH_SHORT).show();
-                        error.printStackTrace(); // Print stack trace for debugging
+                        error.printStackTrace();
                     }
                 }
         ) {
@@ -149,7 +158,6 @@ public class LoginActivity extends AppCompatActivity {
             }
         };
 
-        // Add the request to the RequestQueue
         RequestQueue queue = Volley.newRequestQueue(this);
         queue.add(stringRequest);
     }

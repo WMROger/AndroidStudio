@@ -15,4 +15,10 @@ public interface API {
             @Field("password") String password,
             @Field("passwordConfirmation") String passwordConfirmation
     );
+    @POST("forget_password.php")
+    @FormUrlEncoded
+    Call<ResetResponse> requestPasswordReset(
+            @Field("email") String email
+    );
+
 }
