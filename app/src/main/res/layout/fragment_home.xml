@@ -12,21 +12,83 @@
     <!-- TODO: Update blank fragment layout -->
 
 
+    <RelativeLayout
+        android:id="@+id/relativeLayout2"
+        android:layout_width="176dp"
+        android:layout_height="81dp"
+        android:layout_marginTop="12dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.902"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/relativeLayout">
+
+        <ImageButton
+            android:id="@+id/imageView4"
+            android:layout_width="175dp"
+            android:layout_height="81dp"
+            android:background="@drawable/bg_blackgradient"
+            android:padding="2dp"
+            android:scaleType="fitCenter" />
+
+        <TextView
+            android:id="@+id/textView5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:drawableTop="@drawable/human_icon"
+            android:text="Saturday - Sunday"
+            android:textColor="@color/custom_orange"
+            android:textSize="16sp" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="176dp"
+        android:layout_height="81dp"
+        android:layout_marginTop="12dp"
+        app:layout_constraintEnd_toStartOf="@+id/relativeLayout2"
+        app:layout_constraintHorizontal_bias="0.372"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/relativeLayout">
+
+        <ImageButton
+            android:id="@+id/imageView4"
+            android:layout_width="175dp"
+            android:layout_height="81dp"
+            android:background="@drawable/bg_blackgradient"
+            android:padding="2dp"
+            android:scaleType="fitCenter" />
+
+        <TextView
+            android:id="@+id/textView5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:drawableTop="@drawable/baseline_event_note_24"
+            android:text="Saturday - Sunday"
+            android:textColor="@color/custom_orange"
+            android:textSize="16sp" />
+
+    </RelativeLayout>
+
     <TextView
         android:id="@+id/textDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/koulen"
         android:letterSpacing=".05"
-        android:text="08/30/2024   12:00 P.M"
+        android:text="08/22/2024 11:14 PM"
         android:textColor="#FFFFFF"
         android:textColorLink="#FFFFFF"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.13"
+        app:layout_constraintHorizontal_bias="0.092"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.004" />
+        app:layout_constraintVertical_bias="0.001" />
 
     <TextView
         android:id="@+id/textView1"
@@ -36,13 +98,13 @@
         android:fontFamily="@font/koulen"
         android:text="WHAT YOU DOING"
         android:textColor="#FFFFFF"
-        android:textSize="47sp"
+        android:textSize="57sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.733"
+        app:layout_constraintHorizontal_bias="0.577"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textDate"
-        app:layout_constraintVertical_bias="0.021" />
+        app:layout_constraintVertical_bias="0.025" />
 
     <TextView
         android:id="@+id/textView2"
@@ -58,175 +120,175 @@
         android:textSize="57sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.673"
+        app:layout_constraintHorizontal_bias="0.53"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView1"
-        app:layout_constraintVertical_bias="0.045" />
+        app:layout_constraintVertical_bias="0.061" />
 
-
-    <HorizontalScrollView
-        android:id="@+id/horizontalScrollView"
-        android:layout_width="406dp"
-        android:layout_height="66dp"
-        android:layout_marginTop="-500dp"
-        android:scrollbars="none"
-        app:layout_constraintBottom_toBottomOf="parent"
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="166dp"
+        android:layout_marginTop="32dp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView1">
+        app:layout_constraintTop_toBottomOf="@+id/textView2">
 
-        <LinearLayout
-            android:layout_width="wrap_content"
+        <ImageButton
+            android:id="@+id/imageView4"
+            android:layout_width="386dp"
             android:layout_height="match_parent"
-            android:orientation="horizontal">
+            android:layout_centerInParent="true"
+            android:background="@drawable/orange_border"
+            android:scaleType="fitXY"
+            android:padding="2dp"
+            android:src="@drawable/progress_tracker" />
 
-            <Button
-                android:id="@+id/button1"
-                style="?android:attr/buttonBarButtonStyle"
-                android:layout_width="135dp"
-                android:layout_height="64dp"
-                android:layout_marginStart="25dp"
-                android:backgroundTint="#DE612B"
-                android:baselineAligned="false"
-                android:text="TRACKER"
-                android:textColor="#272525"
-                android:textSize="20sp"
-                app:cornerRadius="10dp" />
+        <TextView
+            android:id="@+id/textView5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:text="Tracker"
+            android:textColor="@color/custom_orange"
+            android:textSize="21sp" />
 
-            <Button
-                android:id="@+id/button2"
-                style="?android:attr/buttonBarButtonStyle"
-                android:layout_width="135dp"
-                android:layout_height="64dp"
-                android:layout_marginStart="15dp"
-                android:backgroundTint="#DE612B"
-                android:baselineAligned="false"
-                android:text="GYM"
-                android:textColor="#272525"
-                android:textSize="25sp"
-                app:cornerRadius="10dp"
-                 />
+        <ImageView
+            android:id="@+id/tracker_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:src="@drawable/tracker_icon" />
 
-            <Button
-                android:id="@+id/button3"
-                style="?android:attr/buttonBarButtonStyle"
-                android:layout_width="135dp"
-                android:layout_height="64dp"
-                android:layout_marginStart="15dp"
-                android:backgroundTint="#DE612B"
-                android:baselineAligned="false"
-                android:text="LOREM"
-                android:textColor="#272525"
-                android:textSize="25sp"
-                app:cornerRadius="10dp" />
+        <TextView
+            android:id="@+id/textView10"
+            android:layout_width="wrap_content"
+            android:layout_height="20dp"
+            android:layout_below="@+id/tracker_icon"
+            android:layout_alignStart="@+id/imageView4"
+            android:layout_alignEnd="@+id/imageView4"
+            android:layout_alignParentBottom="true"
+            android:gravity="center"
+            android:layout_marginStart="125dp"
+            android:layout_marginTop="2dp"
+            android:layout_marginEnd="120dp"
+            android:layout_marginBottom="40dp"
+            android:text="No data yet"
+            android:textColor="@color/custom_orange" />
+    </RelativeLayout>
 
-            <Button
-                android:id="@+id/button4"
-                style="?android:attr/buttonBarButtonStyle"
-                android:layout_width="135dp"
-                android:layout_height="64dp"
-                android:layout_marginStart="15dp"
-                android:backgroundTint="#DE612B"
-                android:baselineAligned="false"
-                android:text="LOREM"
-                android:textColor="#272525"
-                android:textSize="25sp"
-                app:cornerRadius="10dp" />
-
-            <Button
-                android:id="@+id/button5"
-                style="?android:attr/buttonBarButtonStyle"
-                android:layout_width="135dp"
-                android:layout_height="64dp"
-                android:layout_marginStart="15dp"
-                android:backgroundTint="#DE612B"
-                android:baselineAligned="false"
-                android:text="LOREM"
-                android:textColor="#272525"
-                android:textSize="25sp"
-                app:cornerRadius="10dp" />
-
-
-        </LinearLayout>
-
-    </HorizontalScrollView>
-
-    <TextView
-        android:id="@+id/textView10"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="PROGRESS TRACKER"
-        android:textColor="#FFFFFF"
-        android:textSize="21sp"
-        app:layout_constraintBottom_toBottomOf="parent"
+    <RelativeLayout
+        android:id="@+id/relativeLayout"
+        android:layout_width="match_parent"
+        android:layout_height="216dp"
+        android:layout_marginTop="212dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.128"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/horizontalScrollView"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toBottomOf="@+id/textView2">
 
-    <ImageView
-        android:id="@+id/imageView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/progress_tracker"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.397"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView10"
-        app:layout_constraintVertical_bias="0.0" />
+        <ImageButton
+            android:id="@+id/imageView4"
+            android:layout_width="386dp"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"
+            android:background="@drawable/bg_blackgradient"
+            android:padding="2dp"
+            android:scaleType="fitXY" />
 
-    <TextView
-        android:id="@+id/textView4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="PROGRESS TRACKER"
-        android:textColor="#FFFFFF"
-        android:textSize="21sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.125"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView2"
-        app:layout_constraintVertical_bias="0.0" />
+        <Button
+            android:id="@+id/button3"
+            android:layout_width="183dp"
+            android:layout_height="91dp"
+            android:layout_alignStart="@+id/imageView4"
+            android:layout_alignEnd="@+id/imageView4"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentBottom="true"
+            android:layout_centerInParent="true"
+            android:layout_marginStart="187dp"
+            android:layout_marginTop="114dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="11dp"
+            android:backgroundTint="@color/dark_gray"
+            android:drawableTop="@drawable/like_icon"
+            android:gravity="center|bottom"
+            android:paddingTop="20dp"
+            android:text="Recommendations"
+            android:textAllCaps="false"
+            android:textColor="@color/custom_orange"
+            android:textSize="14sp"
+            app:cornerRadius="10dp" />
 
-    <ImageView
-        android:id="@+id/imageView3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/progress_tracker"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.397"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView4"
-        app:layout_constraintVertical_bias="0.0" />
+        <TextView
+            android:id="@+id/textView5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:text="Workouts"
+            android:textColor="@color/custom_orange"
+            android:textSize="21sp" />
 
-    <TextView
-        android:id="@+id/textView5"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="PROGRESS TRACKER"
-        android:textColor="#FFFFFF"
-        android:textSize="21sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.125"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView3"
-        app:layout_constraintVertical_bias="0.0" />
+        <TextView
+            android:id="@+id/textView10"
+            android:layout_width="wrap_content"
+            android:layout_height="20dp"
+            android:layout_alignStart="@+id/imageView4"
+            android:layout_alignEnd="@+id/imageView4"
+            android:layout_alignParentBottom="true"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="2dp"
+            android:layout_marginEnd="225dp"
+            android:layout_marginBottom="155dp"
+            android:gravity="center"
+            android:text="Quick start"
+            android:textColor="@color/custom_orange" />
 
-    <ImageView
-        android:id="@+id/imageView4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/progress_tracker"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.409"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView5"
-        app:layout_constraintVertical_bias="0.0" />
+        <Button
+            android:id="@+id/button3"
+            android:layout_width="345dp"
+            android:layout_height="51dp"
+            android:layout_alignStart="@+id/imageView4"
+            android:layout_alignEnd="@+id/imageView4"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentBottom="true"
+            android:layout_centerInParent="true"
+            android:layout_marginStart="25dp"
+            android:layout_marginTop="62dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="103dp"
+            android:backgroundTint="@color/dark_gray"
+            android:drawableLeft="@drawable/plus_icon"
+            android:gravity="start|top"
+            android:text="create a workout"
+            android:textAllCaps="false"
+            android:textColor="@color/custom_orange"
+            android:textSize="16sp"
+            app:cornerRadius="10dp" />
+
+        <Button
+            android:id="@+id/button3"
+            android:layout_width="155dp"
+            android:layout_height="93dp"
+            android:layout_alignStart="@+id/imageView4"
+            android:layout_alignEnd="@+id/imageView4"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentBottom="true"
+            android:layout_centerInParent="true"
+            android:layout_marginStart="25dp"
+            android:layout_marginTop="115dp"
+            android:layout_marginEnd="206dp"
+            android:layout_marginBottom="8dp"
+            android:backgroundTint="@color/dark_gray"
+            android:drawableTop="@drawable/build_muscle"
+            android:gravity="center|bottom"
+            android:paddingTop="20dp"
+            android:text="Your Workouts"
+            android:textAllCaps="false"
+            android:textColor="@color/custom_orange"
+            android:textSize="14sp"
+            app:cornerRadius="10dp" />
+
+    </RelativeLayout>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,18 +1,255 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Home_LandingPage.SettingsFragment">
+    android:background="@drawable/bg_gradient"
+    tools:context=".Home_LandingPage.SettingsFragment"
+    tools:ignore="HardcodedText">
 
     <!-- TODO: Update blank fragment layout -->
+
+
     <TextView
+        android:id="@+id/textView35"
+        android:layout_width="92dp"
+        android:layout_height="19dp"
+        android:layout_marginBottom="20dp"
+        android:fontFamily="@font/konkhmer_sleokchher"
+        android:gravity="center"
+        android:text="@string/BUG"
+        android:textColor="#FFFFFF"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toTopOf="@+id/textView36"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.96" />
+
+    <Button
+        android:id="@+id/Login_LoginButton"
+        android:layout_width="357dp"
+        android:layout_height="49dp"
+        android:text="Log out"
+        android:textAllCaps="false"
+        app:cornerRadius="16dp"
+        app:layout_constraintBottom_toTopOf="@+id/textView35"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <Button
+        android:id="@+id/button33"
+        android:layout_width="357dp"
+        android:layout_height="wrap_content"
+        android:backgroundTint="#000000"
+        android:text="Delete Account"
+        android:textAlignment="textStart"
+        android:textAllCaps="false"
+        android:textColor="@color/custom_orange"
+        app:cornerRadius="10dp"
+        app:layout_constraintBottom_toTopOf="@+id/Login_LoginButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.931"
+        app:strokeColor="#DE612B"
+        app:strokeWidth="1dp" />
+
+    <LinearLayout
+        android:id="@+id/linearLayout8"
+        android:layout_width="357dp"
+        android:layout_height="146dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="@+id/button33"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.919">
+
+        <TextView
+            android:id="@+id/textView35"
+            android:layout_width="92dp"
+            android:layout_height="19dp"
+            android:layout_marginStart="15dp"
+            android:fontFamily="@font/konkhmer_sleokchher"
+            android:text="Application"
+            android:textColor="#FFFFFF"
+            android:textSize="14sp" />
+
+        <Button
+            android:id="@+id/button33"
+            android:layout_width="357dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="-10dp"
+            android:backgroundTint="#000000"
+            android:drawableEnd="@drawable/right_arrow_icon"
+            android:text="Advanced"
+            android:textAlignment="textStart"
+            android:textAllCaps="false"
+            app:cornerRadius="10dp"
+            app:strokeColor="#DE612B"
+            app:strokeWidth="1dp" />
+
+        <Button
+            android:id="@+id/PCFirstName"
+            android:layout_width="357dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="-10dp"
+            android:backgroundTint="#000000"
+            android:drawableEnd="@drawable/right_arrow_icon"
+            android:text="Licenses"
+            android:textAlignment="textStart"
+            android:textAllCaps="false"
+            app:cornerRadius="10dp"
+            app:strokeColor="#DE612B"
+            app:strokeWidth="1dp" />
+
+        <Button
+            android:id="@+id/PCFirstName"
+            android:layout_width="357dp"
+            android:layout_height="wrap_content"
+            android:backgroundTint="#000000"
+            android:drawableEnd="@drawable/right_arrow_icon"
+            android:text="Notification"
+            android:textAlignment="textStart"
+            android:textAllCaps="false"
+            app:cornerRadius="10dp"
+            app:strokeColor="#DE612B"
+            app:strokeWidth="1dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayout7"
+        android:layout_width="357dp"
+        android:layout_height="106dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout8"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.917">
+
+        <TextView
+            android:id="@+id/textView35"
+            android:layout_width="92dp"
+            android:layout_height="19dp"
+            android:layout_marginStart="15dp"
+            android:fontFamily="@font/konkhmer_sleokchher"
+            android:text="General"
+            android:textColor="#FFFFFF"
+            android:textSize="14sp" />
+
+        <Button
+            android:id="@+id/button33"
+            android:layout_width="357dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="-10dp"
+            android:backgroundTint="#000000"
+            android:drawableEnd="@drawable/right_arrow_icon"
+            android:text="Help Center"
+            android:textAlignment="textStart"
+            android:textAllCaps="false"
+            app:cornerRadius="10dp"
+            app:strokeColor="#DE612B"
+            app:strokeWidth="1dp" />
+
+        <Button
+            android:id="@+id/PCFirstName"
+            android:layout_width="357dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="-10dp"
+            android:backgroundTint="#000000"
+            android:drawableEnd="@drawable/right_arrow_icon"
+            android:text="Workout Preference"
+            android:textAlignment="textStart"
+            android:textAllCaps="false"
+            app:cornerRadius="10dp"
+            app:strokeColor="#DE612B"
+            app:strokeWidth="1dp" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/textView36"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Settings Fragment"
-        android:textSize="30sp"
-        android:layout_centerInParent="true"
-        android:textColor="@color/lavender"/>
+        android:gravity="center"
+        android:lineHeight="10sp"
+        android:text="@string/HeavyMetals"
+        android:textColor="@color/white"
+        android:textSize="11sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.991" />
 
-</RelativeLayout>
+    <LinearLayout
+        android:layout_width="357dp"
+        android:layout_height="146dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout7"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.78">
+
+        <TextView
+            android:id="@+id/textView35"
+            android:layout_width="92dp"
+            android:layout_height="19dp"
+            android:layout_marginStart="15dp"
+            android:fontFamily="@font/konkhmer_sleokchher"
+            android:text="Account"
+            android:textColor="#FFFFFF"
+            android:textSize="14sp" />
+
+        <Button
+            android:id="@+id/button33"
+            android:layout_width="357dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="-10dp"
+            android:backgroundTint="#000000"
+            android:drawableEnd="@drawable/right_arrow_icon"
+            android:text="Profile"
+            android:textAlignment="textStart"
+            android:textAllCaps="false"
+            app:cornerRadius="10dp"
+            app:strokeColor="#DE612B"
+            app:strokeWidth="1dp" />
+
+        <Button
+            android:id="@+id/PCFirstName"
+            android:layout_width="357dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="-10dp"
+            android:backgroundTint="#000000"
+            android:drawableEnd="@drawable/right_arrow_icon"
+            android:text="Goals"
+            android:textAlignment="textStart"
+            android:textAllCaps="false"
+            app:cornerRadius="10dp"
+            app:strokeColor="#DE612B"
+            app:strokeWidth="1dp" />
+
+        <Button
+            android:id="@+id/PCFirstName"
+            android:layout_width="357dp"
+            android:layout_height="wrap_content"
+            android:backgroundTint="#000000"
+            android:drawableEnd="@drawable/right_arrow_icon"
+            android:text="Measurement"
+            android:textAlignment="textStart"
+            android:textAllCaps="false"
+            app:cornerRadius="10dp"
+            app:strokeColor="#DE612B"
+            app:strokeWidth="1dp" />
+    </LinearLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

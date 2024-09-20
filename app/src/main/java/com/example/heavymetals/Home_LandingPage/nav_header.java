@@ -1,101 +1,110 @@
 package com.example.heavymetals.Home_LandingPage;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.heavymetals.R;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class nav_header extends Fragment {
+import java.util.HashMap;
+import java.util.Map;
 
-    private static final String TAG = "nav_header";
-    private String url = "https://heavymetals.scarlet2.io/HeavyMetals/email_retrieve.php"; // Use HTTPS and ensure URL is correct
+public class nav_header extends AppCompatActivity {
 
-    private TextView Username, Email;
+    TextView usernameTextView;
+    private String email;  // Assuming you retrieve email from login or saved state
 
-    @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.nav_header, container, false);
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.nav_header);
 
-        // Initialize views
-        Username = view.findViewById(R.id.Menu_User_Firstname);
-        Email = view.findViewById(R.id.Menu_User_Email);
+        usernameTextView = findViewById(R.id.Menu_User_Firstname);
 
-        // Check if TextViews are properly initialized
-        if (Username == null || Email == null) {
-            Log.e(TAG, "TextViews are null. Initialization failed.");
+        // Retrieve email from SharedPreferences instead of getIntent()
+        SharedPreferences sharedPreferences = getSharedPreferences("user_prefs", MODE_PRIVATE);
+        email = sharedPreferences.getString("user_email", null);  // Get the email
+
+        if (email != null) {
+            // Fetch and display the username
+            fetchUsername(email);
+
         } else {
-            Log.d(TAG, "TextViews initialized successfully.");
+            Toast.makeText(this, "Email not found in shared preferences", Toast.LENGTH_SHORT).show();
         }
-
-        // Fetch user data
-        fetchUserData();
-
-        return view;
     }
 
-    private void fetchUserData() {
-        RequestQueue requestQueue = Volley.newRequestQueue(requireContext());
+    // Reusable method for handling the response
+    public void onResponse(String response) {
+        Log.d("Response", "Server Response: " + response);
+        try {
+            JSONObject jsonResponse = new JSONObject(response);
+            if (jsonResponse.getBoolean("success")) {
+                String firstName = jsonResponse.getString("first_name");
+                String lastName = jsonResponse.getString("last_name");
+                String fullName = firstName + " " + lastName;
 
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        Log.d(TAG, "Response: " + response.toString()); // Log the full response
-
-                        try {
-                            if (response.has("error")) {
-                                Log.e(TAG, "Error: " + response.getString("error"));
-                                return;
-                            }
-
-                            String firstName = response.optString("first_name", "Default Name");
-                            String email = response.optString("email", "Default Email");
-
-                            // Debug logs
-                            Log.d(TAG, "Setting Username to: " + firstName);
-                            Log.d(TAG, "Setting Email to: " + email);
-
-                            if (Username != null && Email != null) {
-                                // Set the data in the TextViews
-                                Username.setText(firstName);
-                                Email.setText(email);
-                            } else {
-                                Log.e(TAG, "TextViews are null. Unable to update.");
-                            }
-                        } catch (JSONException e) {
-                            Log.e(TAG, "Error parsing JSON response", e);
-                        }
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                if (error.networkResponse != null) {
-                    Log.e(TAG, "HTTP Status Code: " + error.networkResponse.statusCode);
-                }
-                Log.e(TAG, "Error: " + error.toString());
-                error.printStackTrace();
+                // Set username in TextView
+                usernameTextView.setText(fullName);
+                Log.d("Response", "User: " + fullName);
+            } else {
+                Toast.makeText(nav_header.this, "User not found", Toast.LENGTH_SHORT).show();
             }
-        });
+        } catch (JSONException e) {
+            e.printStackTrace();
+            Log.d("Response", "Error parsing JSON");
+        }
+    }
 
-        requestQueue.add(jsonObjectRequest);
+    private void fetchUsername(String email) {
+        if (email == null) {
+            Toast.makeText(this, "Email is null", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        Log.d("nav_header", "Email received: " + email);
+
+        String url = "https://heavymetals.scarlet2.io/HeavyMetals/get_username.php";
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
+                new com.android.volley.Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        // Instead of handling response here, pass it to the reusable onResponse method
+                        onResponse(response);
+                    }
+                },
+                new com.android.volley.Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        error.printStackTrace();
+                        Toast.makeText(nav_header.this, "Error: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                }) {
+
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+                params.put("email", email);  // Send the user's email to the PHP script
+                Log.d("nav_header", "Params sent: " + params.toString());
+                return params;
+            }
+        };
+
+        // Add the request to the RequestQueue
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        requestQueue.add(stringRequest);
     }
 }
