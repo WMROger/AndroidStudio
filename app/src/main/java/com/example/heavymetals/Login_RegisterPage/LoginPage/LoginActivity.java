@@ -32,7 +32,7 @@ public class LoginActivity extends AppCompatActivity {
     // Initialize Variables
     EditText email, passwordEditText;
     Button loginBtn;
-    TextView signUp;
+    TextView signUp, ForgetPassword;
     String url_login = "https://heavymetals.scarlet2.io/HeavyMetals/login_user.php"; // Ensure this is correct
 
     @Override
@@ -43,6 +43,7 @@ public class LoginActivity extends AppCompatActivity {
         // Find views by ID
         email = findViewById(R.id.Login_UserEmail);
         passwordEditText = findViewById(R.id.Password_Usertext);
+        ForgetPassword = findViewById(R.id.Login_ForgetPassPage);
         loginBtn = findViewById(R.id.Login_LoginButton);
         signUp = findViewById(R.id.LoginSignUpTxt);
 
@@ -58,6 +59,12 @@ public class LoginActivity extends AppCompatActivity {
 
             // Perform network request for authentication
             authenticateUser(emailInput, passwordInput);
+        });
+
+        ForgetPassword.setOnClickListener(v -> {
+            Intent intent = new Intent(LoginActivity.this, ForgetPasswordActivity.class);
+            startActivity(intent);
+            finish();
         });
 
         // Set sign-up button behavior
