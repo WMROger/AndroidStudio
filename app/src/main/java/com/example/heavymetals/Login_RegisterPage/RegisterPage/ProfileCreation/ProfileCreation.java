@@ -18,6 +18,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 
 import java.util.Calendar;
+import android.widget.Button;
 
 public class ProfileCreation extends AppCompatActivity {
     private Button btnPFDnext;
@@ -74,6 +75,7 @@ public class ProfileCreation extends AppCompatActivity {
         // DatePickerDialog
         DatePickerDialog datePickerDialog = new DatePickerDialog(
                 this,
+                R.style.CustomDatePicker,
                 (view, year1, month1, dayOfMonth) -> {
                     // Month is 0-indexed so add 1
                     String selectedDate = dayOfMonth + "/" + (month1 + 1) + "/" + year1;
@@ -81,6 +83,19 @@ public class ProfileCreation extends AppCompatActivity {
                 },
                 year, month, day
         );
+
+        // Show the dialog
         datePickerDialog.show();
+
+        // After showing the dialog, customize the button colors
+        Button positiveButton = datePickerDialog.getButton(DatePickerDialog.BUTTON_POSITIVE);
+        Button negativeButton = datePickerDialog.getButton(DatePickerDialog.BUTTON_NEGATIVE);
+
+        // Set the color for OK and Cancel buttons
+        if (positiveButton != null && negativeButton != null) {
+            positiveButton.setTextColor(getResources().getColor(R.color.custom_orange)); // Set custom color for OK button
+            negativeButton.setTextColor(getResources().getColor(R.color.custom_orange)); // Set custom color for Cancel button
+        }
     }
+
 }

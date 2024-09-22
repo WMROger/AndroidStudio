@@ -17,4 +17,22 @@
         <!--DEFAULT FONT FAMILY STYLE-->
         <item name="android:fontFamily">@font/konkhmer_sleokchher</item>
     </style>
+
+    <!-- Custom DatePicker style -->
+    <style name="CustomDatePicker" parent="Theme.AppCompat.Light.Dialog">
+        <item name="colorAccent">#DE612B</item> <!-- Custom color for DatePicker accents -->
+        <item name="android:textColorPrimary">#DE612B</item> <!-- Text color -->
+        <item name="android:textColorSecondary">#DE612B</item> <!-- Secondary text color -->
+
+        <!-- Button styles -->
+        <item name="buttonBarPositiveButtonStyle">@style/CustomDatePickerButton</item>
+        <item name="buttonBarNegativeButtonStyle">@style/CustomDatePickerButton</item>
+    </style>
+
+    <!-- Custom style for OK and Cancel buttons -->
+    <style name="CustomDatePickerButton" parent="Widget.AppCompat.Button.ButtonBar.AlertDialog">
+        <item name="android:textColor">#DE612B</item> <!-- Set custom button text color -->
+    </style>
+
+
 </resources>

@@ -14,6 +14,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import com.example.heavymetals.Home_LandingPage.Workouts.WorkoutModule1;
 import com.example.heavymetals.Login_RegisterPage.AuthenticationActivity;
 import com.example.heavymetals.R;
 import com.google.android.material.navigation.NavigationView;
@@ -116,7 +117,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     String email = jsonResponse.getString("email");
                     // Update the UI with the user's name and email on the main thread
                     runOnUiThread(() -> {
-                        firstNameTextView.setText(firstName + " " +lastName);  // Set first name
+                        firstNameTextView.setText(firstName + " " + lastName);  // Set first name
                         emailTextView.setText(email);  // Set email
                     });
                 } else {
@@ -139,12 +140,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ProfileFragment()).commit();
         } else if (itemId == R.id.nav_home) {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new HomeFragment()).commit();
-        } else if (itemId == R.id.nav_settings) {
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new SettingsFragment()).commit();
         } else if (itemId == R.id.nav_progress) {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ProgressFragment()).commit();
         } else if (itemId == R.id.nav_exercise) {
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ExercisePlanFragment()).commit();
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new WorkoutModule1()).commit();
+        } else if (itemId == R.id.nav_settings) {
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new SettingsFragment()).commit();
         } else if (itemId == R.id.nav_logout) {
             Toast.makeText(this, "Logout!", Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(MainActivity.this, AuthenticationActivity.class);
