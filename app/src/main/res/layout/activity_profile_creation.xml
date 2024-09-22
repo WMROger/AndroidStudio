@@ -158,6 +158,7 @@
             android:hint="First Name"
             android:inputType="text"
             android:paddingLeft="20sp"
+            android:textColor="@color/white"
             android:textColorHint="#FDFDFD" />
 
         <!-- Last Name Input -->
@@ -178,6 +179,7 @@
             android:hint="Last Name"
             android:inputType="text"
             android:paddingLeft="20sp"
+            android:textColor="@color/white"
             android:textColorHint="#FDFDFD" />
 
         <!-- Date of Birth Input -->

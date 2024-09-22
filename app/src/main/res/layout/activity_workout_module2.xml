@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Home_LandingPage.Workouts.WorkoutModule2"
+    android:background="@drawable/bg_gradient"
+    tools:layout_editor_absoluteX="13dp"
+    tools:layout_editor_absoluteY="-1dp">
+
+
+    <TextView
+        android:id="@+id/workout_txt2"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:layout_marginStart="40dp"
+        android:fontFamily="@font/konkhmer_sleokchher"
+        android:text="Workouts"
+        android:textColor="@color/white"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.007"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.059" />
+
+
+
+
+    <TextView
+        android:id="@+id/WM2discard_txt"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:text="Discard"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        app:flow_verticalAlign="center"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.844"
+        app:layout_constraintStart_toEndOf="@+id/workout_txt2"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.059" />
+
+
+    <TextView
+        android:id="@+id/textView42"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="42dp"
+        android:layout_marginTop="80dp"
+        android:layout_marginEnd="140dp"
+        android:text="Creating a Workout"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <TextView
+        android:id="@+id/textView43"
+        android:layout_width="280dp"
+        android:layout_height="wrap_content"
+        android:lineHeight="20sp"
+        android:text="Click Add Exercise to Choose Exercise that’s suits you"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:textSize="17sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView42"
+        app:layout_constraintVertical_bias="0.016" />
+
+
+    <LinearLayout
+        android:layout_width="380dp"
+        android:layout_height="550dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="33dp"
+        android:background="@drawable/bg_blackgradient"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.483"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView43"
+        app:layout_constraintVertical_bias="0.26">
+
+
+        <EditText
+            android:id="@+id/editTextText"
+            android:layout_width="300dp"
+            android:layout_height="50dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="20dp"
+            android:alpha="0.5"
+            android:background="@drawable/button_background"
+            android:ems="10"
+            android:hint="Name your workout"
+            android:inputType="text"
+            android:paddingLeft="25dp"
+            android:textColorHint="#FFFFFF"
+            android:textSize="15sp" />
+
+
+        <Button
+            android:id="@+id/WM2AddExercisebtn"
+            android:layout_width="303dp"
+            android:layout_height="60dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="81dp"
+            android:text="Add Exercise"
+            android:textAllCaps="false"
+            app:cornerRadius="20dp" />
+    </LinearLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

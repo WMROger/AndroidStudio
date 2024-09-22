@@ -30,7 +30,7 @@ public class ForgetPasswordActivity extends AppCompatActivity {
     TextView backButton;
     private Retrofit retrofit;
     private API apiService;
-    private final String baseUrl = "https://heavymetals.scarlet2.io/HeavyMetals/forget_password.php/";
+    private final String baseUrl = "https://heavymetals.scarlet2.io/HeavyMetals/forgetpass/";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
