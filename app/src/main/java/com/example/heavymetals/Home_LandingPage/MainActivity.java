@@ -135,9 +135,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int itemId = item.getItemId();
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fragment_container, new WorkoutModule1())
-                .commit();
 
         if (itemId == R.id.nav_profile) {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ProfileFragment()).commit();

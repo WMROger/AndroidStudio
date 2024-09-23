@@ -29,9 +29,7 @@ public class WorkoutModule2 extends AppCompatActivity {
 
         discardTxt.setOnClickListener(V -> {
             // Navigate back to WorkoutModule1
-            Intent intent = new Intent(WorkoutModule2.this, WorkoutModule1.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(intent);
+
             finish(); // Close WorkoutModule2 activity
         });
 

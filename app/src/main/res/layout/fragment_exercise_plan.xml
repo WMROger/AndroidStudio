@@ -96,7 +96,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button15" />
+         />
 
     <ScrollView
         android:id="@+id/scrollView"
@@ -195,7 +195,7 @@
 
 
                 <ImageButton
-                    android:id="@+id/bpress_addBtn"
+                    android:id="@+id/addItemBtn1"
                     android:layout_width="33dp"
                     android:layout_height="33dp"
                     android:layout_alignParentEnd="true"
@@ -264,7 +264,7 @@
 
 
                 <ImageButton
-                    android:id="@+id/treadmill_addBtn"
+                    android:id="@+id/addItemBtn2"
                     android:layout_width="33dp"
                     android:layout_height="33dp"
                     android:layout_alignParentEnd="true"
@@ -333,7 +333,7 @@
 
 
                 <ImageButton
-                    android:id="@+id/deadlift_addBtn"
+                    android:id="@+id/addItemBtn3"
                     android:layout_width="33dp"
                     android:layout_height="33dp"
                     android:layout_alignParentEnd="true"
@@ -402,7 +402,7 @@
 
 
                 <ImageButton
-                    android:id="@+id/plank_addBtn"
+                    android:id="@+id/addItemBtn4"
                     android:layout_width="33dp"
                     android:layout_height="33dp"
                     android:layout_alignParentEnd="true"
@@ -471,7 +471,7 @@
 
 
                 <ImageButton
-                    android:id="@+id/pullup_addBtn"
+                    android:id="@+id/addItemBtn5"
                     android:layout_width="33dp"
                     android:layout_height="33dp"
                     android:layout_alignParentEnd="true"
@@ -540,7 +540,7 @@
 
 
                 <ImageButton
-                    android:id="@+id/bicepcurls_addBtn"
+                    android:id="@+id/addItemBtn6"
                     android:layout_width="33dp"
                     android:layout_height="33dp"
                     android:layout_alignParentEnd="true"
@@ -555,4 +555,15 @@
 
         </LinearLayout>
     </ScrollView>
+
+    <ImageButton
+        android:id="@+id/addItemBtn"
+        android:layout_width="33dp"
+        android:layout_height="33dp"
+        android:layout_gravity="end"
+        android:visibility="gone"
+        android:background="@null"
+        android:src="@drawable/additem"
+        tools:layout_editor_absoluteX="2dp"
+        tools:layout_editor_absoluteY="-1dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>
