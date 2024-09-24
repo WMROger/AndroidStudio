@@ -33,9 +33,9 @@ public class WorkoutModule1 extends Fragment {
 
         setupToggleButton(addItemBtn1, "Bench Press");
         setupToggleButton(addItemBtn2, "Treadmill");
-        setupToggleButton(addItemBtn3, "Deadlift");
+        setupToggleButton(addItemBtn3, "Dead lift");
         setupToggleButton(addItemBtn4, "Plank");
-        setupToggleButton(addItemBtn5, "Pullups");
+        setupToggleButton(addItemBtn5, "Pull ups");
         setupToggleButton(addItemBtn6, "Bicep Curls");
 
         FEPAddworkout.setOnClickListener(v -> {

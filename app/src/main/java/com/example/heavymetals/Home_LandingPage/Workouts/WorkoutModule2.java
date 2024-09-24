@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class WorkoutModule2 extends AppCompatActivity {
-    private TextView exerciseNameText, exerciseCategoryText;
+    private TextView WM2discard_txt, exerciseNameText, exerciseCategoryText;
     private LinearLayout workoutContainer;
     private HashMap<String, Integer> exerciseIconMap;
     private ImageView exerciseIcon;
@@ -28,7 +28,6 @@ public class WorkoutModule2 extends AppCompatActivity {
     private ImageButton removeButton;
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,7 +35,13 @@ public class WorkoutModule2 extends AppCompatActivity {
 
         // Initialize the layout where exercises will be added
         workoutContainer = findViewById(R.id.workout_container);
-
+        WM2discard_txt = findViewById(R.id.WM2discard_txt);
+        WM2discard_txt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
         // Ensure that workoutContainer is not null
         if (workoutContainer == null) {
             throw new NullPointerException("workoutContainer is null. Check your layout.");
@@ -111,13 +116,12 @@ public class WorkoutModule2 extends AppCompatActivity {
     }
 
 
-
     // Function to initialize the mapping between exercises and their corresponding icons
     private void initializeExerciseIconMap() {
         exerciseIconMap = new HashMap<>();
         exerciseIconMap.put("Bench Press", R.drawable.bench_press_icon);
         exerciseIconMap.put("Pull ups", R.drawable.pullup_icon);
-        exerciseIconMap.put("Deadlift", R.drawable.deadlift_icon);
+        exerciseIconMap.put("Dead lift", R.drawable.deadlift_icon);
         exerciseIconMap.put("Treadmill", R.drawable.treadmill_icon);
         exerciseIconMap.put("Plank", R.drawable.plank_icon);
         exerciseIconMap.put("Bicep Curls", R.drawable.bicepcurls_icon);
@@ -130,7 +134,7 @@ public class WorkoutModule2 extends AppCompatActivity {
                 return "Chest";
             case "Pull ups":
                 return "Upper Body";
-            case "Deadlift":
+            case "Dead lift":
                 return "Back";
             case "Treadmill":
                 return "Cardio";
