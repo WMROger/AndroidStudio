@@ -15,7 +15,7 @@ import java.util.ArrayList;
 
 public class WorkoutModule1 extends Fragment {
     private Button FEPAddworkout;
-    private ImageButton addItemBtn1, addItemBtn2, addItemBtn3, addItemBtn4, addItemBtn5;
+    private ImageButton addItemBtn1, addItemBtn2, addItemBtn3, addItemBtn4, addItemBtn5, addItemBtn6;
     private ArrayList<String> selectedExercises = new ArrayList<>();
 
     @Override
@@ -29,12 +29,14 @@ public class WorkoutModule1 extends Fragment {
         addItemBtn3 = view.findViewById(R.id.addItemBtn3);
         addItemBtn4 = view.findViewById(R.id.addItemBtn4);
         addItemBtn5 = view.findViewById(R.id.addItemBtn5);
+        addItemBtn6 = view.findViewById(R.id.addItemBtn6);
 
         setupToggleButton(addItemBtn1, "Bench Press");
         setupToggleButton(addItemBtn2, "Treadmill");
         setupToggleButton(addItemBtn3, "Deadlift");
         setupToggleButton(addItemBtn4, "Plank");
         setupToggleButton(addItemBtn5, "Pullups");
+        setupToggleButton(addItemBtn6, "Bicep Curls");
 
         FEPAddworkout.setOnClickListener(v -> {
             Intent intent = new Intent(getActivity(), WorkoutModule2.class);
