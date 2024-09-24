@@ -17,6 +17,9 @@
         android:windowSoftInputMode="adjustPan"
         tools:targetApi="31">
         <activity
+            android:name=".Home_LandingPage.Workouts.AddWorkoutActivity"
+            android:exported="false" />
+        <activity
             android:name=".Home_LandingPage.Workouts.WorkoutModule4"
             android:exported="false" />
         <activity
@@ -25,7 +28,6 @@
         <activity
             android:name=".Home_LandingPage.Workouts.WorkoutModule2"
             android:exported="false" />
-
         <activity
             android:name=".Home_LandingPage.Workouts.WorkoutModule1"
             android:exported="false" />

@@ -82,7 +82,7 @@
         android:text="08/22/2024 11:14 PM"
         android:textColor="#FFFFFF"
         android:textColorLink="#FFFFFF"
-        android:textSize="16sp"
+        android:textSize="26sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.092"
