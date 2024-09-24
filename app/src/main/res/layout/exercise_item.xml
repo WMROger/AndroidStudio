@@ -8,7 +8,9 @@
     android:layout_margin="16dp"
     android:background="@color/black"
     app:cardCornerRadius="20dp"
-    app:cardElevation="6dp">
+    app:cardElevation="6dp"
+    android:visibility="gone">
+
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -83,6 +85,7 @@
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
             android:orientation="horizontal"
+            android:background="@drawable/bg_blackgradient"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"

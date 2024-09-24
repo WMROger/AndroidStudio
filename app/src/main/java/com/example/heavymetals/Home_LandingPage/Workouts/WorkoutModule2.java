@@ -25,6 +25,9 @@ public class WorkoutModule2 extends AppCompatActivity {
     private Integer iconResource;
     private ArrayList<String> selectedExercises;
     private Button addSetButton;
+    private ImageButton removeButton;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,67 +56,67 @@ public class WorkoutModule2 extends AppCompatActivity {
         }
     }
 
-    // Function to add an exercise dynamically
+
     // Function to add an exercise dynamically
     private void addExercise(String exerciseName) {
+        // Inflate the exercise item view (which is initially set to 'gone' in XML)
         View exerciseCard = LayoutInflater.from(this).inflate(R.layout.exercise_item, workoutContainer, false);
 
-        // Set exercise name and category (dummy category for now)
+        // Set the exercise card visibility to VISIBLE once it’s added dynamically
+        exerciseCard.setVisibility(View.VISIBLE);
+
+        // Find the relevant views in the card (name, category, icon, etc.)
         addSetButton = exerciseCard.findViewById(R.id.add_set_button);
         exerciseNameText = exerciseCard.findViewById(R.id.exercise_name);
         exerciseCategoryText = exerciseCard.findViewById(R.id.exercise_category);
+
+        // Set the exercise name and category based on the input
         exerciseNameText.setText(exerciseName);
-
-
-
-        // Find the reps EditText (you will need to add this in your XML layout for each set)
-        EditText repsEditText = exerciseCard.findViewById(R.id.reps_edit_text); // Assuming you added an EditText in the layout
-        repsEditText.setText("10"); // Set default reps to 10
-
-        // You can later retrieve the reps input from the EditText when needed
-        String reps = repsEditText.getText().toString();
-
-        // Set the click listener to add a new set when clicked
-        addSetButton.setOnClickListener(v -> {
-            // Inflate a new set layout
-            View newSetLayout = LayoutInflater.from(this).inflate(R.layout.exercise_item, workoutContainer, false);
-
-            // Update the set number dynamically (e.g., Set 3, Set 4)
-            TextView setNumberTextView = newSetLayout.findViewById(R.id.set_value);
-            int currentSetNumber = workoutContainer.getChildCount(); // This assumes each child is a set
-            setNumberTextView.setText(String.valueOf(currentSetNumber + 1));
-
-            // Add the new set layout to the exercise card
-            workoutContainer.addView(newSetLayout);
-        });
-
-        // Assign a dummy category based on exercise name
         String exerciseCategory = getExerciseCategory(exerciseName);
         exerciseCategoryText.setText(exerciseCategory);
 
-        // Set the appropriate image for the exercise
+        // Set the default reps for the exercise
+        EditText repsEditText = exerciseCard.findViewById(R.id.reps_edit_text);
+        repsEditText.setText("10");  // Default reps value
+
+        // Set the appropriate icon for the exercise
         exerciseIcon = exerciseCard.findViewById(R.id.exercise_icon);
         iconResource = exerciseIconMap.get(exerciseName);
         if (iconResource != null) {
             exerciseIcon.setImageResource(iconResource);
         } else {
-            exerciseIcon.setImageResource(R.drawable.human_icon); // Use default if not found
+            exerciseIcon.setImageResource(R.drawable.human_icon);  // Default icon if not found
         }
 
-        // Set the click listener for the remove button
-        ImageButton removeButton = exerciseCard.findViewById(R.id.remove_exercise_button);
+        // Set a click listener to remove the exercise card if necessary
+        removeButton = exerciseCard.findViewById(R.id.remove_exercise_button);
         removeButton.setOnClickListener(v -> workoutContainer.removeView(exerciseCard));
+
+        // Set a click listener to add new sets
+        addSetButton.setOnClickListener(v -> {
+            // Inflate a new set layout
+            View newSetLayout = LayoutInflater.from(this).inflate(R.layout.exercise_item, workoutContainer, false);
+
+            // Update the set number dynamically
+            TextView setNumberTextView = newSetLayout.findViewById(R.id.set_value);
+            int currentSetNumber = workoutContainer.getChildCount();  // Counts the sets
+            setNumberTextView.setText(String.valueOf(currentSetNumber + 1));
+
+            // Add the new set to the workout container
+            workoutContainer.addView(newSetLayout);
+        });
 
         // Add the exercise card to the workout container
         workoutContainer.addView(exerciseCard);
     }
 
 
+
     // Function to initialize the mapping between exercises and their corresponding icons
     private void initializeExerciseIconMap() {
         exerciseIconMap = new HashMap<>();
         exerciseIconMap.put("Bench Press", R.drawable.bench_press_icon);
-        exerciseIconMap.put("Push ups", R.drawable.pullup_icon);
+        exerciseIconMap.put("Pull ups", R.drawable.pullup_icon);
         exerciseIconMap.put("Deadlift", R.drawable.deadlift_icon);
         exerciseIconMap.put("Treadmill", R.drawable.treadmill_icon);
         exerciseIconMap.put("Plank", R.drawable.plank_icon);
@@ -124,8 +127,9 @@ public class WorkoutModule2 extends AppCompatActivity {
     private String getExerciseCategory(String exerciseName) {
         switch (exerciseName) {
             case "Bench Press":
-            case "Push ups":
                 return "Chest";
+            case "Pull ups":
+                return "Upper Body";
             case "Deadlift":
                 return "Back";
             case "Treadmill":

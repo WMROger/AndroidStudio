@@ -454,7 +454,7 @@
                     android:layout_height="23dp"
                     android:layout_toRightOf="@id/cardView5"
                     android:gravity="center"
-                    android:text="Pullups"
+                    android:text="Pull ups"
                     android:textColor="@color/white"
                     android:textSize="17sp" />
 

@@ -82,8 +82,10 @@
         android:layout_height="571dp"
         app:layout_constraintBottom_toTopOf="@+id/WM2AddExercisebtn"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.515"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView43">
+        app:layout_constraintTop_toBottomOf="@+id/textView43"
+        app:layout_constraintVertical_bias="0.514">
 
         <LinearLayout
             android:id="@+id/workout_container"
@@ -91,6 +93,7 @@
             android:layout_height="650dp"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="33dp"
+            android:paddingBottom="20dp"
             android:background="@drawable/bg_blackgradient"
             android:orientation="vertical"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -110,9 +113,10 @@
                 android:alpha="0.5"
                 android:background="@drawable/button_background"
                 android:ems="10"
+                android:gravity="center"
                 android:hint="Name your workout"
                 android:inputType="text"
-                android:paddingLeft="25dp"
+                android:textColor="@color/white"
                 android:textColorHint="#FFFFFF"
                 android:textSize="15sp" />
 
