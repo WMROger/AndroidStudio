@@ -38,7 +38,7 @@ public class WorkoutAdapter extends RecyclerView.Adapter<WorkoutAdapter.WorkoutV
     @Override
     public void onBindViewHolder(@NonNull WorkoutViewHolder holder, int position) {
         Workout workout = workoutList.get(position);
-        holder.workoutTitle.setText(workout.getTitle());
+        holder.workoutTitle.setText(workout.getTitle());  // Display workout name
         holder.exerciseCount.setText("Exercises: " + workout.getExerciseCount());
         holder.viewWorkoutButton.setOnClickListener(v -> listener.onViewWorkoutClick(workout));
     }

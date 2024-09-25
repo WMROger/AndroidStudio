@@ -51,5 +51,4 @@ public class WorkoutModule4 extends AppCompatActivity {
         intent.putStringArrayListExtra("exercises", (ArrayList<String>) workout.getExercises());
         startActivity(intent);
     }
-
 }
