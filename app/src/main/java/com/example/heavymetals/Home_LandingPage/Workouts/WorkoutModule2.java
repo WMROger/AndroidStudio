@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -81,9 +82,6 @@ public class WorkoutModule2 extends AppCompatActivity {
         String exerciseCategory = getExerciseCategory(exerciseName);
         exerciseCategoryText.setText(exerciseCategory);
 
-        // Set the default reps for the exercise
-        EditText repsEditText = exerciseCard.findViewById(R.id.reps_edit_text);
-        repsEditText.setText("10");  // Default reps value
 
         // Set the appropriate icon for the exercise
         exerciseIcon = exerciseCard.findViewById(R.id.exercise_icon);
@@ -104,10 +102,9 @@ public class WorkoutModule2 extends AppCompatActivity {
         // Find the container for sets inside this specific exercise card
         LinearLayout setsContainer = exerciseCard.findViewById(R.id.sets_container);
 
-        // Set a click listener to add new sets
         addSetButton.setOnClickListener(v -> {
-            // Inflate a new set layout
-            View newSetLayout = LayoutInflater.from(this).inflate(R.layout.exercise_item, setsContainer, false);
+            // Inflate the new set layout (use the correct set_item_layout)
+            View newSetLayout = LayoutInflater.from(this).inflate(R.layout.set_item_layout, setsContainer, false);
 
             // Find the set number TextView and update it dynamically
             TextView setNumberTextView = newSetLayout.findViewById(R.id.set_value);
@@ -123,6 +120,12 @@ public class WorkoutModule2 extends AppCompatActivity {
             // Add the new set layout to the specific setsContainer for this exercise
             setsContainer.addView(newSetLayout);
         });
+
+
+
+
+
+
 
         // Add the exercise card to the workout container
         workoutContainer.addView(exerciseCard);
@@ -167,7 +170,8 @@ public class WorkoutModule2 extends AppCompatActivity {
         int childCount = workoutContainer.getChildCount();
         Log.d("WorkoutModule2", "Child count: " + childCount);
 
-        if (childCount > 0) {
+        // Check if the workout container has any exercises added
+        if (childCount > 0 && hasValidExercises()) {
             WM2discard_txt.setText("Save");
             WM2discard_txt.setOnClickListener(v -> {
                 Intent intent = new Intent(WorkoutModule2.this, WorkoutModule3.class);
@@ -178,5 +182,32 @@ public class WorkoutModule2 extends AppCompatActivity {
             WM2discard_txt.setOnClickListener(v -> finish());
         }
     }
+
+    // Helper method to determine if there are any valid exercises with values
+    private boolean hasValidExercises() {
+        // Loop through all added exercise cards in the workoutContainer
+        for (int i = 0; i < workoutContainer.getChildCount(); i++) {
+            View exerciseCard = workoutContainer.getChildAt(i);
+
+            // Ensure that the exerciseCard is not null and contains the reps EditText
+            if (exerciseCard != null) {
+                EditText repsEditText = exerciseCard.findViewById(R.id.reps_edit_text);
+
+                // Check if the repsEditText is not null
+                if (repsEditText != null) {
+                    String repsValue = repsEditText.getText().toString();
+
+                    // If any exercise has valid reps or other fields are filled, return true
+                    if (repsValue != null && !repsValue.isEmpty()) {
+                        return true;
+                    }
+                }
+            }
+        }
+        // If none of the exercises have valid input, return false
+        return false;
+    }
+
+
 
 }

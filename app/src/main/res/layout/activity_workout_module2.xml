@@ -89,8 +89,8 @@
 
         <LinearLayout
             android:id="@+id/workout_container"
-            android:layout_width="380dp"
-            android:layout_height="650dp"
+            android:layout_width="375dp"
+            android:layout_height="match_parent"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="33dp"
             android:paddingBottom="20dp"
