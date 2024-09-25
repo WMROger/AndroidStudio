@@ -30,6 +30,9 @@ public class WorkoutModule2 extends AppCompatActivity {
     private Button addSetButton;
     private ImageButton removeButton;
 
+    // Define the threshold height in dp
+    private static final int THRESHOLD_HEIGHT_DP = 100;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,8 +63,38 @@ public class WorkoutModule2 extends AppCompatActivity {
             }
         }
 
-        // Update the button text depending on whether exercises are present
-        updateSaveOrDiscardText();
+        // Check the height and update the button text accordingly
+        checkWorkoutContainerHeight();
+    }
+
+    // Convert dp to pixels for accurate comparison
+    private int dpToPx(int dp) {
+        float density = getResources().getDisplayMetrics().density;
+        return Math.round(dp * density);
+    }
+
+    // Method to check the height of the workout container
+    private void checkWorkoutContainerHeight() {
+        workoutContainer.post(() -> {
+            // Get the current height of the workout container
+            int containerHeight = workoutContainer.getHeight();
+            Log.d("WorkoutModule2", "Workout container height: " + containerHeight);
+
+            // Compare it with the threshold (converted to pixels)
+            if (containerHeight > dpToPx(THRESHOLD_HEIGHT_DP)) {
+                // Height exceeds the threshold, show "Save"
+                WM2discard_txt.setText("Save");
+                WM2discard_txt.setOnClickListener(v -> {
+                    // Navigate to the next screen when saving the workout
+                    Intent intent = new Intent(WorkoutModule2.this, WorkoutModule3.class);
+                    startActivity(intent);
+                });
+            } else {
+                // Height is below the threshold, show "Discard"
+                WM2discard_txt.setText("Discard");
+                WM2discard_txt.setOnClickListener(v -> finish());
+            }
+        });
     }
 
     // Function to add an exercise dynamically
@@ -82,7 +115,6 @@ public class WorkoutModule2 extends AppCompatActivity {
         String exerciseCategory = getExerciseCategory(exerciseName);
         exerciseCategoryText.setText(exerciseCategory);
 
-
         // Set the appropriate icon for the exercise
         exerciseIcon = exerciseCard.findViewById(R.id.exercise_icon);
         iconResource = exerciseIconMap.get(exerciseName);
@@ -96,7 +128,8 @@ public class WorkoutModule2 extends AppCompatActivity {
         removeButton = exerciseCard.findViewById(R.id.remove_exercise_button);
         removeButton.setOnClickListener(v -> {
             workoutContainer.removeView(exerciseCard);
-            updateSaveOrDiscardText(); // Update the button text after removal
+            // After removing an exercise, check the height and update the button text
+            checkWorkoutContainerHeight();
         });
 
         // Find the container for sets inside this specific exercise card
@@ -121,17 +154,11 @@ public class WorkoutModule2 extends AppCompatActivity {
             setsContainer.addView(newSetLayout);
         });
 
-
-
-
-
-
-
         // Add the exercise card to the workout container
         workoutContainer.addView(exerciseCard);
 
-        // Update the button text since we added an exercise
-        updateSaveOrDiscardText();
+        // After adding an exercise, check the height and update the button text
+        checkWorkoutContainerHeight();
     }
 
     // Function to initialize the mapping between exercises and their corresponding icons
@@ -165,27 +192,7 @@ public class WorkoutModule2 extends AppCompatActivity {
         }
     }
 
-    // Helper function to update the button text based on the content of the workout container
-    private void updateSaveOrDiscardText() {
-        int childCount = workoutContainer.getChildCount();
-        Log.d("WorkoutModule2", "Child count: " + childCount);
-
-        // Check if the workout container has any exercises added
-        if (childCount > 0 && hasValidExercises()) {
-            // Change text to "Save" if there are exercises
-            WM2discard_txt.setText("Save");
-            WM2discard_txt.setOnClickListener(v -> {
-                // Navigate to the next screen when saving the workout
-                Intent intent = new Intent(WorkoutModule2.this, WorkoutModule3.class);
-                startActivity(intent);
-            });
-        } else {
-            // Change text to "Discard" if there are no exercises
-            WM2discard_txt.setText("Discard");
-            WM2discard_txt.setOnClickListener(v -> finish());
-        }
-    }
-
+    // Removed the previous updateSaveOrDiscardText() method since it duplicates functionality with checkWorkoutContainerHeight()
 
     // Helper method to determine if there are any valid exercises with values
     private boolean hasValidExercises() {
@@ -211,7 +218,4 @@ public class WorkoutModule2 extends AppCompatActivity {
         // If none of the exercises have valid input, return false
         return false;
     }
-
-
-
 }
