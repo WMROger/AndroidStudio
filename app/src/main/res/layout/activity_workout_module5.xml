@@ -1,0 +1,499 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_gradient"
+    tools:context=".Home_LandingPage.Workouts.WorkoutModule1">
+
+    <!-- Title "Exercises" -->
+    <TextView
+        android:id="@+id/exercises_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:fontFamily="@font/konkhmer_sleokchher"
+        android:text="Exercises"
+        android:textColor="@color/white"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- Subtitle "Select an exercise..." -->
+    <TextView
+        android:id="@+id/exercises_subtitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:text="Select an Exercise you wish to add to your workout"
+        android:textColor="@color/white"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/exercises_title" />
+
+    <!-- Search Bar -->
+    <EditText
+        android:id="@+id/search_bar"
+        android:layout_width="380dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/bg_blackgradient"
+        android:fontFamily="@font/konkhmer_sleokchher"
+        android:hint="Search an Exercise"
+        android:paddingLeft="16dp"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/exercises_subtitle"
+        app:layout_constraintWidth_percent="0.9" />
+
+    <!-- ScrollView for exercise list -->
+    <ScrollView
+        android:id="@+id/scrollView"
+        android:layout_width="wrap_content"
+        android:layout_height="570dp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/search_bar">
+
+
+        <LinearLayout
+            android:layout_width="380dp"
+            android:layout_height="60dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/bg_blackgradient"
+            android:orientation="vertical"
+            android:paddingBottom="20dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView37">
+
+
+            <TextView
+                android:id="@+id/textView41"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginBottom="15dp"
+                android:text="Recommendations:"
+                android:textColor="@color/white"
+                android:textSize="20sp" />
+
+
+            <RelativeLayout
+                android:layout_width="350dp"
+                android:layout_height="69dp"
+                android:layout_gravity="center"
+                android:background="@drawable/workout_bg_gray"
+                android:orientation="horizontal"
+                android:padding="16dp">
+
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cardView1"
+                    android:layout_width="40dp"
+                    android:layout_height="80dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="10dp"
+                    app:cardBackgroundColor="#D9D9D9"
+                    app:cardCornerRadius="100pt">
+
+
+                    <ImageView
+                        android:id="@+id/bench_press_icon"
+                        android:layout_width="match_parent"
+                        android:layout_height="30dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/bench_press_icon" />
+                </androidx.cardview.widget.CardView>
+
+
+                <TextView
+                    android:id="@+id/bench_press_txt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="23dp"
+                    android:layout_toRightOf="@id/cardView1"
+                    android:fontFamily="@font/konkhmer_sleokchher"
+                    android:gravity="center"
+                    android:text="Bench Press"
+                    android:textColor="@color/white"
+                    android:textSize="17sp" />
+
+
+                <TextView
+                    android:id="@+id/bpress_description"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/bench_press_txt"
+                    android:layout_toRightOf="@+id/cardView1"
+                    android:fontFamily="@font/konkhmer_sleokchher"
+                    android:text="Chest"
+                    android:textColor="@color/white"
+                    android:textSize="9sp" />
+
+
+                <ImageButton
+                    android:id="@+id/addItemBtn1"
+                    android:layout_width="33dp"
+                    android:layout_height="33dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_gravity="end"
+                    android:background="@null"
+                    android:src="@drawable/additem"
+                    tools:layout_editor_absoluteX="274dp"
+                    tools:layout_editor_absoluteY="16dp" />
+
+
+            </RelativeLayout>
+
+
+            <RelativeLayout
+                android:layout_width="350dp"
+                android:layout_height="69dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/workout_bg_gray"
+                android:orientation="horizontal"
+                android:padding="16dp">
+
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cardView2"
+                    android:layout_width="40dp"
+                    android:layout_height="80dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="10dp"
+                    app:cardBackgroundColor="#D9D9D9"
+                    app:cardCornerRadius="100pt">
+
+
+                    <ImageView
+                        android:id="@+id/treadmill_icon"
+                        android:layout_width="match_parent"
+                        android:layout_height="30dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/treadmill_icon" />
+                </androidx.cardview.widget.CardView>
+
+
+                <TextView
+                    android:id="@+id/treadmill_txt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="23dp"
+                    android:layout_toRightOf="@id/cardView2"
+                    android:gravity="center"
+                    android:text="Treadmill"
+                    android:textColor="@color/white"
+                    android:textSize="17sp" />
+
+
+                <TextView
+                    android:id="@+id/treadmill_description"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/treadmill_txt"
+                    android:layout_toRightOf="@+id/cardView2"
+                    android:text="Cardio"
+                    android:textColor="@color/white"
+                    android:textSize="9sp" />
+
+
+                <ImageButton
+                    android:id="@+id/addItemBtn2"
+                    android:layout_width="33dp"
+                    android:layout_height="33dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_gravity="end"
+                    android:background="@null"
+                    android:src="@drawable/additem"
+                    tools:layout_editor_absoluteX="274dp"
+                    tools:layout_editor_absoluteY="16dp" />
+
+
+            </RelativeLayout>
+
+
+            <RelativeLayout
+                android:layout_width="350dp"
+                android:layout_height="69dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/workout_bg_gray"
+                android:orientation="horizontal"
+                android:padding="16dp">
+
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cardView3"
+                    android:layout_width="40dp"
+                    android:layout_height="80dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="10dp"
+                    app:cardBackgroundColor="#D9D9D9"
+                    app:cardCornerRadius="100pt">
+
+
+                    <ImageView
+                        android:id="@+id/deadlift_icon"
+                        android:layout_width="match_parent"
+                        android:layout_height="30dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/deadlift_icon" />
+                </androidx.cardview.widget.CardView>
+
+
+                <TextView
+                    android:id="@+id/deadlift_txt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="23dp"
+                    android:layout_toRightOf="@id/cardView3"
+                    android:gravity="center"
+                    android:text="Deadlift"
+                    android:textColor="@color/white"
+                    android:textSize="17sp" />
+
+
+                <TextView
+                    android:id="@+id/deadlift_description"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/deadlift_txt"
+                    android:layout_toRightOf="@+id/cardView3"
+                    android:text="Lower back, Hamstrings"
+                    android:textColor="@color/white"
+                    android:textSize="9sp" />
+
+
+                <ImageButton
+                    android:id="@+id/addItemBtn3"
+                    android:layout_width="33dp"
+                    android:layout_height="33dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_gravity="end"
+                    android:background="@null"
+                    android:src="@drawable/additem"
+                    tools:layout_editor_absoluteX="274dp"
+                    tools:layout_editor_absoluteY="16dp" />
+
+
+            </RelativeLayout>
+
+
+            <RelativeLayout
+                android:layout_width="350dp"
+                android:layout_height="69dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/workout_bg_gray"
+                android:orientation="horizontal"
+                android:padding="16dp">
+
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cardView4"
+                    android:layout_width="40dp"
+                    android:layout_height="80dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="10dp"
+                    app:cardBackgroundColor="#D9D9D9"
+                    app:cardCornerRadius="100pt">
+
+
+                    <ImageView
+                        android:id="@+id/plank_icon"
+                        android:layout_width="match_parent"
+                        android:layout_height="30dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/plank_icon" />
+                </androidx.cardview.widget.CardView>
+
+
+                <TextView
+                    android:id="@+id/plank_txt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="23dp"
+                    android:layout_toRightOf="@id/cardView4"
+                    android:gravity="center"
+                    android:text="Plank"
+                    android:textColor="@color/white"
+                    android:textSize="17sp" />
+
+
+                <TextView
+                    android:id="@+id/plank_description"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/plank_txt"
+                    android:layout_toRightOf="@+id/cardView4"
+                    android:text="Core"
+                    android:textColor="@color/white"
+                    android:textSize="9sp" />
+
+
+                <ImageButton
+                    android:id="@+id/addItemBtn4"
+                    android:layout_width="33dp"
+                    android:layout_height="33dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_gravity="end"
+                    android:background="@null"
+                    android:src="@drawable/additem"
+                    tools:layout_editor_absoluteX="274dp"
+                    tools:layout_editor_absoluteY="16dp" />
+
+
+            </RelativeLayout>
+
+
+            <RelativeLayout
+                android:layout_width="350dp"
+                android:layout_height="69dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/workout_bg_gray"
+                android:orientation="horizontal"
+                android:padding="16dp">
+
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cardView5"
+                    android:layout_width="40dp"
+                    android:layout_height="80dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="10dp"
+                    app:cardBackgroundColor="#D9D9D9"
+                    app:cardCornerRadius="100pt">
+
+
+                    <ImageView
+                        android:id="@+id/pullup_icon"
+                        android:layout_width="match_parent"
+                        android:layout_height="30dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/pullup_icon" />
+                </androidx.cardview.widget.CardView>
+
+
+                <TextView
+                    android:id="@+id/pullup_txt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="23dp"
+                    android:layout_toRightOf="@id/cardView5"
+                    android:gravity="center"
+                    android:text="Pull ups"
+                    android:textColor="@color/white"
+                    android:textSize="17sp" />
+
+
+                <TextView
+                    android:id="@+id/pullup_description"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/pullup_txt"
+                    android:layout_toRightOf="@+id/cardView5"
+                    android:text="Upper Body"
+                    android:textColor="@color/white"
+                    android:textSize="9sp" />
+
+
+                <ImageButton
+                    android:id="@+id/addItemBtn5"
+                    android:layout_width="33dp"
+                    android:layout_height="33dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_gravity="end"
+                    android:background="@null"
+                    android:src="@drawable/additem"
+                    tools:layout_editor_absoluteX="274dp"
+                    tools:layout_editor_absoluteY="16dp" />
+
+
+            </RelativeLayout>
+
+
+            <RelativeLayout
+                android:layout_width="350dp"
+                android:layout_height="69dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/workout_bg_gray"
+                android:orientation="horizontal"
+                android:padding="16dp">
+
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cardView7"
+                    android:layout_width="40dp"
+                    android:layout_height="80dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="10dp"
+                    app:cardBackgroundColor="#D9D9D9"
+                    app:cardCornerRadius="100pt">
+
+
+                    <ImageView
+                        android:id="@+id/bicepcurls_icon"
+                        android:layout_width="match_parent"
+                        android:layout_height="37dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/bicepcurls_icon" />
+                </androidx.cardview.widget.CardView>
+
+
+                <TextView
+                    android:id="@+id/bicepcurls_txt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="23dp"
+                    android:layout_toRightOf="@id/cardView7"
+                    android:gravity="center"
+                    android:text="Bicep Curls"
+                    android:textColor="@color/white"
+                    android:textSize="17sp" />
+
+
+                <TextView
+                    android:id="@+id/bicepcurls_description"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/bicepcurls_txt"
+                    android:layout_toRightOf="@+id/cardView7"
+                    android:text="Upper arm"
+                    android:textColor="@color/white"
+                    android:textSize="9sp" />
+
+
+                <ImageButton
+                    android:id="@+id/addItemBtn6"
+                    android:layout_width="33dp"
+                    android:layout_height="33dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_gravity="end"
+                    android:background="@null"
+                    android:src="@drawable/additem"
+                    tools:layout_editor_absoluteX="274dp"
+                    tools:layout_editor_absoluteY="16dp" />
+            </RelativeLayout>
+
+
+        </LinearLayout>
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

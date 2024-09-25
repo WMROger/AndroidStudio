@@ -80,7 +80,7 @@
         <!-- Set, Reps, Done Labels and Values -->
 
         <LinearLayout
-            android:id="@+id/linearLayout6"
+            android:id="@+id/sets_container"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
@@ -185,7 +185,8 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/linearLayout6" />
+            app:layout_constraintTop_toBottomOf="@+id/sets_container"
+            app:layout_constraintVertical_bias="1.0" />
 
         <!-- Add Set Button -->
     </androidx.constraintlayout.widget.ConstraintLayout>
