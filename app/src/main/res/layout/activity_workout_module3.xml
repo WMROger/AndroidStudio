@@ -48,16 +48,15 @@
         android:id="@+id/linearLayout2"
         android:layout_width="380dp"
         android:layout_height="600dp"
-        android:layout_marginStart="16dp"
         android:layout_marginTop="50dp"
         android:background="@drawable/bg_blackgradient"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="0.483"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.377">
+        app:layout_constraintVertical_bias="0.37">
 
 
         <TextView
@@ -96,7 +95,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:background="@drawable/bench_press_icon"/>
+                    android:background="@drawable/bench_press_icon" />
             </androidx.cardview.widget.CardView>
 
 
@@ -246,8 +245,6 @@
             </androidx.cardview.widget.CardView>
 
 
-
-
             <Button
                 android:id="@+id/addBtn_set1"
                 android:layout_width="wrap_content"
@@ -263,8 +260,6 @@
                 android:textAllCaps="false"
                 android:textSize="16sp"
                 app:cornerRadius="20dp" />
-
-
 
 
         </RelativeLayout>
@@ -443,8 +438,6 @@
             </androidx.cardview.widget.CardView>
 
 
-
-
             <Button
                 android:id="@+id/button20"
                 android:layout_width="wrap_content"
@@ -462,7 +455,6 @@
                 app:cornerRadius="20dp" />
         </RelativeLayout>
     </LinearLayout>
-
 
     <Button
         android:layout_width="300dp"

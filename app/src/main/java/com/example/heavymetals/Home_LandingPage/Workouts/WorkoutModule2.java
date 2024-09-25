@@ -15,10 +15,14 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.heavymetals.Models.Workout;
 import com.example.heavymetals.R;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+
 
 public class WorkoutModule2 extends AppCompatActivity {
     private TextView WM2discard_txt, exerciseNameText, exerciseCategoryText;
@@ -29,6 +33,8 @@ public class WorkoutModule2 extends AppCompatActivity {
     private ArrayList<String> selectedExercises;
     private Button addSetButton;
     private ImageButton removeButton;
+    private List<Workout> workoutList; // Declaring workoutList
+    private EditText workoutNameInput;  // For naming the workout
 
     // Define the threshold height in dp
     private static final int THRESHOLD_HEIGHT_DP = 100;
@@ -39,6 +45,7 @@ public class WorkoutModule2 extends AppCompatActivity {
         setContentView(R.layout.activity_workout_module2);  // Use the correct layout here
 
         // Initialize the layout where exercises will be added
+        workoutNameInput = findViewById(R.id.workout_name_input);  // Workout name input
         workoutContainer = findViewById(R.id.workout_container);
         WM2discard_txt = findViewById(R.id.WM2discard_txt);
 
@@ -73,28 +80,36 @@ public class WorkoutModule2 extends AppCompatActivity {
         return Math.round(dp * density);
     }
 
-    // Method to check the height of the workout container
+    // Modify this function to save the workout name and pass it to WorkoutModule4
     private void checkWorkoutContainerHeight() {
         workoutContainer.post(() -> {
             // Get the current height of the workout container
             int containerHeight = workoutContainer.getHeight();
-            Log.d("WorkoutModule2", "Workout container height: " + containerHeight);
 
-            // Compare it with the threshold (converted to pixels)
+            // Compare it with the threshold
             if (containerHeight > dpToPx(THRESHOLD_HEIGHT_DP)) {
-                // Height exceeds the threshold, show "Save"
                 WM2discard_txt.setText("Save");
                 WM2discard_txt.setOnClickListener(v -> {
-                    // Navigate to the next screen when saving the workout
-                    Intent intent = new Intent(WorkoutModule2.this, WorkoutModule3.class);
+                    // Get the custom workout name from the input field
+                    String workoutName = workoutNameInput.getText().toString();
+                    if (workoutName.isEmpty()) {
+                        workoutName = "Unnamed Workout";  // Default name if no input
+                    }
+
+                    // Create a new Workout object to hold the name and exercises
+                    Workout newWorkout = new Workout(workoutName, selectedExercises.size(), selectedExercises);
+
+                    // Create an intent and pass the workout object to WorkoutModule4
+                    Intent intent = new Intent(this, WorkoutModule4.class);
+                    intent.putExtra("workout", newWorkout);  // Pass the Workout object
                     startActivity(intent);
                 });
             } else {
-                // Height is below the threshold, show "Discard"
                 WM2discard_txt.setText("Discard");
                 WM2discard_txt.setOnClickListener(v -> finish());
             }
         });
+
     }
 
     // Function to add an exercise dynamically
