@@ -172,16 +172,20 @@ public class WorkoutModule2 extends AppCompatActivity {
 
         // Check if the workout container has any exercises added
         if (childCount > 0 && hasValidExercises()) {
+            // Change text to "Save" if there are exercises
             WM2discard_txt.setText("Save");
             WM2discard_txt.setOnClickListener(v -> {
+                // Navigate to the next screen when saving the workout
                 Intent intent = new Intent(WorkoutModule2.this, WorkoutModule3.class);
                 startActivity(intent);
             });
         } else {
+            // Change text to "Discard" if there are no exercises
             WM2discard_txt.setText("Discard");
             WM2discard_txt.setOnClickListener(v -> finish());
         }
     }
+
 
     // Helper method to determine if there are any valid exercises with values
     private boolean hasValidExercises() {
