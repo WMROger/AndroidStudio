@@ -2,11 +2,9 @@ package com.example.heavymetals.Home_LandingPage.Workouts;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -15,10 +13,10 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.heavymetals.Models.Workout;
+import com.example.heavymetals.Models.Adapters.Exercise;
+import com.example.heavymetals.Models.Adapters.Workout;
 import com.example.heavymetals.R;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -96,21 +94,32 @@ public class WorkoutModule2 extends AppCompatActivity {
                         workoutName = "Unnamed Workout";  // Default name if no input
                     }
 
+                    // Convert the selectedExercises (ArrayList<String>) into a list of Exercise objects
+                    List<Exercise> exerciseList = new ArrayList<>();
+
+                    // Loop through the selected exercises and convert each to an Exercise object
+                    for (String exerciseName : selectedExercises) {
+                        // Set default sets, reps, and done status for each exercise
+                        Exercise exercise = new Exercise(exerciseName, 3, 10, false);  // Default sets = 3, reps = 10, done = false
+                        exerciseList.add(exercise);
+                    }
+
                     // Create a new Workout object to hold the name and exercises
-                    Workout newWorkout = new Workout(workoutName, selectedExercises.size(), selectedExercises);
+                    Workout newWorkout = new Workout(workoutName, exerciseList.size(), exerciseList);
 
                     // Create an intent and pass the workout object to WorkoutModule4
                     Intent intent = new Intent(this, WorkoutModule4.class);
                     intent.putExtra("workout", newWorkout);  // Pass the Workout object
                     startActivity(intent);
+
                 });
             } else {
                 WM2discard_txt.setText("Discard");
                 WM2discard_txt.setOnClickListener(v -> finish());
             }
         });
-
     }
+
 
     // Function to add an exercise dynamically
     private void addExercise(String exerciseName) {

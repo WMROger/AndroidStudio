@@ -8,8 +8,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.example.heavymetals.Models.Adapters.Exercise;
 import com.example.heavymetals.Models.Adapters.WorkoutAdapter;
-import com.example.heavymetals.Models.Workout;
+import com.example.heavymetals.Models.Adapters.Workout;
 import com.example.heavymetals.R;
 
 import java.util.ArrayList;
@@ -46,9 +47,9 @@ public class WorkoutModule4 extends AppCompatActivity {
     }
 
     private void onWorkoutViewClicked(Workout workout) {
-        // Open WorkoutDetailActivity and pass the exercises list to display
+        // Pass the entire list of Exercise objects to the WorkoutDetailActivity
         Intent intent = new Intent(this, WorkoutDetailActivity.class);
-        intent.putStringArrayListExtra("exercises", (ArrayList<String>) workout.getExercises());
+        intent.putExtra("exercises", (ArrayList<Exercise>) workout.getExercises());  // Pass the exercises list
         startActivity(intent);
     }
 
