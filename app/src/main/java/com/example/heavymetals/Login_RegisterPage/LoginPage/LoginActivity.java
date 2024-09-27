@@ -29,37 +29,31 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class LoginActivity extends AppCompatActivity {
-    // Initialize Variables
     EditText email, passwordEditText;
     Button loginBtn;
     TextView signUp, ForgetPassword;
-    String url_login = "https://heavymetals.scarlet2.io/HeavyMetals/login_user.php"; // Ensure this is correct
+    String url_login = "https://heavymetals.scarlet2.io/HeavyMetals/login_user.php";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login); // Set the content view
+        setContentView(R.layout.activity_login);
 
-        // Find views by ID
         email = findViewById(R.id.Login_UserEmail);
         passwordEditText = findViewById(R.id.Password_Usertext);
         ForgetPassword = findViewById(R.id.Login_ForgetPassPage);
         loginBtn = findViewById(R.id.Login_LoginButton);
         signUp = findViewById(R.id.LoginSignUpTxt);
 
-        // LOGIN: Signing in
         loginBtn.setOnClickListener(v -> {
             String emailInput = email.getText().toString().trim();
             String passwordInput = passwordEditText.getText().toString().trim();
 
-            // Input validation
             if (!validateEmail() || !validatePassword()) {
                 return;
             }
 
-            // Perform network request for authentication
             authenticateUser(emailInput, passwordInput);
-
         });
 
         ForgetPassword.setOnClickListener(v -> {
@@ -68,7 +62,6 @@ public class LoginActivity extends AppCompatActivity {
             finish();
         });
 
-        // Set sign-up button behavior
         signUp.setOnClickListener(v -> {
             Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
             startActivity(intent);
@@ -78,12 +71,11 @@ public class LoginActivity extends AppCompatActivity {
 
     private boolean validateEmail() {
         String val = email.getText().toString().trim();
-
         if (val.isEmpty()) {
             email.setError("Field cannot be empty");
             return false;
         } else {
-            email.setError(null);  // Clears the error
+            email.setError(null);
             return true;
         }
     }
@@ -101,61 +93,41 @@ public class LoginActivity extends AppCompatActivity {
 
     private void authenticateUser(String email, String password) {
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url_login,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        Log.d("LoginActivity", "Raw server response: " + response);
+                response -> {
+                    Log.d("LoginActivity", "Raw server response: " + response);
 
-                        if (response.startsWith("{")) {
-                            try {
-                                JSONObject jsonResponse = new JSONObject(response);
-                                String success = jsonResponse.getString("success");
+                    if (response.startsWith("{")) {
+                        try {
+                            JSONObject jsonResponse = new JSONObject(response);
+                            String success = jsonResponse.getString("success");
 
-                                if (success.equalsIgnoreCase("1")) {
-                                    if (jsonResponse.has("token")) {
-                                        String token = jsonResponse.getString("token");
-                                        saveToken(token);
+                            if (success.equalsIgnoreCase("1")) {
+                                if (jsonResponse.has("token")) {
+                                    String token = jsonResponse.getString("token");
+                                    saveUserDetails(token, email);
 
-                                        // Pass the email to MainActivity via Intent
-                                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                        intent.putExtra("user_email", email); // Pass email to MainActivity
-                                        startActivity(intent);
-                                        finish(); // Close LoginActivity
-                                        // Assuming you already have the user's email after login
-                                        String email = "user_email_from_login";  // This should be the actual email from login
-
-                                        // Save email in SharedPreferences
-                                        SharedPreferences sharedPreferences = getSharedPreferences("user_prefs", MODE_PRIVATE);
-                                        SharedPreferences.Editor editor = sharedPreferences.edit();
-                                        editor.putString("user_email", email);
-                                        editor.apply();
-
-                                    } else {
-                                        Log.d("LoginActivity", "Token not found in response");
-                                    }
+                                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                    intent.putExtra("user_email", email);
+                                    startActivity(intent);
+                                    finish();
                                 } else {
-                                    String message = jsonResponse.optString("message", "Authentication failed");
-                                    passwordEditText.setError(message);
+                                    Log.d("LoginActivity", "Token not found in response");
                                 }
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                                Toast.makeText(LoginActivity.this, "Error parsing JSON: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                            } else {
+                                String message = jsonResponse.optString("message", "Authentication failed");
+                                passwordEditText.setError(message);
                             }
-                        } else {
-                            Log.e("LoginActivity", "Unexpected non-JSON response: " + response);
-                            Toast.makeText(LoginActivity.this, "Server error or invalid response.", Toast.LENGTH_SHORT).show();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Toast.makeText(LoginActivity.this, "Error parsing JSON: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                         }
+                    } else {
+                        Log.e("LoginActivity", "Unexpected non-JSON response: " + response);
+                        Toast.makeText(LoginActivity.this, "Server error or invalid response.", Toast.LENGTH_SHORT).show();
                     }
-
                 },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(LoginActivity.this, "Network error: " + error.getMessage(), Toast.LENGTH_SHORT).show();
-                        error.printStackTrace();
-                    }
-                }
+                this::handleVolleyError
         ) {
             @Override
             protected Map<String, String> getParams() {
@@ -170,10 +142,22 @@ public class LoginActivity extends AppCompatActivity {
         queue.add(stringRequest);
     }
 
-    private void saveToken(String token) {
+    private void saveUserDetails(String token, String email) {
         SharedPreferences sharedPreferences = getSharedPreferences("user_prefs", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString("auth_token", token);
+        editor.putString("user_email", email);
         editor.apply();
+    }
+
+    private void handleVolleyError(VolleyError error) {
+        String errorMessage = "Network error occurred.";
+        if (error.networkResponse != null) {
+            int statusCode = error.networkResponse.statusCode;
+            errorMessage += " Status code: " + statusCode;
+        }
+
+        Toast.makeText(LoginActivity.this, errorMessage, Toast.LENGTH_LONG).show();
+        Log.e("LoginActivity", "Volley Error: " + error.getMessage());
     }
 }

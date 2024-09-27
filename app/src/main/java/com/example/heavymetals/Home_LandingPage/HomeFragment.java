@@ -1,11 +1,13 @@
 package com.example.heavymetals.Home_LandingPage;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -13,6 +15,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.example.heavymetals.Home_LandingPage.Workouts.WorkoutModule4;
 import com.example.heavymetals.Models.API;
 import com.example.heavymetals.Models.CurrentTimeResponse;
 import com.example.heavymetals.R;
@@ -28,7 +31,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class HomeFragment extends Fragment {
-
+    private Button YourWorkoutBtn;
     private TextView textViewCurrentTime;
     private API apiService;
     private final Handler handler = new Handler();
@@ -40,8 +43,15 @@ public class HomeFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_home, container, false);
-
+        YourWorkoutBtn = view.findViewById(R.id.YourWorkout_btn);
         textViewCurrentTime = view.findViewById(R.id.textDate); // Ensure this ID exists in your fragment_home.xml
+
+        YourWorkoutBtn.setOnClickListener(v -> {
+            // Use requireActivity() or getActivity() to get the Activity context from the Fragment
+            Intent intent = new Intent(requireActivity(), WorkoutModule4.class);
+            startActivity(intent);
+        });
+
 
         // Initialize Retrofit
         Retrofit retrofit = new Retrofit.Builder()

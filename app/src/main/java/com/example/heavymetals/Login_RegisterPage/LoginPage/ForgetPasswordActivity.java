@@ -27,30 +27,33 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class ForgetPasswordActivity extends AppCompatActivity {
     private EditText emailEditText;
     private Button searchButton;
-    TextView backButton;
+    private TextView backButton;
     private Retrofit retrofit;
     private API apiService;
-    private final String baseUrl = "https://heavymetals.scarlet2.io/HeavyMetals/forgetpass/";
+    private final String baseUrl = "https://heavymetals.scarlet2.io/HeavyMetals/forgetpass/forgetpass.php/";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_forget_password);
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-        // Initialize views
 
         initializeViews();
         setupRetrofit();
-        backButton = findViewById(R.id.Forget_BackTxt);
+
+        // Back button functionality
         backButton.setOnClickListener(v -> {
             Intent intent = new Intent(ForgetPasswordActivity.this, LoginActivity.class);
             startActivity(intent);
             finish();
         });
+
+        // Search/Reset button functionality
         searchButton.setOnClickListener(v -> {
             if (validateEmail()) {
                 requestPasswordReset();
@@ -61,6 +64,7 @@ public class ForgetPasswordActivity extends AppCompatActivity {
     private void initializeViews() {
         emailEditText = findViewById(R.id.Login_UserEmail);
         searchButton = findViewById(R.id.Forget_ConfirmSearch);
+        backButton = findViewById(R.id.Forget_BackTxt);
     }
 
     private void setupRetrofit() {
