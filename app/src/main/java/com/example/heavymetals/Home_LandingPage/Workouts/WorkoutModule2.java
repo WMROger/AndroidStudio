@@ -1,8 +1,10 @@
 package com.example.heavymetals.Home_LandingPage.Workouts;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -11,15 +13,20 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.heavymetals.Login_RegisterPage.LoginPage.LoginActivity;
 import com.example.heavymetals.Models.Adapters.Exercise;
 import com.example.heavymetals.Models.Adapters.Workout;
 import com.example.heavymetals.R;
 import com.google.gson.Gson;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.lang.ref.WeakReference;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
@@ -44,15 +51,31 @@ public class WorkoutModule2 extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_workout_module2);  // Use the correct layout here
+        setContentView(R.layout.activity_workout_module2);
 
-        // Initialize the layout where exercises will be added
-        workoutNameInput = findViewById(R.id.workout_name_input);  // Workout name input
+        // Retrieve the user email or token from SharedPreferences
+        SharedPreferences sharedPreferences = getSharedPreferences("user_prefs", MODE_PRIVATE);
+        String userEmail = sharedPreferences.getString("user_email", null); // Get the user email
+        String authToken = sharedPreferences.getString("auth_token", null); // Get the auth token if needed
+
+        if (userEmail == null || authToken == null) {
+            // Handle the case where no user is logged in
+            Log.e("WorkoutModule2", "No logged-in user found");
+            Toast.makeText(this, "No logged-in user found. Please login.", Toast.LENGTH_LONG).show();
+            Intent loginIntent = new Intent(WorkoutModule2.this, LoginActivity.class);
+            startActivity(loginIntent);
+            finish();  // Finish the current activity so the user can't proceed without logging in
+            return;  // Stop further execution in this method
+        } else {
+            Log.d("WorkoutModule2", "Logged-in user: " + userEmail);
+        }
+
+        // Initialize layout elements
+        workoutNameInput = findViewById(R.id.workout_name_input);
         workoutContainer = findViewById(R.id.workout_container);
         WM2discard_txt = findViewById(R.id.WM2discard_txt);
         WM2AddExercisebtn = findViewById(R.id.WM2AddExercisebtn);
 
-        // Set click listener for "Discard" button
         WM2discard_txt.setOnClickListener(v -> finish());
 
         WM2AddExercisebtn.setOnClickListener(v -> {
@@ -60,30 +83,76 @@ public class WorkoutModule2 extends AppCompatActivity {
             startActivity(intent);
         });
 
-        // Get the selected exercises from the intent
+        // Get the selected exercises passed from another activity
         selectedExercises = getIntent().getStringArrayListExtra("selectedExercises");
-
-        // Initialize the exercise icon map
         initializeExerciseIconMap();
 
-        // Add exercises dynamically if any are passed through the intent
         if (selectedExercises != null && !selectedExercises.isEmpty()) {
             for (String exercise : selectedExercises) {
                 addExercise(exercise);
             }
         }
 
-        // Check the height and update the button text accordingly
         checkWorkoutContainerHeight();
     }
 
-    // Convert dp to pixels for accurate comparison
+
     private int dpToPx(int dp) {
         float density = getResources().getDisplayMetrics().density;
         return Math.round(dp * density);
     }
 
-    // Modify this function to save the workout name and pass it to WorkoutModule4
+    private void addExercise(String exerciseName) {
+        // Inflate the exercise item layout (assuming you have a layout for each exercise)
+        View exerciseCard = LayoutInflater.from(this).inflate(R.layout.exercise_item, workoutContainer, false);
+
+        // Find and initialize views within the inflated exercise card
+        TextView exerciseNameText = exerciseCard.findViewById(R.id.exercise_name);
+        TextView exerciseCategoryText = exerciseCard.findViewById(R.id.exercise_category);
+        ImageView exerciseIcon = exerciseCard.findViewById(R.id.exercise_icon);
+        ImageButton removeButton = exerciseCard.findViewById(R.id.remove_exercise_button);
+        LinearLayout setsContainer = exerciseCard.findViewById(R.id.sets_container);
+        Button addSetButton = exerciseCard.findViewById(R.id.add_set_button);
+
+        // Set exercise name and category
+        exerciseNameText.setText(exerciseName);
+        exerciseCategoryText.setText(getExerciseCategory(exerciseName));
+
+        // Set exercise icon
+        iconResource = exerciseIconMap.get(exerciseName);
+        if (iconResource != null) {
+            exerciseIcon.setImageResource(iconResource);
+        } else {
+            exerciseIcon.setImageResource(R.drawable.human_icon);  // Fallback icon if none found
+        }
+
+        // Add click listener to remove the exercise card
+        removeButton.setOnClickListener(v -> {
+            workoutContainer.removeView(exerciseCard);
+            checkWorkoutContainerHeight();  // Recalculate the container height after removing
+        });
+
+        // Add click listener to add sets
+        addSetButton.setOnClickListener(v -> {
+            // Inflate new set layout (assuming you have a set item layout)
+            View newSetLayout = LayoutInflater.from(this).inflate(R.layout.set_item_layout, setsContainer, false);
+            TextView setNumberTextView = newSetLayout.findViewById(R.id.set_value);
+            EditText repsEditText = newSetLayout.findViewById(R.id.reps_edit_text);
+
+            int currentSetCount = setsContainer.getChildCount();
+            setNumberTextView.setText(String.valueOf(currentSetCount + 1));
+            repsEditText.setText("10");  // Default reps value
+
+            setsContainer.addView(newSetLayout);  // Add the new set to the container
+        });
+
+        // Add the inflated exercise card to the workout container
+        workoutContainer.addView(exerciseCard);
+
+        // Recalculate container height after adding the exercise
+        checkWorkoutContainerHeight();
+    }
+
     private void checkWorkoutContainerHeight() {
         workoutContainer.post(() -> {
             int containerHeight = workoutContainer.getHeight();
@@ -92,22 +161,21 @@ public class WorkoutModule2 extends AppCompatActivity {
                 WM2discard_txt.setOnClickListener(v -> {
                     String workoutName = workoutNameInput.getText().toString();
                     if (workoutName.isEmpty()) {
-                        workoutName = "Unnamed Workout";  // Default name if no input
+                        workoutName = "Unnamed Workout";
                     }
 
-                    // Convert the selectedExercises into a list of Exercise objects
                     List<Exercise> exerciseList = new ArrayList<>();
                     for (String exerciseName : selectedExercises) {
-                        Exercise exercise = new Exercise(exerciseName, 3, 10, false);  // Default sets and reps
+                        Exercise exercise = new Exercise(exerciseName, 3, 10, false);
                         exerciseList.add(exercise);
                     }
 
                     Workout newWorkout = new Workout(workoutName, exerciseList.size(), exerciseList);
 
-                    // Send workout data to the server
-                    sendWorkoutToServer(newWorkout);
+                    // Save workout locally and send to server
+                    saveWorkoutForUser(newWorkout);
 
-                    // Navigate to WorkoutModule4
+                    // After saving, navigate to another activity
                     Intent intent = new Intent(this, WorkoutModule4.class);
                     intent.putExtra("workout", newWorkout);
                     startActivity(intent);
@@ -119,49 +187,9 @@ public class WorkoutModule2 extends AppCompatActivity {
         });
     }
 
-    // Function to add an exercise dynamically
-    private void addExercise(String exerciseName) {
-        View exerciseCard = LayoutInflater.from(this).inflate(R.layout.exercise_item, workoutContainer, false);
-        exerciseCard.setVisibility(View.VISIBLE);
 
-        addSetButton = exerciseCard.findViewById(R.id.add_set_button);
-        exerciseNameText = exerciseCard.findViewById(R.id.exercise_name);
-        exerciseCategoryText = exerciseCard.findViewById(R.id.exercise_category);
 
-        exerciseNameText.setText(exerciseName);
-        String exerciseCategory = getExerciseCategory(exerciseName);
-        exerciseCategoryText.setText(exerciseCategory);
 
-        exerciseIcon = exerciseCard.findViewById(R.id.exercise_icon);
-        iconResource = exerciseIconMap.get(exerciseName);
-        if (iconResource != null) {
-            exerciseIcon.setImageResource(iconResource);
-        } else {
-            exerciseIcon.setImageResource(R.drawable.human_icon);  // Default icon if not found
-        }
-
-        removeButton = exerciseCard.findViewById(R.id.remove_exercise_button);
-        removeButton.setOnClickListener(v -> {
-            workoutContainer.removeView(exerciseCard);
-            checkWorkoutContainerHeight();
-        });
-
-        LinearLayout setsContainer = exerciseCard.findViewById(R.id.sets_container);
-        addSetButton.setOnClickListener(v -> {
-            View newSetLayout = LayoutInflater.from(this).inflate(R.layout.set_item_layout, setsContainer, false);
-            TextView setNumberTextView = newSetLayout.findViewById(R.id.set_value);
-            int currentSetCount = setsContainer.getChildCount();
-            setNumberTextView.setText(String.valueOf(currentSetCount + 1));
-            EditText newRepsEditText = newSetLayout.findViewById(R.id.reps_edit_text);
-            newRepsEditText.setText("10");
-            setsContainer.addView(newSetLayout);
-        });
-
-        workoutContainer.addView(exerciseCard);
-        checkWorkoutContainerHeight();
-    }
-
-    // Function to initialize the mapping between exercises and their corresponding icons
     private void initializeExerciseIconMap() {
         exerciseIconMap = new HashMap<>();
         exerciseIconMap.put("Bench Press", R.drawable.bench_press_icon);
@@ -172,7 +200,6 @@ public class WorkoutModule2 extends AppCompatActivity {
         exerciseIconMap.put("Bicep Curls", R.drawable.bicepcurls_icon);
     }
 
-    // A helper method to return the category for each exercise
     private String getExerciseCategory(String exerciseName) {
         switch (exerciseName) {
             case "Bench Press":
@@ -192,42 +219,115 @@ public class WorkoutModule2 extends AppCompatActivity {
         }
     }
 
-    // Function to send the workout to the server
-    private void sendWorkoutToServer(Workout workout) {
-        new AsyncTask<Workout, Void, Void>() {
-            @Override
-            protected Void doInBackground(Workout... workouts) {
-                try {
-                    URL url = new URL("http://heavymetals.scarlet2.io/HeavyMetals/save_workout/");
-                    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-                    conn.setRequestMethod("POST");
-                    conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
-                    conn.setDoOutput(true);
+    // Save workout to SharedPreferences or Database
+    private void saveWorkoutForUser(Workout workout) {
+        SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
+        String loggedInUser = sharedPreferences.getString("loggedInUser", null);  // Retrieve the user email
 
-                    // Prepare data to send
-                    Gson gson = new Gson();
-                    String workoutName = workouts[0].getTitle();
-                    String exercisesJson = gson.toJson(workouts[0].getExercises());
+        if (loggedInUser == null) {
+            Log.e("WorkoutModule2", "No logged-in user found");
+            Toast.makeText(this, "No logged-in user found. Please login.", Toast.LENGTH_LONG).show();
+            Intent loginIntent = new Intent(WorkoutModule2.this, LoginActivity.class);
+            startActivity(loginIntent);
+            finish();
+        } else {
+            Log.d("WorkoutModule2", "Logged-in user: " + loggedInUser);
+            // Continue with other logic for logged-in user
+        }
 
-                    String postData = "workoutName=" + workoutName +
-                            "&exercises=" + exercisesJson;
+    }
 
-                    OutputStream os = conn.getOutputStream();
-                    os.write(postData.getBytes());
-                    os.flush();
-                    os.close();
 
-                    int responseCode = conn.getResponseCode();
-                    if (responseCode == HttpURLConnection.HTTP_OK) {
-                        // Handle success (optional)
-                    } else {
-                        // Handle error (optional)
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+
+    // Save user login information in SharedPreferences
+    private void saveUserLogin(String email, String token) {
+        SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("loggedInUser", email); // Save the user email
+        editor.putString("auth_token", token);   // Save auth token if needed
+        editor.apply();
+    }
+
+
+
+
+    private static class SendWorkoutTask extends AsyncTask<Workout, Void, Void> {
+        private WeakReference<WorkoutModule2> activityReference;
+
+        SendWorkoutTask(WorkoutModule2 activity) {
+            activityReference = new WeakReference<>(activity);
+        }
+
+        @Override
+        protected Void doInBackground(Workout... workouts) {
+            WorkoutModule2 activity = activityReference.get();
+            if (activity == null || activity.isFinishing()) {
                 return null;
             }
-        }.execute(workout);
+
+            // Retrieve user email and token from SharedPreferences
+            SharedPreferences sharedPreferences = activity.getSharedPreferences("user_prefs", MODE_PRIVATE);
+            String userEmail = sharedPreferences.getString("user_email", null);
+            String authToken = sharedPreferences.getString("auth_token", null);
+
+            if (userEmail == null || authToken == null) {
+                // If no user is logged in, skip sending the request
+                return null;
+            }
+
+            try {
+                URL url = new URL("http://heavymetals.scarlet2.io/HeavyMetals/workout_save/save_workout/");
+                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                conn.setRequestMethod("POST");
+                conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+                conn.setDoOutput(true);
+
+                Gson gson = new Gson();
+                String workoutName = workouts[0].getTitle();
+                String exercisesJson = gson.toJson(workouts[0].getExercises());
+
+                // Add user authentication details to the POST data
+                String postData = "workoutName=" + workoutName + "&exercises=" + exercisesJson + "&email=" + userEmail + "&token=" + authToken;
+
+                // Write data to the server
+                OutputStream os = conn.getOutputStream();
+                os.write(postData.getBytes());
+                os.flush();
+                os.close();
+
+                int responseCode = conn.getResponseCode();
+                Log.d("SaveWorkoutTask", "Response code: " + responseCode);
+
+                // Check for success (HTTP 200 OK)
+                if (responseCode == HttpURLConnection.HTTP_OK) {
+                    // Read the server response
+                    BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                    String inputLine;
+                    StringBuilder response = new StringBuilder();
+                    while ((inputLine = in.readLine()) != null) {
+                        response.append(inputLine);
+                    }
+                    in.close();
+
+                    Log.d("SaveWorkoutTask", "Server response: " + response.toString());
+                } else {
+                    // Log any errors from the server
+                    Log.e("SaveWorkoutTask", "Failed to save workout. Server responded with: " + responseCode);
+                    BufferedReader errorStream = new BufferedReader(new InputStreamReader(conn.getErrorStream()));
+                    StringBuilder errorResponse = new StringBuilder();
+                    String errorLine;
+                    while ((errorLine = errorStream.readLine()) != null) {
+                        errorResponse.append(errorLine);
+                    }
+                    errorStream.close();
+                    Log.e("SaveWorkoutTask", "Error response from server: " + errorResponse.toString());
+                }
+            } catch (Exception e) {
+                Log.e("SaveWorkoutTask", "Error saving workout to server", e);
+            }
+            return null;
+        }
     }
+
+
 }

@@ -142,13 +142,20 @@ public class LoginActivity extends AppCompatActivity {
         queue.add(stringRequest);
     }
 
+
     private void saveUserDetails(String token, String email) {
-        SharedPreferences sharedPreferences = getSharedPreferences("user_prefs", Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString("auth_token", token);
-        editor.putString("user_email", email);
+        editor.putString("loggedInUser", email);  // Save the user email after successful login
+        editor.putString("auth_token", token);    // Save auth token
         editor.apply();
+
+
+        // Log and Toast to confirm user details were saved successfully
+        Log.d("LoginActivity", "User details saved successfully: " + email);
+        Toast.makeText(LoginActivity.this, "Login successful! Welcome " + email, Toast.LENGTH_SHORT).show();
     }
+
 
     private void handleVolleyError(VolleyError error) {
         String errorMessage = "Network error occurred.";
