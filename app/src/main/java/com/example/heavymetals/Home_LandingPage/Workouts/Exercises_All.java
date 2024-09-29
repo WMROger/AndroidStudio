@@ -34,7 +34,6 @@ public class Exercises_All extends AppCompatActivity {
 
         // Initialize buttons
         FEPAddExercise = findViewById(R.id.FEPAddExercise);
-
         addItemBtn1 = findViewById(R.id.addItemBtn1);
         addItemBtn2 = findViewById(R.id.addItemBtn2);
         addItemBtn3 = findViewById(R.id.addItemBtn3);
@@ -45,7 +44,7 @@ public class Exercises_All extends AppCompatActivity {
         // Setup toggle functionality for each button
         setupToggleButton(addItemBtn1, "Bench Press");
         setupToggleButton(addItemBtn2, "Treadmill");
-        setupToggleButton(addItemBtn3, "Deadlift");
+        setupToggleButton(addItemBtn3, "Dead lift");
         setupToggleButton(addItemBtn4, "Plank");
         setupToggleButton(addItemBtn5, "Pull ups");
         setupToggleButton(addItemBtn6, "Bicep Curls");
@@ -54,12 +53,30 @@ public class Exercises_All extends AppCompatActivity {
         FEPAddExercise.setOnClickListener(v -> {
             Intent intent = new Intent(Exercises_All.this, WorkoutModule2.class);
             intent.putStringArrayListExtra("selectedExercises", selectedExercises);  // Pass selected exercises
-            startActivity(intent);
+            startActivityForResult(intent, 100);  // Use request code to get result back
         });
     }
 
-    // Method to toggle the state of the add button and add/remove exercises
+    // Handle the result from WorkoutModule2
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 100 && resultCode == RESULT_OK) {
+            selectedExercises = data.getStringArrayListExtra("selectedExercises");
+            // Update the UI accordingly
+        }
+    }
+
+
     private void setupToggleButton(ImageButton button, String exerciseName) {
+        if (selectedExercises.contains(exerciseName)) {
+            button.setImageResource(R.drawable.additem_orange);  // Already selected
+            button.setTag(R.drawable.additem_orange);
+        } else {
+            button.setImageResource(R.drawable.additem_black);  // Not selected
+            button.setTag(R.drawable.additem_black);
+        }
+
         button.setOnClickListener(v -> {
             int currentIcon = (int) button.getTag();
 
@@ -74,7 +91,9 @@ public class Exercises_All extends AppCompatActivity {
             }
         });
 
-        // Initially set to black icon (unselected)
+
+
+    // Initially set to black icon (unselected)
         button.setTag(R.drawable.additem_black);
     }
 }

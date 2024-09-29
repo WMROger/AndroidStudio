@@ -4,20 +4,25 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import android.util.Log;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.example.heavymetals.Home_LandingPage.MainActivity;
 import com.example.heavymetals.Models.Adapters.Exercise;
 import com.example.heavymetals.Models.Adapters.WorkoutAdapter;
 import com.example.heavymetals.Models.Adapters.Workout;
 import com.example.heavymetals.R;
 import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.InputStreamReader;
@@ -47,7 +52,11 @@ public class WorkoutModule4 extends AppCompatActivity {
         recyclerView = findViewById(R.id.recyclerViewWorkouts);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
+        // Initialize workout list
         workoutList = new ArrayList<>();
+
+        // Load saved workouts from server or SharedPreferences
+        fetchWorkoutsFromServer();
 
         // Back button listener to navigate to MainActivity
         wm4_Back_txt.setOnClickListener(v -> navigateToMainActivity());
@@ -61,20 +70,8 @@ public class WorkoutModule4 extends AppCompatActivity {
         Workout workout = (Workout) getIntent().getSerializableExtra("workout");
 
         if (workout != null) {
-            // Clear the workout list to replace it with the new workout
-            workoutList.clear();
-
             // Add the new workout to the list
-            workoutList.add(workout);
-
-            // Initialize the adapter or update the adapter's data
-            updateRecyclerView();
-
-            // Save the workout for this specific user
-            saveWorkoutsForUser(workoutList);
-        } else {
-            // Load saved workouts from server or SharedPreferences
-            fetchWorkoutsFromServer();  // Try to load from server first
+            addNewWorkout(workout);
         }
 
         // Save button listener for manual save
@@ -84,6 +81,33 @@ public class WorkoutModule4 extends AppCompatActivity {
                 Toast.makeText(WorkoutModule4.this, "Workout manually saved!", Toast.LENGTH_SHORT).show();
             } else {
                 Toast.makeText(WorkoutModule4.this, "No workout to save.", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    // Add a new workout and update the RecyclerView
+    private void addNewWorkout(Workout workout) {
+        if (workoutList == null) {
+            workoutList = new ArrayList<>();
+        }
+
+        // Add the new workout to the list
+        workoutList.add(workout);
+
+        // Notify adapter about new item
+        updateRecyclerView();
+    }
+
+    // Update RecyclerView data
+    private void updateRecyclerView() {
+        runOnUiThread(() -> {
+            if (workoutAdapter == null) {
+                workoutAdapter = new WorkoutAdapter(workoutList, this::onWorkoutViewClicked);
+                recyclerView.setAdapter(workoutAdapter);
+            } else {
+                // Notify only about the newly added item
+                workoutAdapter.notifyItemInserted(workoutList.size() - 1);
+                recyclerView.scrollToPosition(workoutList.size() - 1);  // Scroll to the newly added item
             }
         });
     }
@@ -100,42 +124,36 @@ public class WorkoutModule4 extends AppCompatActivity {
         }
     }
 
-    // Update RecyclerView data
-    private void updateRecyclerView() {
-        if (workoutAdapter == null) {
-            workoutAdapter = new WorkoutAdapter(workoutList, this::onWorkoutViewClicked);
-            recyclerView.setAdapter(workoutAdapter);
-        } else {
-            // Notify the adapter that data has changed
-            workoutAdapter.notifyDataSetChanged();
-        }
-    }
-
-    // Save workouts to SharedPreferences or Database
     private void saveWorkoutsForUser(List<Workout> workouts) {
         SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
         String loggedInUser = sharedPreferences.getString("loggedInUser", "");
 
-        if (!loggedInUser.isEmpty()) {
-            Gson gson = new Gson();
-            String workoutJson = gson.toJson(workouts);  // Save the entire workout list
-
-            SharedPreferences workoutPrefs = getSharedPreferences("WorkoutData", MODE_PRIVATE);
-            SharedPreferences.Editor workoutEditor = workoutPrefs.edit();
-            workoutEditor.putString("workout_" + loggedInUser, workoutJson);
-            workoutEditor.apply();
-
-            Log.d("SaveWorkout", "Workouts saved for user: " + loggedInUser);
-
-            // Send workout to the server
-            new SaveWorkoutToServerTask().execute(workoutJson, loggedInUser);
-        } else {
+        // Check if a user is logged in
+        if (loggedInUser == null || loggedInUser.isEmpty()) {
+            // No logged-in user, display a message and skip the save process
             Log.e("SaveWorkout", "No logged-in user found. Workouts will not be saved.");
             Toast.makeText(this, "No logged-in user found. Cannot save workouts.", Toast.LENGTH_LONG).show();
+            return;  // Exit the method to prevent saving
         }
+
+        // Proceed with saving if the user is logged in
+        Gson gson = new Gson();
+        String workoutJson = gson.toJson(workouts);  // Save the entire workout list
+
+        SharedPreferences workoutPrefs = getSharedPreferences("WorkoutData", MODE_PRIVATE);
+        SharedPreferences.Editor workoutEditor = workoutPrefs.edit();
+        workoutEditor.putString("workout_" + loggedInUser, workoutJson);
+        workoutEditor.apply();
+
+        Log.d("SaveWorkout", "Workouts saved for user: " + loggedInUser);
+
+        // Send workout to the server
+        new SaveWorkoutToServerTask().execute(workoutJson, loggedInUser);
     }
 
-    // AsyncTask to save workout to the server
+
+
+    // AsyncTask to save workout and exercises to the server
     private class SaveWorkoutToServerTask extends AsyncTask<String, Void, Boolean> {
         @Override
         protected Boolean doInBackground(String... params) {
@@ -148,9 +166,11 @@ public class WorkoutModule4 extends AppCompatActivity {
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                 conn.setRequestMethod("POST");
                 conn.setDoOutput(true);
+                conn.setConnectTimeout(15000);  // 15 seconds timeout
+                conn.setReadTimeout(10000);     // 10 seconds read timeout
                 conn.setRequestProperty("Content-Type", "application/json");
 
-                // Write the JSON workout data
+                // Write the JSON workout and exercises data
                 BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(conn.getOutputStream()));
                 writer.write(workoutJson);
                 writer.flush();
@@ -182,13 +202,15 @@ public class WorkoutModule4 extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(Boolean success) {
-            if (success) {
-                Log.d("SaveWorkout", "Workout successfully saved to server.");
-                Toast.makeText(WorkoutModule4.this, "Workout saved successfully!", Toast.LENGTH_SHORT).show();
-            } else {
-                Log.e("SaveWorkout", "Workout failed to save.");
-                Toast.makeText(WorkoutModule4.this, "Failed to save workout.", Toast.LENGTH_SHORT).show();
-            }
+            runOnUiThread(() -> {
+                if (success) {
+                    Log.d("SaveWorkout", "Workout and exercises successfully saved to server.");
+                    Toast.makeText(WorkoutModule4.this, "Workout and exercises saved successfully!", Toast.LENGTH_SHORT).show();
+                } else {
+                    Log.e("SaveWorkout", "Failed to save workout and exercises.");
+                    Toast.makeText(WorkoutModule4.this, "Failed to save workout and exercises.", Toast.LENGTH_SHORT).show();
+                }
+            });
         }
     }
 
@@ -201,6 +223,8 @@ public class WorkoutModule4 extends AppCompatActivity {
                 URL url = new URL(urlString);
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                 conn.setRequestMethod("GET");
+                conn.setConnectTimeout(15000);  // 15 seconds timeout
+                conn.setReadTimeout(10000);     // 10 seconds read timeout
                 int responseCode = conn.getResponseCode();
 
                 if (responseCode == HttpURLConnection.HTTP_OK) {
@@ -248,28 +272,36 @@ public class WorkoutModule4 extends AppCompatActivity {
         }
     }
 
-    // Load saved workouts from SharedPreferences
     private void loadSavedWorkouts() {
         SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
         String loggedInUser = sharedPreferences.getString("loggedInUser", "");
 
-        if (!loggedInUser.isEmpty()) {
-            SharedPreferences workoutPrefs = getSharedPreferences("WorkoutData", MODE_PRIVATE);
-            String workoutJson = workoutPrefs.getString("workout_" + loggedInUser, null);
+        if (loggedInUser == null || loggedInUser.isEmpty()) {
+            Log.e("LoadWorkouts", "No logged-in user found.");
+            Toast.makeText(this, "No logged-in user found. Cannot load workouts.", Toast.LENGTH_LONG).show();
+            return;  // Exit the method to prevent loading
+        }
 
-            if (workoutJson != null) {
-                Gson gson = new Gson();
+        SharedPreferences workoutPrefs = getSharedPreferences("WorkoutData", MODE_PRIVATE);
+        String workoutJson = workoutPrefs.getString("workout_" + loggedInUser, null);
+
+        if (workoutJson != null) {
+            Gson gson = new Gson();
+            try {
                 Type workoutListType = new TypeToken<List<Workout>>() {}.getType();
                 workoutList = gson.fromJson(workoutJson, workoutListType);
 
-                updateRecyclerView();
-            } else {
-                Log.d("LoadWorkouts", "No saved workout found for the user.");
+                if (workoutList != null && !workoutList.isEmpty()) {
+                    updateRecyclerView();
+                }
+            } catch (JsonSyntaxException e) {
+                Log.e("WorkoutModule4", "Failed to parse workout JSON", e);
             }
         } else {
-            Log.d("LoadWorkouts", "No logged-in user found.");
+            Log.d("LoadWorkouts", "No saved workout found for the user.");
         }
     }
+
 
     private void onWorkoutViewClicked(Workout workout) {
         Intent intent = new Intent(this, WorkoutDetailActivity.class);
@@ -286,5 +318,6 @@ public class WorkoutModule4 extends AppCompatActivity {
         Intent intent = new Intent(WorkoutModule4.this, MainActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
         startActivity(intent);
+        finish();  // Ensure this activity is finished
     }
 }

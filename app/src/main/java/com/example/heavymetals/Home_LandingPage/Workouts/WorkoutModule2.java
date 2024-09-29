@@ -180,14 +180,13 @@ public class WorkoutModule2 extends AppCompatActivity {
                     intent.putExtra("workout", newWorkout);
                     startActivity(intent);
                 });
+
             } else {
                 WM2discard_txt.setText("Discard");
                 WM2discard_txt.setOnClickListener(v -> finish());
             }
         });
     }
-
-
 
 
     private void initializeExerciseIconMap() {
@@ -238,7 +237,6 @@ public class WorkoutModule2 extends AppCompatActivity {
     }
 
 
-
     // Save user login information in SharedPreferences
     private void saveUserLogin(String email, String token) {
         SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
@@ -247,8 +245,6 @@ public class WorkoutModule2 extends AppCompatActivity {
         editor.putString("auth_token", token);   // Save auth token if needed
         editor.apply();
     }
-
-
 
 
     private static class SendWorkoutTask extends AsyncTask<Workout, Void, Void> {
@@ -276,7 +272,7 @@ public class WorkoutModule2 extends AppCompatActivity {
             }
 
             try {
-                URL url = new URL("http://heavymetals.scarlet2.io/HeavyMetals/workout_save/save_workout/");
+                URL url = new URL("http://heavymetals.scarlet2.io/HeavyMetals/workout_save/save_workout.php"); // Corrected URL
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                 conn.setRequestMethod("POST");
                 conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
@@ -287,7 +283,7 @@ public class WorkoutModule2 extends AppCompatActivity {
                 String exercisesJson = gson.toJson(workouts[0].getExercises());
 
                 // Add user authentication details to the POST data
-                String postData = "workoutName=" + workoutName + "&exercises=" + exercisesJson + "&email=" + userEmail + "&token=" + authToken;
+                String postData = "workoutName=" + workoutName + "&exercises=" + exercisesJson + "&user_email=" + userEmail + "&auth_token=" + authToken;
 
                 // Write data to the server
                 OutputStream os = conn.getOutputStream();

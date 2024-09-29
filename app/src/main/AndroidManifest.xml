@@ -26,11 +26,11 @@
             android:name=".Home_LandingPage.Workouts.WorkoutModule5"
             android:exported="false" />
         <activity
-            android:name=".Home_LandingPage.Workouts.AddWorkoutActivity"
+            android:name=".Home_LandingPage.Workouts.Exercises_All$WorkoutModule2"
             android:exported="false" />
         <activity
             android:name=".Home_LandingPage.Workouts.WorkoutModule4"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".Home_LandingPage.Workouts.WorkoutModule3"
             android:exported="false" />

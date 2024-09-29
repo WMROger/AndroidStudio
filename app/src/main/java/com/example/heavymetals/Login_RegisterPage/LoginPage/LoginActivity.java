@@ -37,37 +37,52 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
 
-        email = findViewById(R.id.Login_UserEmail);
-        passwordEditText = findViewById(R.id.Password_Usertext);
-        ForgetPassword = findViewById(R.id.Login_ForgetPassPage);
-        loginBtn = findViewById(R.id.Login_LoginButton);
-        signUp = findViewById(R.id.LoginSignUpTxt);
+        // Check if user is already logged in
+        SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
+        String loggedInUser = sharedPreferences.getString("loggedInUser", null);
 
-        loginBtn.setOnClickListener(v -> {
-            String emailInput = email.getText().toString().trim();
-            String passwordInput = passwordEditText.getText().toString().trim();
-
-            if (!validateEmail() || !validatePassword()) {
-                return;
-            }
-
-            authenticateUser(emailInput, passwordInput);
-        });
-
-        ForgetPassword.setOnClickListener(v -> {
-            Intent intent = new Intent(LoginActivity.this, ForgetPasswordActivity.class);
+        if (loggedInUser != null) {
+            // User is already logged in, redirect to MainActivity
+            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
-            finish();
-        });
+            finish(); // Finish LoginActivity so it can't be accessed
+        } else {
+            // User is not logged in, continue with the login screen setup
+            setContentView(R.layout.activity_login);
 
-        signUp.setOnClickListener(v -> {
-            Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
-            startActivity(intent);
-            finish();
-        });
+            email = findViewById(R.id.Login_UserEmail);
+            passwordEditText = findViewById(R.id.Password_Usertext);
+            ForgetPassword = findViewById(R.id.Login_ForgetPassPage);
+            loginBtn = findViewById(R.id.Login_LoginButton);
+            signUp = findViewById(R.id.LoginSignUpTxt);
+
+            loginBtn.setOnClickListener(v -> {
+                String emailInput = email.getText().toString().trim();
+                String passwordInput = passwordEditText.getText().toString().trim();
+
+                if (!validateEmail() || !validatePassword()) {
+                    return;
+                }
+
+                authenticateUser(emailInput, passwordInput);
+            });
+
+            ForgetPassword.setOnClickListener(v -> {
+                Intent intent = new Intent(LoginActivity.this, ForgetPasswordActivity.class);
+                startActivity(intent);
+                finish();
+            });
+
+            signUp.setOnClickListener(v -> {
+                Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
+                startActivity(intent);
+                finish();
+            });
+        }
     }
+
 
     private boolean validateEmail() {
         String val = email.getText().toString().trim();
