@@ -137,14 +137,20 @@ public class WorkoutModule2 extends AppCompatActivity {
 
         // Add click listener to add sets
         addSetButton.setOnClickListener(v -> {
+            // Check if the exercise is already in the map, if not, initialize it with 0 sets
+            if (!exerciseSetsMap.containsKey(exerciseName)) {
+                exerciseSetsMap.put(exerciseName, 0);  // Initialize with 0 sets
+            }
+
+            // Now it is safe to retrieve the current set count
+            int currentSetCount = exerciseSetsMap.get(exerciseName);  // This will not be null
+            currentSetCount += 1;
+            exerciseSetsMap.put(exerciseName, currentSetCount); // Update the set count
+
+            // Inflate a new set item layout and set its values
             View newSetLayout = LayoutInflater.from(this).inflate(R.layout.set_item_layout, setsContainer, false);
             TextView setNumberTextView = newSetLayout.findViewById(R.id.set_value);
             EditText repsEditText = newSetLayout.findViewById(R.id.reps_edit_text);
-
-            // Get current set count for the exercise and increase it
-            int currentSetCount = exerciseSetsMap.get(exerciseName);
-            currentSetCount += 1;
-            exerciseSetsMap.put(exerciseName, currentSetCount); // Update the set count
 
             setNumberTextView.setText(String.valueOf(currentSetCount));
             repsEditText.setText("10");  // Default reps value

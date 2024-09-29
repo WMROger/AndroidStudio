@@ -39,9 +39,18 @@ public class WorkoutAdapter extends RecyclerView.Adapter<WorkoutAdapter.WorkoutV
         Workout workout = workoutList.get(position);
         holder.workoutTitle.setText(workout.getTitle());  // Display workout name
         holder.exerciseCount.setText("Exercises: " + workout.getExerciseCount());
-        holder.viewWorkoutButton.setOnClickListener(v -> listener.onViewWorkoutClick(workout));
-    }
 
+        // Handle view workout click
+        holder.viewWorkoutButton.setOnClickListener(v -> listener.onViewWorkoutClick(workout));
+
+        // Handle delete workout click
+        holder.deleteWorkout.setOnClickListener(v -> {
+            // Remove the workout from the list
+            workoutList.remove(position);
+            notifyItemRemoved(position);  // Notify RecyclerView about the item removal
+            notifyItemRangeChanged(position, workoutList.size());  // Update remaining items' positions
+        });
+    }
 
     @Override
     public int getItemCount() {
@@ -52,12 +61,14 @@ public class WorkoutAdapter extends RecyclerView.Adapter<WorkoutAdapter.WorkoutV
         TextView workoutTitle;
         TextView exerciseCount;
         Button viewWorkoutButton;
+        TextView deleteWorkout;  // Add this to handle deletion
 
         public WorkoutViewHolder(@NonNull View itemView) {
             super(itemView);
             workoutTitle = itemView.findViewById(R.id.workoutTitle);
             exerciseCount = itemView.findViewById(R.id.exerciseCount);
             viewWorkoutButton = itemView.findViewById(R.id.viewWorkoutButton);
+            deleteWorkout = itemView.findViewById(R.id.Deletetxtview);  // Initialize the delete TextView
         }
     }
 }

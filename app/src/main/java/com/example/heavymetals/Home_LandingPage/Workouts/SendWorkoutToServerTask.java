@@ -22,21 +22,21 @@ import java.net.URL;
 
 // Define the task in a new file
 public class SendWorkoutToServerTask extends AsyncTask<Workout, Void, Void> {
-    private WeakReference<WorkoutModule2> activityReference;
+    private WeakReference<Context> contextReference;
 
-    SendWorkoutToServerTask(WorkoutModule2 activity) {
-        activityReference = new WeakReference<>(activity);
+    public SendWorkoutToServerTask(Context context) {
+        this.contextReference = new WeakReference<>(context);
     }
 
     @Override
     protected Void doInBackground(Workout... workouts) {
-        WorkoutModule2 activity = activityReference.get();
-        if (activity == null || activity.isFinishing()) {
+        Context context = contextReference.get();
+        if (context == null) {
             return null;
         }
 
         // Retrieve user email and token from SharedPreferences
-        SharedPreferences sharedPreferences = activity.getSharedPreferences("user_prefs", MODE_PRIVATE);
+        SharedPreferences sharedPreferences = context.getSharedPreferences("user_prefs", MODE_PRIVATE);
         String userEmail = sharedPreferences.getString("user_email", null);
         String authToken = sharedPreferences.getString("auth_token", null);
 
@@ -55,8 +55,8 @@ public class SendWorkoutToServerTask extends AsyncTask<Workout, Void, Void> {
 
             // Convert the workout object to JSON
             Gson gson = new Gson();
-            String workoutName = workouts[0].getTitle();
-            String exercisesJson = gson.toJson(workouts[0].getExercises());
+            String workoutName = workouts.length > 0 ? workouts[0].getTitle() : "";  // Use an empty name if no workout
+            String exercisesJson = workouts.length > 0 ? gson.toJson(workouts[0].getExercises()) : "[]"; // Send empty array if no workouts
 
             // Add user authentication details to the POST data
             String postData = "workoutName=" + workoutName + "&exercises=" + exercisesJson + "&email=" + userEmail + "&token=" + authToken;
@@ -101,6 +101,4 @@ public class SendWorkoutToServerTask extends AsyncTask<Workout, Void, Void> {
         return null;
     }
 }
-
-
 

@@ -68,12 +68,17 @@ public class WorkoutModule4 extends AppCompatActivity {
         // Save button listener
         wm4_Save_txt.setOnClickListener(v -> {
             if (!workoutList.isEmpty()) {
-                saveWorkoutsForUser(workoutList);  // Save workouts to server/SharedPreferences
+                // Save workouts to server/SharedPreferences
+                saveWorkoutsForUser(workoutList);
                 Toast.makeText(WorkoutModule4.this, "Workout manually saved!", Toast.LENGTH_SHORT).show();
             } else {
-                Toast.makeText(WorkoutModule4.this, "No workout to save.", Toast.LENGTH_SHORT).show();
+                // Call the task to send empty workout to server
+                new SendWorkoutToServerTask(WorkoutModule4.this).execute();
+                Toast.makeText(WorkoutModule4.this, "No workouts left. Deletions saved.", Toast.LENGTH_SHORT).show();
             }
         });
+
+
 
         // Load workout data if passed from another activity
         Workout workout = (Workout) getIntent().getSerializableExtra("workout");
@@ -170,15 +175,17 @@ public class WorkoutModule4 extends AppCompatActivity {
 
         // Save workouts to SharedPreferences
         Gson gson = new Gson();
-        String workoutJson = gson.toJson(workouts);
+        String workoutJson = gson.toJson(workouts);  // This could be an empty list if all are deleted
         SharedPreferences workoutPrefs = getSharedPreferences("WorkoutData", MODE_PRIVATE);
         SharedPreferences.Editor workoutEditor = workoutPrefs.edit();
         workoutEditor.putString("workout_" + loggedInUser, workoutJson);
         workoutEditor.apply();
 
-        // Send workouts to the server
-        new SaveWorkoutToServerTask().execute(workoutJson, loggedInUser);
+        // Send workouts to the server (this will send an empty list if all are deleted)
+        new SendWorkoutToServerTask(this).execute(workouts.toArray(new Workout[0]));  // Pass the workouts array
     }
+
+
 
     // AsyncTask to save workouts to the server
     private class SaveWorkoutToServerTask extends AsyncTask<String, Void, Boolean> {
