@@ -165,11 +165,10 @@ public class LoginActivity extends AppCompatActivity {
         editor.putString("auth_token", token);    // Save auth token
         editor.apply();
 
-
-        // Log and Toast to confirm user details were saved successfully
-        Log.d("LoginActivity", "User details saved successfully: " + email);
+        // Confirm that user details were saved
         Toast.makeText(LoginActivity.this, "Login successful! Welcome " + email, Toast.LENGTH_SHORT).show();
     }
+
 
 
     private void handleVolleyError(VolleyError error) {

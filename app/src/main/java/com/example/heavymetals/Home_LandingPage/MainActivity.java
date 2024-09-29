@@ -1,6 +1,7 @@
 package com.example.heavymetals.Home_LandingPage;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -35,7 +36,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private DrawerLayout drawerLayout;
     private TextView emailTextView;
-    private TextView firstNameTextView;  // Add TextView for user first name
+    private TextView firstNameTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,20 +60,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // Initialize NavigationView header and TextViews
         View headerView = navigationView.getHeaderView(0);
         emailTextView = headerView.findViewById(R.id.Menu_User_Email);
-        firstNameTextView = headerView.findViewById(R.id.Menu_User_Firstname);  // Initialize first name TextView
+        firstNameTextView = headerView.findViewById(R.id.Menu_User_Firstname);
 
-        // Retrieve the user email from intent or savedInstanceState
-        String userEmail = null;
-        if (savedInstanceState != null) {
-            userEmail = savedInstanceState.getString("user_email");
-        } else if (getIntent().hasExtra("user_email")) {
-            userEmail = getIntent().getStringExtra("user_email");
+        // Retrieve the user email from SharedPreferences
+        SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
+        String userEmail = sharedPreferences.getString("loggedInUser", null);
+        if (userEmail == null) {
+            // No logged-in user, redirect to AuthenticationActivity
+            redirectToLogin();
+            return;  // Stop further execution
         }
 
-        // Set email in Navigation header if available
-        if (userEmail != null) {
-            emailTextView.setText(userEmail);
-        }
+        // Set email in Navigation header
+        emailTextView.setText(userEmail);
 
         // Open HomeFragment as default if savedInstanceState is null
         if (savedInstanceState == null) {
@@ -80,7 +80,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             navigationView.setCheckedItem(R.id.nav_home);
         }
 
-        // Make network request in a background thread
+        // Fetch user details from the server
+        fetchUserDetails(userEmail);
+    }
+
+    // Fetch the user details from the server (asynchronous network request)
+    private void fetchUserDetails(String email) {
         new Thread(() -> {
             try {
                 URL url = new URL("https://heavymetals.scarlet2.io/HeavyMetals/get_username.php");
@@ -89,10 +94,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 conn.setDoOutput(true);
 
                 // Send the POST data with the actual user email
-                String EMAIL = emailTextView.getText().toString();
                 OutputStream os = conn.getOutputStream();
                 BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os, "UTF-8"));
-                String postData = "email=" + URLEncoder.encode(EMAIL, "UTF-8");
+                String postData = "email=" + URLEncoder.encode(email, "UTF-8");
                 writer.write(postData);
                 writer.flush();
                 writer.close();
@@ -114,11 +118,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 if (success) {
                     String firstName = jsonResponse.getString("first_name");
                     String lastName = jsonResponse.getString("last_name");
-                    String email = jsonResponse.getString("email");
-                    // Update the UI with the user's name and email on the main thread
+
+                    // Update the UI with the user's name on the main thread
                     runOnUiThread(() -> {
-                        firstNameTextView.setText(firstName + " " + lastName);  // Set first name
-                        emailTextView.setText(email);  // Set email
+                        firstNameTextView.setText(firstName + " " + lastName);
                     });
                 } else {
                     String message = jsonResponse.getString("message");
@@ -129,7 +132,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 e.printStackTrace();
             }
         }).start();
-
     }
 
     @Override
@@ -147,16 +149,34 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         } else if (itemId == R.id.nav_settings) {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new SettingsFragment()).commit();
         } else if (itemId == R.id.nav_logout) {
-            Toast.makeText(this, "Logout!", Toast.LENGTH_SHORT).show();
-            Intent intent = new Intent(MainActivity.this, AuthenticationActivity.class);
-            startActivity(intent);
-            finish();
+            logoutUser();  // Call the logout method
         }
 
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;
     }
 
+    // Log out the user and clear their session
+    private void logoutUser() {
+        // Clear the user session from SharedPreferences
+        SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.clear();  // Clear all saved preferences including loggedInUser and auth_token
+        editor.apply();
+
+        // Inform the user about the logout
+        Toast.makeText(this, "Logged out successfully!", Toast.LENGTH_SHORT).show();
+
+        // Redirect the user to the AuthenticationActivity
+        redirectToLogin();
+    }
+
+    private void redirectToLogin() {
+        Intent intent = new Intent(MainActivity.this, AuthenticationActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);  // Clear the activity stack
+        startActivity(intent);
+        finish();  // Close MainActivity
+    }
 
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {

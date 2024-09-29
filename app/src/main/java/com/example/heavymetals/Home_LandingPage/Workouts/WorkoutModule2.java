@@ -33,59 +33,38 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+
 public class WorkoutModule2 extends AppCompatActivity {
-    private TextView WM2discard_txt, exerciseNameText, exerciseCategoryText;
+    private TextView WM2discard_txt;
     private LinearLayout workoutContainer;
-    private HashMap<String, Integer> exerciseIconMap;
-    private ImageView exerciseIcon;
-    private Integer iconResource;
     private ArrayList<String> selectedExercises;
-    private Button addSetButton, WM2AddExercisebtn;
-    private ImageButton removeButton;
+    private HashMap<String, Integer> exerciseSetsMap = new HashMap<>(); // To store sets for each exercise
+    private HashMap<String, Integer> exerciseIconMap = new HashMap<>(); // To store icons for each exercise
     private List<Workout> workoutList;
     private EditText workoutNameInput;
 
-    // Define the threshold height in dp
-    private static final int THRESHOLD_HEIGHT_DP = 100;
+    private static final String TAG = "WorkoutModule2";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_workout_module2);
 
-        // Retrieve the user email or token from SharedPreferences
-        SharedPreferences sharedPreferences = getSharedPreferences("user_prefs", MODE_PRIVATE);
-        String userEmail = sharedPreferences.getString("user_email", null); // Get the user email
-        String authToken = sharedPreferences.getString("auth_token", null); // Get the auth token if needed
-
-        if (userEmail == null || authToken == null) {
-            // Handle the case where no user is logged in
-            Log.e("WorkoutModule2", "No logged-in user found");
-            Toast.makeText(this, "No logged-in user found. Please login.", Toast.LENGTH_LONG).show();
-            Intent loginIntent = new Intent(WorkoutModule2.this, LoginActivity.class);
-            startActivity(loginIntent);
-            finish();  // Finish the current activity so the user can't proceed without logging in
-            return;  // Stop further execution in this method
-        } else {
-            Log.d("WorkoutModule2", "Logged-in user: " + userEmail);
-        }
-
         // Initialize layout elements
         workoutNameInput = findViewById(R.id.workout_name_input);
         workoutContainer = findViewById(R.id.workout_container);
         WM2discard_txt = findViewById(R.id.WM2discard_txt);
-        WM2AddExercisebtn = findViewById(R.id.WM2AddExercisebtn);
+
+        // Initialize the icon map
+        initializeExerciseIconMap();
+
+        // Check user login session
+        checkUserSession();
 
         WM2discard_txt.setOnClickListener(v -> finish());
 
-        WM2AddExercisebtn.setOnClickListener(v -> {
-            Intent intent = new Intent(WorkoutModule2.this, Exercises_All.class);
-            startActivity(intent);
-        });
-
         // Get the selected exercises passed from another activity
         selectedExercises = getIntent().getStringArrayListExtra("selectedExercises");
-        initializeExerciseIconMap();
 
         if (selectedExercises != null && !selectedExercises.isEmpty()) {
             for (String exercise : selectedExercises) {
@@ -96,20 +75,23 @@ public class WorkoutModule2 extends AppCompatActivity {
         checkWorkoutContainerHeight();
     }
 
-
-    private int dpToPx(int dp) {
-        float density = getResources().getDisplayMetrics().density;
-        return Math.round(dp * density);
+    // Initialize the exercise icon map
+    private void initializeExerciseIconMap() {
+        exerciseIconMap.put("Bench Press", R.drawable.bench_press_icon);  // Replace with your actual icon drawable
+        exerciseIconMap.put("Pull ups", R.drawable.pullup_icon);
+        exerciseIconMap.put("Dead lift", R.drawable.deadlift_icon);
+        exerciseIconMap.put("Treadmill", R.drawable.treadmill_icon);
+        exerciseIconMap.put("Plank", R.drawable.plank_icon);
+        exerciseIconMap.put("Bicep Curls", R.drawable.bicepcurls_icon);
     }
 
     private void addExercise(String exerciseName) {
-        // Inflate the exercise item layout (assuming you have a layout for each exercise)
         View exerciseCard = LayoutInflater.from(this).inflate(R.layout.exercise_item, workoutContainer, false);
 
         // Find and initialize views within the inflated exercise card
         TextView exerciseNameText = exerciseCard.findViewById(R.id.exercise_name);
         TextView exerciseCategoryText = exerciseCard.findViewById(R.id.exercise_category);
-        ImageView exerciseIcon = exerciseCard.findViewById(R.id.exercise_icon);
+        ImageView exerciseIcon = exerciseCard.findViewById(R.id.exercise_icon); // Use the ImageView for the icon
         ImageButton removeButton = exerciseCard.findViewById(R.id.remove_exercise_button);
         LinearLayout setsContainer = exerciseCard.findViewById(R.id.sets_container);
         Button addSetButton = exerciseCard.findViewById(R.id.add_set_button);
@@ -118,45 +100,47 @@ public class WorkoutModule2 extends AppCompatActivity {
         exerciseNameText.setText(exerciseName);
         exerciseCategoryText.setText(getExerciseCategory(exerciseName));
 
-        // Set exercise icon
-        iconResource = exerciseIconMap.get(exerciseName);
+        // Set exercise icon from the map
+        Integer iconResource = exerciseIconMap.get(exerciseName);  // Get the icon from the map
         if (iconResource != null) {
-            exerciseIcon.setImageResource(iconResource);
+            exerciseIcon.setImageResource(iconResource);  // Set the icon if found in the map
         } else {
-            exerciseIcon.setImageResource(R.drawable.human_icon);  // Fallback icon if none found
+            exerciseIcon.setImageResource(R.drawable.human_icon);  // Fallback icon if not found
         }
 
         // Add click listener to remove the exercise card
         removeButton.setOnClickListener(v -> {
             workoutContainer.removeView(exerciseCard);
+            exerciseSetsMap.remove(exerciseName); // Remove the exercise's set data
             checkWorkoutContainerHeight();  // Recalculate the container height after removing
         });
 
         // Add click listener to add sets
         addSetButton.setOnClickListener(v -> {
-            // Inflate new set layout (assuming you have a set item layout)
             View newSetLayout = LayoutInflater.from(this).inflate(R.layout.set_item_layout, setsContainer, false);
             TextView setNumberTextView = newSetLayout.findViewById(R.id.set_value);
             EditText repsEditText = newSetLayout.findViewById(R.id.reps_edit_text);
 
-            int currentSetCount = setsContainer.getChildCount();
-            setNumberTextView.setText(String.valueOf(currentSetCount + 1));
+            // Get current set count for the exercise and increase it
+            int currentSetCount = exerciseSetsMap.get(exerciseName);
+            currentSetCount += 1;
+            exerciseSetsMap.put(exerciseName, currentSetCount); // Update the set count
+
+            setNumberTextView.setText(String.valueOf(currentSetCount));
             repsEditText.setText("10");  // Default reps value
 
             setsContainer.addView(newSetLayout);  // Add the new set to the container
         });
 
-        // Add the inflated exercise card to the workout container
         workoutContainer.addView(exerciseCard);
-
-        // Recalculate container height after adding the exercise
         checkWorkoutContainerHeight();
     }
+
 
     private void checkWorkoutContainerHeight() {
         workoutContainer.post(() -> {
             int containerHeight = workoutContainer.getHeight();
-            if (containerHeight > dpToPx(THRESHOLD_HEIGHT_DP)) {
+            if (containerHeight > dpToPx(100)) {
                 WM2discard_txt.setText("Save");
                 WM2discard_txt.setOnClickListener(v -> {
                     String workoutName = workoutNameInput.getText().toString();
@@ -166,7 +150,8 @@ public class WorkoutModule2 extends AppCompatActivity {
 
                     List<Exercise> exerciseList = new ArrayList<>();
                     for (String exerciseName : selectedExercises) {
-                        Exercise exercise = new Exercise(exerciseName, 3, 10, false);
+                        int sets = exerciseSetsMap.getOrDefault(exerciseName, 0);
+                        Exercise exercise = new Exercise(exerciseName, sets, 10, false);  // Default reps value is 10
                         exerciseList.add(exercise);
                     }
 
@@ -180,7 +165,6 @@ public class WorkoutModule2 extends AppCompatActivity {
                     intent.putExtra("workout", newWorkout);
                     startActivity(intent);
                 });
-
             } else {
                 WM2discard_txt.setText("Discard");
                 WM2discard_txt.setOnClickListener(v -> finish());
@@ -188,17 +172,27 @@ public class WorkoutModule2 extends AppCompatActivity {
         });
     }
 
-
-    private void initializeExerciseIconMap() {
-        exerciseIconMap = new HashMap<>();
-        exerciseIconMap.put("Bench Press", R.drawable.bench_press_icon);
-        exerciseIconMap.put("Pull ups", R.drawable.pullup_icon);
-        exerciseIconMap.put("Dead lift", R.drawable.deadlift_icon);
-        exerciseIconMap.put("Treadmill", R.drawable.treadmill_icon);
-        exerciseIconMap.put("Plank", R.drawable.plank_icon);
-        exerciseIconMap.put("Bicep Curls", R.drawable.bicepcurls_icon);
+    // Save workout to SharedPreferences or send it to the server
+    private void saveWorkoutForUser(Workout workout) {
+        SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
+        String loggedInUser = sharedPreferences.getString("loggedInUser", null);  // Retrieve the user email
+        if (loggedInUser == null) {
+            Log.e(TAG, "No logged-in user found");
+            Toast.makeText(this, "No logged-in user found. Please login.", Toast.LENGTH_LONG).show();
+            redirectToLogin();
+        } else {
+            // If user is logged in, continue saving workout
+            new SendWorkoutTask(this).execute(workout);
+        }
     }
 
+    // Converts dp (density-independent pixels) to px (pixels)
+    private int dpToPx(int dp) {
+        float density = getResources().getDisplayMetrics().density;
+        return Math.round(dp * density);
+    }
+
+    // Get exercise category based on the exercise name
     private String getExerciseCategory(String exerciseName) {
         switch (exerciseName) {
             case "Bench Press":
@@ -218,35 +212,6 @@ public class WorkoutModule2 extends AppCompatActivity {
         }
     }
 
-    // Save workout to SharedPreferences or Database
-    private void saveWorkoutForUser(Workout workout) {
-        SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
-        String loggedInUser = sharedPreferences.getString("loggedInUser", null);  // Retrieve the user email
-
-        if (loggedInUser == null) {
-            Log.e("WorkoutModule2", "No logged-in user found");
-            Toast.makeText(this, "No logged-in user found. Please login.", Toast.LENGTH_LONG).show();
-            Intent loginIntent = new Intent(WorkoutModule2.this, LoginActivity.class);
-            startActivity(loginIntent);
-            finish();
-        } else {
-            Log.d("WorkoutModule2", "Logged-in user: " + loggedInUser);
-            // Continue with other logic for logged-in user
-        }
-
-    }
-
-
-    // Save user login information in SharedPreferences
-    private void saveUserLogin(String email, String token) {
-        SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString("loggedInUser", email); // Save the user email
-        editor.putString("auth_token", token);   // Save auth token if needed
-        editor.apply();
-    }
-
-
     private static class SendWorkoutTask extends AsyncTask<Workout, Void, Void> {
         private WeakReference<WorkoutModule2> activityReference;
 
@@ -261,18 +226,17 @@ public class WorkoutModule2 extends AppCompatActivity {
                 return null;
             }
 
-            // Retrieve user email and token from SharedPreferences
-            SharedPreferences sharedPreferences = activity.getSharedPreferences("user_prefs", MODE_PRIVATE);
-            String userEmail = sharedPreferences.getString("user_email", null);
+            SharedPreferences sharedPreferences = activity.getSharedPreferences("UserPrefs", MODE_PRIVATE);
+            String userEmail = sharedPreferences.getString("loggedInUser", null);
             String authToken = sharedPreferences.getString("auth_token", null);
 
             if (userEmail == null || authToken == null) {
-                // If no user is logged in, skip sending the request
+                Log.e(TAG, "No user session found, skipping workout save");
                 return null;
             }
 
             try {
-                URL url = new URL("http://heavymetals.scarlet2.io/HeavyMetals/workout_save/save_workout.php"); // Corrected URL
+                URL url = new URL("https://heavymetals.scarlet2.io/HeavyMetals/workout_save/save_workout.php");
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                 conn.setRequestMethod("POST");
                 conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
@@ -282,21 +246,17 @@ public class WorkoutModule2 extends AppCompatActivity {
                 String workoutName = workouts[0].getTitle();
                 String exercisesJson = gson.toJson(workouts[0].getExercises());
 
-                // Add user authentication details to the POST data
                 String postData = "workoutName=" + workoutName + "&exercises=" + exercisesJson + "&user_email=" + userEmail + "&auth_token=" + authToken;
 
-                // Write data to the server
                 OutputStream os = conn.getOutputStream();
                 os.write(postData.getBytes());
                 os.flush();
                 os.close();
 
                 int responseCode = conn.getResponseCode();
-                Log.d("SaveWorkoutTask", "Response code: " + responseCode);
+                Log.d(TAG, "Response code: " + responseCode);
 
-                // Check for success (HTTP 200 OK)
                 if (responseCode == HttpURLConnection.HTTP_OK) {
-                    // Read the server response
                     BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
                     String inputLine;
                     StringBuilder response = new StringBuilder();
@@ -304,26 +264,15 @@ public class WorkoutModule2 extends AppCompatActivity {
                         response.append(inputLine);
                     }
                     in.close();
-
-                    Log.d("SaveWorkoutTask", "Server response: " + response.toString());
+                    Log.d(TAG, "Server response: " + response.toString());
                 } else {
-                    // Log any errors from the server
-                    Log.e("SaveWorkoutTask", "Failed to save workout. Server responded with: " + responseCode);
-                    BufferedReader errorStream = new BufferedReader(new InputStreamReader(conn.getErrorStream()));
-                    StringBuilder errorResponse = new StringBuilder();
-                    String errorLine;
-                    while ((errorLine = errorStream.readLine()) != null) {
-                        errorResponse.append(errorLine);
-                    }
-                    errorStream.close();
-                    Log.e("SaveWorkoutTask", "Error response from server: " + errorResponse.toString());
+                    Log.e(TAG, "Failed to save workout, response code: " + responseCode);
                 }
+
             } catch (Exception e) {
-                Log.e("SaveWorkoutTask", "Error saving workout to server", e);
+                Log.e(TAG, "Error saving workout to server", e);
             }
             return null;
         }
     }
-
-
 }
