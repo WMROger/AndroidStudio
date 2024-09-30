@@ -17,14 +17,22 @@ import com.example.heavymetals.Login_RegisterPage.LoginPage.LoginActivity;
 import com.example.heavymetals.Models.Adapters.Exercise;
 import com.example.heavymetals.Models.Adapters.Workout;
 import com.example.heavymetals.Models.Adapters.WorkoutAdapter;
+import com.example.heavymetals.Models.Adapters.WorkoutApi;
 import com.example.heavymetals.Models.Adapters.WorkoutResponse;
 import com.example.heavymetals.R;
+import com.example.heavymetals.network.RetrofitClient;
+import com.example.heavymetals.network.SaveWorkoutResponse;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
 
 public class WorkoutModule4 extends AppCompatActivity {
 
@@ -222,4 +230,56 @@ public class WorkoutModule4 extends AppCompatActivity {
         startActivity(intent);
         finish();
     }
+
+    // New Code for Server Integration Starts Below
+
+    private void saveWorkoutsToServer(List<Workout> workouts) {
+        String userEmail = getLoggedInUserEmail();
+
+        if (userEmail == null) {
+            Log.e("SaveWorkout", "No logged-in user found. Cannot save workouts to server.");
+            Toast.makeText(this, "No logged-in user found. Cannot save workouts.", Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        // Create a WorkoutResponse object to send to the server
+        WorkoutResponse workoutResponse = new WorkoutResponse(true, userEmail, workouts);
+
+        // Log the request payload
+        Gson gson = new Gson();
+        String requestPayload = gson.toJson(workoutResponse);
+        Log.d("SaveWorkout", "Request payload: " + requestPayload);
+
+        // Use Retrofit to send the data to the server
+        Retrofit retrofit = RetrofitClient.getClient(getApplicationContext());
+        WorkoutApi workoutApi = retrofit.create(WorkoutApi.class);
+
+        // Call the API to save workouts
+        Call<SaveWorkoutResponse> call = workoutApi.saveWorkouts(workoutResponse);
+        call.enqueue(new Callback<SaveWorkoutResponse>() {
+            @Override
+            public void onResponse(Call<SaveWorkoutResponse> call, Response<SaveWorkoutResponse> response) {
+                if (response.isSuccessful()) {
+                    SaveWorkoutResponse saveResponse = response.body();
+                    if (saveResponse != null && saveResponse.isSuccess()) {
+                        Toast.makeText(WorkoutModule4.this, "Workouts saved to server successfully!", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Log.e("SaveWorkout", "Server response indicates failure: " + (saveResponse != null ? saveResponse.getMessage() : "Unknown error"));
+                        Toast.makeText(WorkoutModule4.this, "Failed to save workouts.", Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    Log.e("SaveWorkout", "Server error: Status code: " + response.code());
+                    Toast.makeText(WorkoutModule4.this, "Failed to save workouts. Status code: " + response.code(), Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<SaveWorkoutResponse> call, Throwable t) {
+                Log.e("SaveWorkout", "Error saving workout to server", t);
+                Toast.makeText(WorkoutModule4.this, "Error saving workout: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    // Remember to call `saveWorkoutsToServer(workoutList);` inside the wm4_Save_txt click listener
 }
