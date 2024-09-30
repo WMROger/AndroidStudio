@@ -17,13 +17,16 @@ public class WorkoutAdapter extends RecyclerView.Adapter<WorkoutAdapter.WorkoutV
     private List<Workout> workoutList;
     private OnWorkoutClickListener listener;
 
+    // Modify the interface to include a method for deletion
     public interface OnWorkoutClickListener {
-        void onViewWorkoutClick(Workout workout);
+        void onViewWorkoutClick(Workout workout);  // Existing click to view a workout
+        void onWorkoutDeleted();  // New method to notify the activity of a deletion
     }
 
     public WorkoutAdapter(List<Workout> workouts, OnWorkoutClickListener listener) {
         this.workoutList = workouts;
         this.listener = listener;
+
     }
 
     @NonNull
@@ -31,6 +34,7 @@ public class WorkoutAdapter extends RecyclerView.Adapter<WorkoutAdapter.WorkoutV
     public WorkoutViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.workout_item, parent, false);
+
         return new WorkoutViewHolder(view);
     }
 
@@ -49,6 +53,9 @@ public class WorkoutAdapter extends RecyclerView.Adapter<WorkoutAdapter.WorkoutV
             workoutList.remove(position);
             notifyItemRemoved(position);  // Notify RecyclerView about the item removal
             notifyItemRangeChanged(position, workoutList.size());  // Update remaining items' positions
+
+            // Notify the activity that a workout was deleted
+            listener.onWorkoutDeleted();  // This will call the method in the activity to save the deletion
         });
     }
 
