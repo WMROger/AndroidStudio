@@ -6,7 +6,7 @@ public class Exercise implements Serializable {
     private String name;
     private int sets;
     private int reps;
-    private boolean isDone;
+    private boolean isDone;  // Tracks if the exercise is completed
 
     // Constructor
     public Exercise(String name, int sets, int reps, boolean isDone) {
@@ -14,6 +14,14 @@ public class Exercise implements Serializable {
         this.sets = sets;
         this.reps = reps;
         this.isDone = isDone;
+    }
+
+    // Alternative constructor without isDone for backwards compatibility
+    public Exercise(String name, int sets, int reps) {
+        this.name = name;
+        this.sets = sets;
+        this.reps = reps;
+        this.isDone = false;  // Default value for isDone
     }
 
     // Getters and Setters

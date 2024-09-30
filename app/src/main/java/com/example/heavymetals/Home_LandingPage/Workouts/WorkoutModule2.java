@@ -181,7 +181,7 @@ public class WorkoutModule2 extends AppCompatActivity {
                         exerciseList.add(exercise);
                     }
 
-                    Workout newWorkout = new Workout(workoutName, exerciseList.size(), exerciseList);
+                    Workout newWorkout = new Workout(workoutName, exerciseList);
 
                     // Save workout locally and send to server
                     saveWorkoutForUser(newWorkout);
