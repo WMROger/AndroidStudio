@@ -181,7 +181,7 @@ public class WorkoutModule2 extends AppCompatActivity {
                         exerciseList.add(exercise);
                     }
 
-                    Workout newWorkout = new Workout(workoutName, exerciseList.size(), exerciseList);
+                    Workout newWorkout = new Workout(workoutName, exerciseList);
 
                     // Save workout locally and send to server
                     saveWorkoutForUser(newWorkout);
@@ -262,7 +262,7 @@ public class WorkoutModule2 extends AppCompatActivity {
             }
 
             try {
-                URL url = new URL("https://heavymetals.scarlet2.io/HeavyMetals/workout_save/save_workout.php");
+                URL url = new URL("https://heavymetals.scarlet2.io/HeavyMetals/workout_save/save_workouts.php");
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                 conn.setRequestMethod("POST");
                 conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
