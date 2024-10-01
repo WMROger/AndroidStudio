@@ -160,6 +160,13 @@ public class WorkoutModule4 extends AppCompatActivity {
             Log.d("LoadWorkouts", "No saved workouts found.");
         }
     }
+    private void saveWorkoutCountToPreferences(int workoutCount) {
+        SharedPreferences sharedPreferences = getSharedPreferences("WorkoutData", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt("workoutCount", workoutCount);  // Save the workout count
+        editor.apply();  // Apply the changes asynchronously
+    }
+
 
     private void saveWorkoutsForUser(List<Workout> workouts) {
         String userEmail = getLoggedInUserEmail();
@@ -173,8 +180,12 @@ public class WorkoutModule4 extends AppCompatActivity {
         // Save to SharedPreferences
         saveWorkoutsToLocalStorage(userEmail, workouts);
 
+        // Save the workout count to preferences
+        saveWorkoutCountToPreferences(workouts.size());
+
         Log.d("SaveWorkout", "Workouts saved locally for user: " + userEmail);
     }
+
 
     private void saveWorkoutsToLocalStorage(String userEmail, List<Workout> workouts) {
         SharedPreferences sharedPreferences = getSharedPreferences("WorkoutData", MODE_PRIVATE);

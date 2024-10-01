@@ -197,7 +197,7 @@
             android:scaleType="fitXY" />
 
         <Button
-            android:id="@+id/button3"
+            android:id="@+id/RecommendationsShortcut_btn"
             android:layout_width="183dp"
             android:layout_height="91dp"
             android:layout_alignStart="@+id/imageView4"
@@ -244,7 +244,7 @@
             android:textColor="@color/custom_orange" />
 
         <Button
-            android:id="@+id/button3"
+            android:id="@+id/CreateWorkoutShortcut_btn"
             android:layout_width="345dp"
             android:layout_height="51dp"
             android:layout_alignStart="@+id/imageView4"

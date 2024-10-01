@@ -15,6 +15,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.example.heavymetals.Home_LandingPage.Workouts.Exercises_All;
+import com.example.heavymetals.Home_LandingPage.Workouts.WorkoutModule1;
 import com.example.heavymetals.Home_LandingPage.Workouts.WorkoutModule4;
 import com.example.heavymetals.Models.API;
 import com.example.heavymetals.Models.CurrentTimeResponse;
@@ -31,7 +33,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class HomeFragment extends Fragment {
-    private Button YourWorkoutBtn;
+    private Button CreateWorkoutShortcut_btn,RecommendationsShortcut_btn;
     private TextView textViewCurrentTime;
     private API apiService;
     private final Handler handler = new Handler();
@@ -43,10 +45,29 @@ public class HomeFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_home, container, false);
-        YourWorkoutBtn = view.findViewById(R.id.YourWorkout_btn);
+        Button yourWorkoutBtn = view.findViewById(R.id.YourWorkout_btn);
         textViewCurrentTime = view.findViewById(R.id.textDate); // Ensure this ID exists in your fragment_home.xml
+        CreateWorkoutShortcut_btn = view.findViewById(R.id.CreateWorkoutShortcut_btn);
+        RecommendationsShortcut_btn = view.findViewById(R.id.RecommendationsShortcut_btn);
 
-        YourWorkoutBtn.setOnClickListener(v -> {
+
+
+        CreateWorkoutShortcut_btn.setOnClickListener(v -> {
+            // Use requireActivity() or getActivity() to get the Activity context from the Fragment
+            Intent intent = new Intent(requireActivity(), Exercises_All.class);
+            startActivity(intent);
+        });
+        // Replace `requireActivity()` with `requireActivity().getSupportFragmentManager()`
+        RecommendationsShortcut_btn.setOnClickListener(v -> {
+            // Create an instance of the new fragment (WorkoutModule1)
+            WorkoutModule1 fragment = new WorkoutModule1();
+            requireActivity().getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_container, fragment)  // R.id.fragment_container is the FrameLayout or container where fragments are loaded
+                    .addToBackStack(null)  // Add this transaction to the back stack so the user can navigate back
+                    .commit();
+        });
+
+        yourWorkoutBtn.setOnClickListener(v -> {
             // Use requireActivity() or getActivity() to get the Activity context from the Fragment
             Intent intent = new Intent(requireActivity(), WorkoutModule4.class);
             startActivity(intent);

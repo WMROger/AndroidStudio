@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
 
     <uses-permission android:name="android.permission.INTERNET" />
 
@@ -25,9 +26,7 @@
         <activity
             android:name=".Home_LandingPage.Workouts.WorkoutModule5"
             android:exported="false" />
-        <activity
-            android:name=".Home_LandingPage.Workouts.Exercises_All$WorkoutModule2"
-            android:exported="false" />
+
         <activity
             android:name=".Home_LandingPage.Workouts.WorkoutModule4"
             android:exported="true" />
@@ -61,7 +60,7 @@
             android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".Login_RegisterPage.RegisterPage.ProfileCreation.ProfileCreation"
-            android:exported="false"
+            android:exported="true"
             android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".Login_RegisterPage.RegisterPage.TermsConditionsActivity"

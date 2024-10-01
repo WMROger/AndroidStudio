@@ -17,7 +17,8 @@
         <item
             android:id="@+id/nav_progress"
             android:icon="@drawable/baseline_tracker_24"
-            android:title="Progress Tracker" />
+            android:title="Progress Tracker"
+            android:visible="false"/>
 
         <item
             android:id="@+id/nav_exercise"

@@ -84,15 +84,17 @@
     <!-- Subtitle with instructions -->
 
     <ImageView
-        android:id="@+id/imageView7"
+        android:id="@+id/ProfilePicture"
         android:layout_width="100dp"
         android:layout_height="107dp"
         android:layout_marginTop="8dp"
+        android:background="@drawable/circle_shape"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView24"
-        app:layout_constraintVertical_bias="0.0"
+        app:layout_constraintVertical_bias="0.007"
         app:srcCompat="@mipmap/ic_launcher_round" />
 
     <TextView
@@ -110,10 +112,14 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <!-- Add Profile TextView with Icon -->
+
+    <!-- Input Fields LinearLayout -->
     <TextView
-        android:id="@+id/textView25"
+        android:id="@+id/ProfileAdd_create"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="3dp"
+        android:layout_marginBottom="376dp"
         android:drawableLeft="@drawable/edit_icon"
         android:drawablePadding="5sp"
         android:text="@string/Profile_Add"
@@ -121,10 +127,9 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView7"
+        app:layout_constraintTop_toBottomOf="@+id/ProfilePicture"
         app:layout_constraintVertical_bias="0.033" />
 
-    <!-- Input Fields LinearLayout -->
     <LinearLayout
         android:id="@+id/linearLayout2"
         android:layout_width="383dp"
@@ -134,7 +139,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView25"
+        app:layout_constraintTop_toBottomOf="@+id/ProfilePicture"
         app:layout_constraintVertical_bias="0.229">
 
         <!-- First Name Input -->
@@ -148,15 +153,16 @@
             android:textColor="#FFFFFF"
             android:textSize="12sp" />
 
-        <EditText
+        <TextView
             android:id="@+id/PCFirstName"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_marginBottom="10sp"
             android:background="@drawable/button_background"
             android:fontFamily="@font/konkhmer_sleokchher"
-            android:hint="First Name"
+            android:hint="User"
             android:inputType="text"
+            android:paddingTop="10sp"
             android:paddingLeft="20sp"
             android:textColor="@color/white"
             android:textColorHint="#FDFDFD" />
@@ -170,14 +176,15 @@
             android:textColor="#FFFFFF"
             android:textSize="12sp" />
 
-        <EditText
+        <TextView
             android:id="@+id/PCLastName"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_marginBottom="10sp"
             android:background="@drawable/button_background"
-            android:hint="Last Name"
+            android:hint="Name"
             android:inputType="text"
+            android:paddingTop="10sp"
             android:paddingLeft="20sp"
             android:textColor="@color/white"
             android:textColorHint="#FDFDFD" />
