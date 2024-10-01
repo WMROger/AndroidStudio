@@ -42,7 +42,7 @@ public class WorkoutModule2 extends AppCompatActivity {
     private HashMap<String, Integer> exerciseIconMap = new HashMap<>(); // To store icons for each exercise
     private List<Workout> workoutList;
     private EditText workoutNameInput;
-
+    private Button ExerciseAdd;
     private static final String TAG = "WorkoutModule2";
 
     @Override
@@ -54,13 +54,15 @@ public class WorkoutModule2 extends AppCompatActivity {
         workoutNameInput = findViewById(R.id.workout_name_input);
         workoutContainer = findViewById(R.id.workout_container);
         WM2discard_txt = findViewById(R.id.WM2discard_txt);
-
+        ExerciseAdd = findViewById(R.id.WM2AddExercisebtn);
         // Initialize the icon map
         initializeExerciseIconMap();
 
         // Check user login session
         checkUserSession();
-
+        ExerciseAdd.setOnClickListener(v -> {
+            Intent intent = new Intent (WorkoutModule2.this, Exercises_All.class);
+        });
         WM2discard_txt.setOnClickListener(v -> finish());
 
         // Get the selected exercises passed from another activity

@@ -81,7 +81,7 @@
         android:layout_width="378dp"
         android:layout_height="571dp"
         android:background="@drawable/bg_blackgradient"
-
+        android:scrollbars="none"
         app:layout_constraintBottom_toTopOf="@+id/WM2AddExercisebtn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.515"
@@ -136,7 +136,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintVertical_bias="0.407" />
+        app:layout_constraintTop_toBottomOf="@+id/textView43"
+        app:layout_constraintVertical_bias="0.99" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

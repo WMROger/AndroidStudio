@@ -94,7 +94,7 @@
 
         <ScrollView
             android:id="@+id/scrollView"
-
+            android:scrollbars="none"
             android:layout_width="340dp"
             android:layout_height="457dp"
             android:layout_marginStart="22dp"
