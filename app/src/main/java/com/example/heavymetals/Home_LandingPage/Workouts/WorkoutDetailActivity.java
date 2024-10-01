@@ -22,7 +22,8 @@ public class WorkoutDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_workout_detail);
 
-        exercisesContainer = findViewById(R.id.exercises_container);
+        // Find the LinearLayout inside the ScrollView
+        exercisesContainer = findViewById(R.id.exercises_linear_layout);
 
         // Get the list of Exercise objects from the intent
         ArrayList<Exercise> exerciseList = (ArrayList<Exercise>) getIntent().getSerializableExtra("exercises");
@@ -45,8 +46,15 @@ public class WorkoutDetailActivity extends AppCompatActivity {
                 exerciseTextView.setText(exerciseDetails);
 
                 // Optionally, style the TextView for each exercise
+                exerciseTextView.setTextColor(getResources().getColor(R.color.white));
                 exerciseTextView.setTextSize(18);
                 exerciseTextView.setPadding(32, 8, 32, 8);
+
+                // Add margins to the TextView
+                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                layoutParams.setMargins(0, 16, 0, 16); // Adding vertical margins between exercises
+                exerciseTextView.setLayoutParams(layoutParams);
 
                 // Add the exercise details TextView to the container
                 exercisesContainer.addView(exerciseTextView);
@@ -55,6 +63,16 @@ public class WorkoutDetailActivity extends AppCompatActivity {
                 CheckBox doneCheckbox = new CheckBox(this);
                 doneCheckbox.setChecked(exercise.isDone());
                 doneCheckbox.setText("Completed");
+                doneCheckbox.setButtonTintList(getResources().getColorStateList(R.color.white));
+                doneCheckbox.setTextColor(getResources().getColor(R.color.white));
+
+                // Add margins to the CheckBox
+                LinearLayout.LayoutParams checkboxParams = new LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                checkboxParams.setMargins(0, 8, 0, 55); // Adding margins below the checkbox
+                doneCheckbox.setLayoutParams(checkboxParams);
+
+                // Add the checkbox to the container
                 exercisesContainer.addView(doneCheckbox);
             }
         } else {
