@@ -128,6 +128,8 @@ public class RegisterActivity extends AppCompatActivity {
                     if (success == 1) {
                         showToast("Registration successful. Please check your email to verify your account.");
                         Intent intent = new Intent(RegisterActivity.this, TermsConditionsActivity.class);
+                        intent.putExtra("first_name", firstName.getText().toString().trim());
+                        intent.putExtra("last_name", lastName.getText().toString().trim());
                         startActivity(intent);
                     } else {
                         showToast("Registration failed: " + message);

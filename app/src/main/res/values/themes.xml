@@ -29,9 +29,9 @@
         <item name="buttonBarNegativeButtonStyle">@style/CustomDatePickerButton</item>
     </style>
 
-    <!-- Custom style for OK and Cancel buttons -->
-    <style name="CustomDatePickerButton" parent="Widget.AppCompat.Button.ButtonBar.AlertDialog">
-        <item name="android:textColor">#DE612B</item> <!-- Set custom button text color -->
+    <!-- Custom style for the OK/Cancel buttons in DatePicker -->
+    <style name="CustomDatePickerButton" parent="Widget.AppCompat.Button">
+        <item name="android:textColor">@color/custom_orange</item> <!-- Ensure you have custom_orange in your colors.xml -->
     </style>
 
 

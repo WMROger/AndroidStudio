@@ -1,29 +1,30 @@
 package com.example.heavymetals.Models;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Exercise {
+public class Exercise implements Serializable {
     private String name;
-    private String type;
-    private List<Set> sets;
+    private String description;
+    private String imageUrl;
 
-    public Exercise(String name, String type) {
+    public Exercise(String name, String description, String imageUrl) {
         this.name = name;
-        this.type = type;
-        this.sets = new ArrayList<>();
+        this.description = description;
+        this.imageUrl = imageUrl;
     }
 
     public String getName() {
         return name;
     }
 
-    public String getType() {
-        return type;
+    public String getDescription() {
+        return description;
     }
 
-    public List<Set> getSets() {
-        return sets;
+    public String getImageUrl() {
+        return imageUrl;
     }
 }
 

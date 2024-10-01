@@ -6,6 +6,7 @@ appcompatVersion = "1.3.1"
 constraintlayoutVersion = "2.1.0"
 coreKtx = "1.13.1"
 espressoCoreVersion = "3.4.0"
+glide = "4.15.1"
 googleMaterial = "1.9.0"
 junit = "4.13.2"
 junitVersion = "1.2.1"
@@ -21,10 +22,12 @@ volley = "1.2.1"
 [libraries]
 activity-v123 = { module = "androidx.activity:activity", version.ref = "activityVersion" }
 appcompat-v131 = { module = "androidx.appcompat:appcompat", version.ref = "appcompatVersion" }
+compiler = { module = "com.github.bumptech.glide:compiler", version.ref = "glide" }
 constraintlayout-v210 = { module = "androidx.constraintlayout:constraintlayout", version.ref = "constraintlayoutVersion" }
 converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "retrofit" }
 core-ktx = { module = "androidx.core:core-ktx", version.ref = "coreKtx" }
 espresso-core-v340 = { module = "androidx.test.espresso:espresso-core", version.ref = "espressoCoreVersion" }
+glide = { module = "com.github.bumptech.glide:glide", version.ref = "glide" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }

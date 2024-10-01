@@ -5,12 +5,12 @@ import java.util.List;
 
 public class Workout implements Serializable {
     private String title;  // Name of the workout (previously called "name")
-    private List<Exercise> exercises;  // List of Exercise objects
+    private List<AdaptersExercise> adaptersExercises;  // List of Exercise objects
 
     // Constructor
-    public Workout(String title, List<Exercise> exercises) {
+    public Workout(String title, List<AdaptersExercise> adaptersExercises) {
         this.title = title;
-        this.exercises = exercises;
+        this.adaptersExercises = adaptersExercises;
     }
 
     // Getter for title (previously "name")
@@ -23,16 +23,16 @@ public class Workout implements Serializable {
     }
 
     // Getter for exercise list
-    public List<Exercise> getExercises() {
-        return exercises;
+    public List<AdaptersExercise> getExercises() {
+        return adaptersExercises;
     }
 
-    public void setExercises(List<Exercise> exercises) {
-        this.exercises = exercises;
+    public void setExercises(List<AdaptersExercise> adaptersExercises) {
+        this.adaptersExercises = adaptersExercises;
     }
 
     // This method calculates the number of exercises (exerciseCount)
     public int getExerciseCount() {
-        return exercises != null ? exercises.size() : 0;
+        return adaptersExercises != null ? adaptersExercises.size() : 0;
     }
 }

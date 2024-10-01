@@ -8,7 +8,7 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.heavymetals.Models.Adapters.Exercise;
+import com.example.heavymetals.Models.Adapters.AdaptersExercise;
 import com.example.heavymetals.R;
 
 import java.util.ArrayList;
@@ -26,22 +26,22 @@ public class WorkoutDetailActivity extends AppCompatActivity {
         exercisesContainer = findViewById(R.id.exercises_linear_layout);
 
         // Get the list of Exercise objects from the intent
-        ArrayList<Exercise> exerciseList = (ArrayList<Exercise>) getIntent().getSerializableExtra("exercises");
+        ArrayList<AdaptersExercise> adaptersExerciseList = (ArrayList<AdaptersExercise>) getIntent().getSerializableExtra("exercises");
 
-        if (exerciseList != null && !exerciseList.isEmpty()) {
+        if (adaptersExerciseList != null && !adaptersExerciseList.isEmpty()) {
             // Log the exercises to ensure the data is being passed
-            Log.d("WorkoutDetailActivity", "Exercises: " + exerciseList.toString());
+            Log.d("WorkoutDetailActivity", "Exercises: " + adaptersExerciseList.toString());
 
             // Loop through the exercises and display each one with sets, reps, and done status
-            for (Exercise exercise : exerciseList) {
+            for (AdaptersExercise adaptersExercise : adaptersExerciseList) {
                 // Dynamically create a TextView for each exercise and add it to the container
                 TextView exerciseTextView = new TextView(this);
 
                 // Format the text to show the exercise name, sets, reps, and done status
-                String exerciseDetails = "Exercise: " + exercise.getName() +
-                        "\nSets: " + exercise.getSets() +
-                        "\nReps: " + exercise.getReps() +
-                        "\nDone: " + (exercise.isDone() ? "Yes" : "No");
+                String exerciseDetails = "Exercise: " + adaptersExercise.getName() +
+                        "\nSets: " + adaptersExercise.getSets() +
+                        "\nReps: " + adaptersExercise.getReps() +
+                        "\nDone: " + (adaptersExercise.isDone() ? "Yes" : "No");
 
                 exerciseTextView.setText(exerciseDetails);
 
@@ -61,7 +61,7 @@ public class WorkoutDetailActivity extends AppCompatActivity {
 
                 // Add a checkbox for the "done" status
                 CheckBox doneCheckbox = new CheckBox(this);
-                doneCheckbox.setChecked(exercise.isDone());
+                doneCheckbox.setChecked(adaptersExercise.isDone());
                 doneCheckbox.setText("Completed");
                 doneCheckbox.setButtonTintList(getResources().getColorStateList(R.color.white));
                 doneCheckbox.setTextColor(getResources().getColor(R.color.white));

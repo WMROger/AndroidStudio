@@ -2,14 +2,14 @@ package com.example.heavymetals.Models.Adapters;
 
 import java.io.Serializable;
 
-public class Exercise implements Serializable {
+public class AdaptersExercise implements Serializable {
     private String name;
     private int sets;
     private int reps;
     private boolean isDone;  // Tracks if the exercise is completed
 
     // Constructor
-    public Exercise(String name, int sets, int reps, boolean isDone) {
+    public AdaptersExercise(String name, int sets, int reps, boolean isDone) {
         this.name = name;
         this.sets = sets;
         this.reps = reps;
@@ -17,7 +17,7 @@ public class Exercise implements Serializable {
     }
 
     // Alternative constructor without isDone for backwards compatibility
-    public Exercise(String name, int sets, int reps) {
+    public AdaptersExercise(String name, int sets, int reps) {
         this.name = name;
         this.sets = sets;
         this.reps = reps;

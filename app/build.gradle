@@ -35,7 +35,8 @@ dependencies {
     implementation libs.activity.v123
     implementation libs.constraintlayout.v210
 
-
+    implementation libs.glide
+    annotationProcessor libs.compiler
     // Retrofit for network calls
     implementation libs.retrofit
     // Gson for JSON parsing

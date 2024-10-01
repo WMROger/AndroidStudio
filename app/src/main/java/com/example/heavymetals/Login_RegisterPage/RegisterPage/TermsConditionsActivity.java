@@ -26,6 +26,7 @@ public class TermsConditionsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+
         setContentView(R.layout.activity_terms_conditions);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -47,7 +48,13 @@ public class TermsConditionsActivity extends AppCompatActivity {
         tncIagree.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                // Retrieve the first name and last name from the intent
+                String firstName = getIntent().getStringExtra("first_name");
+                String lastName = getIntent().getStringExtra("last_name");
+
                 Intent intent = new Intent(TermsConditionsActivity.this, ProfileCreation.class);
+                intent.putExtra("first_name", firstName);
+                intent.putExtra("last_name", lastName);
                 startActivity(intent);
             }
         });

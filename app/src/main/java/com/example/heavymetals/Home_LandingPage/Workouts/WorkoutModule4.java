@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.heavymetals.Home_LandingPage.MainActivity;
 import com.example.heavymetals.Login_RegisterPage.LoginPage.LoginActivity;
-import com.example.heavymetals.Models.Adapters.Exercise;
+import com.example.heavymetals.Models.Adapters.AdaptersExercise;
 import com.example.heavymetals.Models.Adapters.Workout;
 import com.example.heavymetals.Models.Adapters.WorkoutAdapter;
 import com.example.heavymetals.Models.Adapters.WorkoutApi;
@@ -160,6 +160,13 @@ public class WorkoutModule4 extends AppCompatActivity {
             Log.d("LoadWorkouts", "No saved workouts found.");
         }
     }
+    private void saveWorkoutCountToPreferences(int workoutCount) {
+        SharedPreferences sharedPreferences = getSharedPreferences("WorkoutData", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt("workoutCount", workoutCount);  // Save the workout count
+        editor.apply();  // Apply the changes asynchronously
+    }
+
 
     private void saveWorkoutsForUser(List<Workout> workouts) {
         String userEmail = getLoggedInUserEmail();
@@ -173,8 +180,12 @@ public class WorkoutModule4 extends AppCompatActivity {
         // Save to SharedPreferences
         saveWorkoutsToLocalStorage(userEmail, workouts);
 
+        // Save the workout count to preferences
+        saveWorkoutCountToPreferences(workouts.size());
+
         Log.d("SaveWorkout", "Workouts saved locally for user: " + userEmail);
     }
+
 
     private void saveWorkoutsToLocalStorage(String userEmail, List<Workout> workouts) {
         SharedPreferences sharedPreferences = getSharedPreferences("WorkoutData", MODE_PRIVATE);
@@ -220,7 +231,7 @@ public class WorkoutModule4 extends AppCompatActivity {
 
     private void onWorkoutViewClicked(Workout workout) {
         Intent intent = new Intent(this, WorkoutDetailActivity.class);
-        intent.putExtra("exercises", (ArrayList<Exercise>) workout.getExercises());
+        intent.putExtra("exercises", (ArrayList<AdaptersExercise>) workout.getExercises());
         startActivity(intent);
     }
 
