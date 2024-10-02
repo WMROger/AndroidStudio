@@ -41,4 +41,11 @@ public interface ApiService {
     Call<FetchWorkoutsResponse> fetchWorkouts(
             @Body UserIdRequest userIdRequest  // Sending the UserIdRequest object
     );
+
+    @FormUrlEncoded
+    @POST("HeavyMetals/workout_save/delete_workout.php")  // Endpoint for deleting workouts
+    Call<Void> deleteWorkout(
+            @Field("workout_id") int workoutId,  // Workout ID to be deleted
+            @Field("session_token") String sessionToken  // Session token for authentication
+    );
 }

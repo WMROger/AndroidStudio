@@ -103,6 +103,8 @@
             <LinearLayout
                 android:id="@+id/scrollViewLinearLayout"
                 android:layout_width="match_parent"
+                android:paddingBottom="50dp"
+                android:layout_marginBottom="50dp"
                 android:layout_height="match_parent"
                 android:orientation="vertical">
 

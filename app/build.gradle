@@ -44,6 +44,7 @@ dependencies {
 
     // Volley for networking (optional, if needed)
     implementation libs.volley
+    implementation libs.gson
 
 
     // Testing dependencies

@@ -1,19 +1,31 @@
 package com.example.heavymetals.Models.Adapters;
 
+import com.example.heavymetals.Models.Exercise;
 import java.io.Serializable;
 import java.util.List;
+import java.util.Objects;
 
 public class Workout implements Serializable {
-    private String title;  // Name of the workout (previously called "name")
-    private List<AdaptersExercise> adaptersExercises;  // List of Exercise objects
+    private int workoutId;  // ID of the workout
+    private String title;   // Title of the workout
+    private List<Exercise> exercises;  // List of Exercise objects (now using Exercise.java)
 
     // Constructor
-    public Workout(String title, List<AdaptersExercise> adaptersExercises) {
+    public Workout(int workoutId, String title, List<Exercise> exercises) {
+        this.workoutId = workoutId;
         this.title = title;
-        this.adaptersExercises = adaptersExercises;
+        this.exercises = exercises;
     }
 
-    // Getter for title (previously "name")
+    // Getters and setters
+    public int getWorkoutId() {
+        return workoutId;
+    }
+
+    public void setWorkoutId(int workoutId) {
+        this.workoutId = workoutId;
+    }
+
     public String getTitle() {
         return title;
     }
@@ -22,17 +34,30 @@ public class Workout implements Serializable {
         this.title = title;
     }
 
-    // Getter for exercise list
-    public List<AdaptersExercise> getExercises() {
-        return adaptersExercises;
+    public List<Exercise> getExercises() {
+        return exercises;
     }
 
-    public void setExercises(List<AdaptersExercise> adaptersExercises) {
-        this.adaptersExercises = adaptersExercises;
+    public void setExercises(List<Exercise> exercises) {
+        this.exercises = exercises;
     }
 
-    // This method calculates the number of exercises (exerciseCount)
+    // Method to get the count of exercises
     public int getExerciseCount() {
-        return adaptersExercises != null ? adaptersExercises.size() : 0;
+        return exercises != null ? exercises.size() : 0;
+    }
+
+    // Override equals() and hashCode()
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Workout workout = (Workout) o;
+        return workoutId == workout.workoutId;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(workoutId);
     }
 }
