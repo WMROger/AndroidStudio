@@ -39,5 +39,16 @@
         </ScrollView>
 
     </androidx.cardview.widget.CardView>
+    <TextView
+        android:id="@+id/detailSave"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="300dp"
+        android:layout_marginTop="-120dp"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        android:gravity="center"
+        android:text="Save" />
+
 
 </LinearLayout>

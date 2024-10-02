@@ -1,38 +1,55 @@
 package com.example.heavymetals.Models.Adapters;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.io.Serializable;
 import java.util.List;
 
 public class Workout implements Serializable {
-    private String title;  // Name of the workout (previously called "name")
-    private List<AdaptersExercise> adaptersExercises;  // List of Exercise objects
+    private int id;  // New field to hold the workout ID
+    @SerializedName("workout_name")  // Map to workout_name field from the server
+    private String title;
+    private List<AdaptersExercise> exercises;
 
-    // Constructor
-    public Workout(String title, List<AdaptersExercise> adaptersExercises) {
+    // Constructor accepting an int, String, and List<AdaptersExercise>
+    public Workout(int id, String title, List<AdaptersExercise> exercises) {
+        this.id = id;
         this.title = title;
-        this.adaptersExercises = adaptersExercises;
+        this.exercises = exercises;
     }
 
-    // Getter for title (previously "name")
+    // Existing constructor for backwards compatibility
+    public Workout(String title, List<AdaptersExercise> exercises) {
+        this.title = title;
+        this.exercises = exercises;
+    }
+
+    // Getter and setter for id
+    public int getWorkoutId() {
+        return id;
+    }
+
+    public void setWorkoutId(int id) {
+        this.id = id;
+    }
+
+    // Getter for title
     public String getTitle() {
         return title;
     }
 
+    // Setter for title
     public void setTitle(String title) {
         this.title = title;
     }
 
-    // Getter for exercise list
+    // Getter for exercises
     public List<AdaptersExercise> getExercises() {
-        return adaptersExercises;
+        return exercises;
     }
 
-    public void setExercises(List<AdaptersExercise> adaptersExercises) {
-        this.adaptersExercises = adaptersExercises;
-    }
-
-    // This method calculates the number of exercises (exerciseCount)
-    public int getExerciseCount() {
-        return adaptersExercises != null ? adaptersExercises.size() : 0;
+    // Setter for exercises
+    public void setExercises(List<AdaptersExercise> exercises) {
+        this.exercises = exercises;
     }
 }

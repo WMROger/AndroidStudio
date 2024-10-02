@@ -1,6 +1,7 @@
 package com.example.heavymetals.network;
 
 import com.example.heavymetals.Models.Adapters.WorkoutResponse;
+import com.example.heavymetals.Models.ExerciseResponse;
 import com.example.heavymetals.Models.LoginResponse;
 import com.example.heavymetals.Models.RegisterResponse;
 
@@ -8,7 +9,9 @@ import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
+import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.Query;
 
 public interface ApiService {
 
@@ -40,5 +43,16 @@ public interface ApiService {
     @POST("HeavyMetals/workout_save/get_workout.php")  // Endpoint for fetching workouts
     Call<FetchWorkoutsResponse> fetchWorkouts(
             @Body UserIdRequest userIdRequest  // Sending the UserIdRequest object
+    );
+    @GET("HeavyMetals/workout_save/get_exercise.php")
+    Call<ExerciseResponse> getExercises(
+            @Query("session_token") String sessionToken,
+            @Query("workout_id") int workoutId
+    );
+    @FormUrlEncoded
+    @POST("HeavyMetals/workout_save/delete_workout.php")  // Endpoint for deleting workouts
+    Call<Void> deleteWorkout(
+            @Field("workout_id") int workoutId,  // Workout ID to be deleted
+            @Field("session_token") String sessionToken  // Session token for authentication
     );
 }
