@@ -21,7 +21,7 @@
         android:gravity="center" />
 
     <!-- Reps EditText -->
-    <EditText
+    <TextView
         android:id="@+id/reps_edit_text"
         android:layout_width="0dp"
         android:layout_height="60dp"

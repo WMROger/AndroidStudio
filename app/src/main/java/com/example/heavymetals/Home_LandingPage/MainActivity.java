@@ -161,25 +161,103 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     // Log out the user and clear their session
     private void logoutUser() {
-        // Clear the user session from SharedPreferences
+        // Retrieve the session token from SharedPreferences
         SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.clear();  // Clear all saved preferences including loggedInUser and auth_token
-        editor.apply();
+        String sessionToken = sharedPreferences.getString("auth_token", null); // Retrieve the saved session token
 
-        // Inform the user about the logout
-        Toast.makeText(this, "Logged out successfully!", Toast.LENGTH_SHORT).show();
+        if (sessionToken != null) {
+            // Make a network request to logout from the server
+            new Thread(() -> {
+                try {
+                    URL url = new URL("https://heavymetals.scarlet2.io/HeavyMetals/logout.php"); // URL to your logout.php script
+                    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                    conn.setRequestMethod("POST");
+                    conn.setDoOutput(true);
 
-        // Redirect the user to the AuthenticationActivity
-        redirectToLogin();
+                    // Send the POST data with the session token
+                    OutputStream os = conn.getOutputStream();
+                    BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os, "UTF-8"));
+                    String postData = "session_token=" + URLEncoder.encode(sessionToken, "UTF-8");
+                    writer.write(postData);
+                    writer.flush();
+                    writer.close();
+                    os.close();
+
+                    // Log the response code for debugging
+                    int responseCode = conn.getResponseCode();
+                    if (responseCode != HttpURLConnection.HTTP_OK) {
+                        throw new Exception("HTTP error code: " + responseCode);
+                    }
+
+                    // Get the response from the server
+                    InputStream is = conn.getInputStream();
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+                    StringBuilder response = new StringBuilder();
+                    String line;
+                    while ((line = reader.readLine()) != null) {
+                        response.append(line);
+                    }
+                    reader.close();
+
+                    // Parse the server response
+                    JSONObject jsonResponse = new JSONObject(response.toString());
+                    int success = jsonResponse.getInt("success"); // Read success as an integer
+
+                    if (success == 1 || jsonResponse.getString("message").contains("Session token is required")) {
+                        // If logout was successful or if the token was already invalid, clear the local session
+                        runOnUiThread(() -> {
+                            // Clear the local session
+                            SharedPreferences.Editor editor = sharedPreferences.edit();
+                            editor.clear(); // Clear all saved preferences including loggedInUser and auth_token
+                            editor.apply();
+
+                            // Inform the user about the logout
+                            Toast.makeText(MainActivity.this, "Logged out successfully!", Toast.LENGTH_SHORT).show();
+
+                            // Redirect to login
+                            redirectToLogin();
+                        });
+                    } else {
+                        // If logout failed on the server, show an error message
+                        String message = jsonResponse.getString("message");
+                        runOnUiThread(() -> {
+                            Toast.makeText(MainActivity.this, "Logout failed: " + message, Toast.LENGTH_LONG).show();
+                        });
+                    }
+
+                } catch (Exception e) {
+                    // Handle any exceptions during the request and log them
+                    e.printStackTrace();
+                    runOnUiThread(() -> Toast.makeText(MainActivity.this, "Error during logout request: " + e.getMessage(), Toast.LENGTH_LONG).show());
+                }
+            }).start();
+        } else {
+            // If there's no session token, just clear the local session and redirect to login
+            runOnUiThread(() -> {
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.clear(); // Clear all saved preferences including loggedInUser and auth_token
+                editor.apply();
+
+                // Inform the user about the logout
+                Toast.makeText(this, "Logged out successfully!", Toast.LENGTH_SHORT).show();
+
+                // Redirect to the AuthenticationActivity
+                redirectToLogin();
+            });
+        }
     }
 
+
+
+
     private void redirectToLogin() {
+        // This should always run on the main thread
         Intent intent = new Intent(MainActivity.this, AuthenticationActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);  // Clear the activity stack
         startActivity(intent);
         finish();  // Close MainActivity
     }
+
 
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
