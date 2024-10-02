@@ -9,6 +9,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -22,6 +24,7 @@ import com.example.heavymetals.Models.Adapters.WorkoutResponse;
 import com.example.heavymetals.R;
 import com.example.heavymetals.network.RetrofitClient;
 import com.example.heavymetals.network.SaveWorkoutResponse;
+import com.example.heavymetals.network.ScheduleDailyNotification;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -33,6 +36,10 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.content.Context;
+import android.os.Build;
 
 public class WorkoutModule4 extends AppCompatActivity {
 
@@ -41,6 +48,8 @@ public class WorkoutModule4 extends AppCompatActivity {
     private WorkoutAdapter workoutAdapter;
     private List<Workout> workoutList;
     private TextView wm4_Back_txt, wm4_Save_txt;
+    private static final String CHANNEL_ID = "workout_notifications";  // Define CHANNEL_ID as a constant
+    private static final int NOTIFICATION_ID = 100;  // Unique ID for notifications
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,9 +58,16 @@ public class WorkoutModule4 extends AppCompatActivity {
 
         // Initialize UI elements
         initializeUI();
+        createNotificationChannel();  // Create notification channel
+
+        ScheduleDailyNotification scheduleNotification = new ScheduleDailyNotification();
+        scheduleNotification.scheduleDailyNotification(this);
 
         // Check if the user is logged in
         checkLoginStatus();
+
+        // Initialize the workoutList to avoid NullPointerException
+        workoutList = new ArrayList<>();
 
         // Load saved workouts from SharedPreferences before fetching from server
         loadSavedWorkouts();
@@ -62,6 +78,40 @@ public class WorkoutModule4 extends AppCompatActivity {
         if (workout != null) {
             addNewWorkout(workout);
         }
+
+        // Trigger the notification after the workout list is initialized
+        int workoutCount = (workoutList != null) ? workoutList.size() : 0;
+        if (workoutCount > 0) {
+            sendWorkoutNotification(workoutCount);
+        }
+    }
+
+    // Create the Notification Channel for Android O and above
+    private void createNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            CharSequence name = "Workout Reminder";
+            String description = "Reminds the user of pending workouts";
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
+            channel.setDescription(description);
+
+            // Register the channel with the system
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
+    }
+
+    // Trigger the notification to remind the user about workouts
+    private void sendWorkoutNotification(int workoutCount) {
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
+                .setSmallIcon(R.drawable.human_icon)  // Set your notification icon
+                .setContentTitle("Workout Reminder")
+                .setContentText("You have " + workoutCount + " workouts to complete. Let's get to work!")
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+
+        // Trigger the notification
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
+        notificationManager.notify(NOTIFICATION_ID, builder.build());
     }
 
     private void initializeUI() {
@@ -71,7 +121,7 @@ public class WorkoutModule4 extends AppCompatActivity {
         recyclerView = findViewById(R.id.recyclerViewWorkouts);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        workoutList = new ArrayList<>();
+        workoutList = new ArrayList<>(); // Ensure workoutList is initialized
 
         // Add new workout button listener
         addWorkout.setOnClickListener(v -> {
@@ -105,7 +155,6 @@ public class WorkoutModule4 extends AppCompatActivity {
 
                 @Override
                 public void onWorkoutDeleted(Workout workout) {
-                    // This method should be triggered when a workout is deleted
                     onWorkoutDeleted(workout);  // Call the deletion method in WorkoutModule4
                 }
             });
@@ -115,13 +164,6 @@ public class WorkoutModule4 extends AppCompatActivity {
             workoutAdapter.notifyDataSetChanged();
         }
     }
-
-
-
-
-
-
-
 
 
     /**
@@ -207,7 +249,6 @@ public class WorkoutModule4 extends AppCompatActivity {
 
                 @Override
                 public void onWorkoutDeleted(Workout workout) {
-                    // This will call the actual deletion method
                     onWorkoutDeleted(workout);
                 }
 
@@ -217,7 +258,6 @@ public class WorkoutModule4 extends AppCompatActivity {
             workoutAdapter.notifyDataSetChanged();
         }
     }
-
 
     public void onWorkoutDeleted(Workout workout) {
         if (workout == null) {
@@ -246,53 +286,34 @@ public class WorkoutModule4 extends AppCompatActivity {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
                 if (response.isSuccessful()) {
-                    // Workout deleted successfully on the server, now delete locally
                     Log.d("WorkoutModule4", "Workout deleted from server: " + workout.getTitle());
 
                     // Remove workout from local list
                     workoutList.remove(workout);
-
-                    // Notify the adapter about the data change
-                    if (workoutAdapter != null) {
-                        workoutAdapter.notifyDataSetChanged();
-                    }
+                    workoutAdapter.notifyDataSetChanged();
 
                     // Save the updated list locally
                     saveWorkoutsForUser(workoutList);
 
                     Toast.makeText(WorkoutModule4.this, "Workout deleted successfully", Toast.LENGTH_SHORT).show();
                 } else {
-                    // Deletion on the server failed, show a toast
                     Toast.makeText(WorkoutModule4.this, "Failed to delete workout on the server", Toast.LENGTH_SHORT).show();
-                    Log.e("WorkoutModule4", "Server deletion failed: " + response.message());
                 }
             }
 
             @Override
             public void onFailure(Call<Void> call, Throwable t) {
-                // Handle failure
                 Toast.makeText(WorkoutModule4.this, "Error deleting workout: " + t.getMessage(), Toast.LENGTH_SHORT).show();
-                Log.e("WorkoutModule4", "Error deleting workout from server", t);
             }
         });
-
     }
 
-
-
-
-    /**
-     * Handles viewing workout details.
-     */
     private void onWorkoutViewClicked(Workout workout) {
         Intent intent = new Intent(this, WorkoutDetailActivity.class);
         intent.putExtra("exercises", (ArrayList<AdaptersExercise>) workout.getExercises());
         startActivity(intent);
     }
 
-    /**
-     * Navigates back to the main activity.
-     */
     private void navigateToMainActivity() {
         Intent intent = new Intent(WorkoutModule4.this, MainActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
@@ -302,42 +323,6 @@ public class WorkoutModule4 extends AppCompatActivity {
 
     // ------------ Server Integration Methods ------------
 
-    /**
-     * Saves the workouts to the server.
-     */
-    private void saveWorkoutsToServer(List<Workout> workouts) {
-        String userEmail = getLoggedInUserEmail();
-        if (userEmail == null) {
-            Toast.makeText(this, "No logged-in user found. Cannot save workouts.", Toast.LENGTH_LONG).show();
-            return;
-        }
-
-        WorkoutResponse workoutResponse = new WorkoutResponse(true, userEmail, workouts);
-
-        Retrofit retrofit = RetrofitClient.getClient(getApplicationContext());
-        WorkoutApi workoutApi = retrofit.create(WorkoutApi.class);
-
-        Call<SaveWorkoutResponse> call = workoutApi.saveWorkouts(workoutResponse);
-        call.enqueue(new Callback<SaveWorkoutResponse>() {
-            @Override
-            public void onResponse(Call<SaveWorkoutResponse> call, Response<SaveWorkoutResponse> response) {
-                if (response.isSuccessful() && response.body() != null && response.body().isSuccess()) {
-                    Toast.makeText(WorkoutModule4.this, "Workouts saved to server successfully!", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(WorkoutModule4.this, "Failed to save workouts.", Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<SaveWorkoutResponse> call, Throwable t) {
-                Toast.makeText(WorkoutModule4.this, "Error saving workout: " + t.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
-
-    /**
-     * Fetches workouts from the server.
-     */
     private void fetchWorkoutsFromServer() {
         String sessionToken = getSessionToken();
         if (sessionToken == null) {
@@ -367,9 +352,6 @@ public class WorkoutModule4 extends AppCompatActivity {
         });
     }
 
-    /**
-     * Retrieves the session token for API calls.
-     */
     private String getSessionToken() {
         SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
         return sharedPreferences.getString("auth_token", null);
