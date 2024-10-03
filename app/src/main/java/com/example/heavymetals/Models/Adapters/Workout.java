@@ -6,20 +6,17 @@ import java.io.Serializable;
 import java.util.List;
 
 public class Workout implements Serializable {
-    private int id;  // New field to hold the workout ID
-    @SerializedName("workout_name")  // Map to workout_name field from the server
+    @SerializedName("workout_id")  // Ensure this matches the server's workout ID field
+    private int id;
+
+    @SerializedName("workout_name")  // Maps to workout_name field from the server
     private String title;
+
     private List<AdaptersExercise> exercises;
 
-    // Constructor accepting an int, String, and List<AdaptersExercise>
+    // Constructor
     public Workout(int id, String title, List<AdaptersExercise> exercises) {
         this.id = id;
-        this.title = title;
-        this.exercises = exercises;
-    }
-
-    // Existing constructor for backwards compatibility
-    public Workout(String title, List<AdaptersExercise> exercises) {
         this.title = title;
         this.exercises = exercises;
     }
@@ -33,22 +30,20 @@ public class Workout implements Serializable {
         this.id = id;
     }
 
-    // Getter for title
+    // Getter and setter for title
     public String getTitle() {
         return title;
     }
 
-    // Setter for title
     public void setTitle(String title) {
         this.title = title;
     }
 
-    // Getter for exercises
+    // Getter and setter for exercises
     public List<AdaptersExercise> getExercises() {
         return exercises;
     }
 
-    // Setter for exercises
     public void setExercises(List<AdaptersExercise> exercises) {
         this.exercises = exercises;
     }

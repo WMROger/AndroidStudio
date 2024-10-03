@@ -90,7 +90,7 @@ public class WorkoutModule4 extends AppCompatActivity {
         workoutList = new ArrayList<>();
 
         // Load saved workouts from SharedPreferences before fetching from server
-        loadSavedWorkouts();
+
         fetchWorkoutsFromServer();
 
         // Load workout data passed from another activity (if any)
@@ -126,12 +126,12 @@ public class WorkoutModule4 extends AppCompatActivity {
                     for (Workout workout : workoutList) {
                         Log.d("WorkoutModule4", "Fetched workout ID: " + workout.getWorkoutId() + ", workout name: " + workout.getTitle());
                     }
-
                     updateRecyclerView();
                 } else {
                     Toast.makeText(WorkoutModule4.this, "Failed to load workouts.", Toast.LENGTH_SHORT).show();
                 }
             }
+
 
 
             @Override
@@ -140,6 +140,7 @@ public class WorkoutModule4 extends AppCompatActivity {
             }
         });
     }
+
 
 
     // Create the Notification Channel for Android O and above
@@ -240,36 +241,7 @@ public class WorkoutModule4 extends AppCompatActivity {
     /**
      * Loads saved workouts from SharedPreferences.
      */
-    private void loadSavedWorkouts() {
-        SharedPreferences sharedPreferences = getSharedPreferences("WorkoutData", MODE_PRIVATE);
-        String userEmail = getLoggedInUserEmail();
 
-        if (userEmail == null) {
-            Log.e("LoadWorkouts", "No logged-in user found.");
-            return;
-        }
-
-        String workoutJson = sharedPreferences.getString("workout_" + userEmail, null);
-        if (workoutJson != null) {
-            Gson gson = new Gson();
-            Type workoutListType = new TypeToken<List<Workout>>() {}.getType();
-            workoutList = gson.fromJson(workoutJson, workoutListType);
-
-            // Check for invalid workout IDs
-            if (workoutList != null && !workoutList.isEmpty()) {
-                for (Workout workout : workoutList) {
-                    if (workout.getWorkoutId() > 0) {
-                        Log.d("LoadWorkouts", "Loaded valid workout ID from SharedPreferences: " + workout.getWorkoutId());
-                    } else {
-                        Log.e("LoadWorkouts", "Invalid workout ID found in SharedPreferences: " + workout.getWorkoutId());
-                        // You can skip this workout or clear it from SharedPreferences if needed
-                    }
-                }
-
-                updateRecyclerView();
-            }
-        }
-    }
 
 
 
@@ -283,8 +255,20 @@ public class WorkoutModule4 extends AppCompatActivity {
             Toast.makeText(this, "No logged-in user found. Cannot save workouts.", Toast.LENGTH_LONG).show();
             return;
         }
-        saveWorkoutsToLocalStorage(userEmail, workouts);
+
+        // Filter out workouts with invalid IDs
+        List<Workout> validWorkouts = new ArrayList<>();
+        for (Workout workout : workouts) {
+            if (workout.getWorkoutId() > 0) {
+                validWorkouts.add(workout);
+            } else {
+                Log.e("WorkoutModule4", "Skipping invalid workout with ID: " + workout.getWorkoutId());
+            }
+        }
+
+        saveWorkoutsToLocalStorage(userEmail, validWorkouts);
     }
+
 
     /**
      * Saves the workouts to SharedPreferences.
@@ -382,10 +366,16 @@ public class WorkoutModule4 extends AppCompatActivity {
     private void onWorkoutViewClicked(Workout workout) {
         Log.d("WorkoutModule4", "Workout clicked with ID: " + workout.getWorkoutId());
 
+        if (workout.getWorkoutId() == 0) {
+            Log.e("WorkoutModule4", "Invalid workout ID, cannot view details.");
+            Toast.makeText(this, "Unable to open workout details. Invalid workout ID.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
         String sessionToken = sharedPreferences.getString("auth_token", null);
 
-        if (sessionToken != null && workout != null && workout.getWorkoutId() != 0) {
+        if (sessionToken != null && workout != null) {
             Intent intent = new Intent(this, WorkoutDetailActivity.class);
             intent.putExtra("workout_id", workout.getWorkoutId());  // Pass the workout ID
             intent.putExtra("session_token", sessionToken);         // Pass the session token
@@ -395,6 +385,7 @@ public class WorkoutModule4 extends AppCompatActivity {
             Toast.makeText(this, "Unable to open workout details. Please try again.", Toast.LENGTH_SHORT).show();
         }
     }
+
 
 
 

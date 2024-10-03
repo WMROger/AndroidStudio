@@ -1,6 +1,5 @@
 package com.example.heavymetals.Models.Adapters;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,6 +39,11 @@ public class ExercisesAdapter extends RecyclerView.Adapter<ExercisesAdapter.Exer
         return exercises.size();
     }
 
+    public void updateExercises(List<AdaptersExercise> exercises) {
+        this.exercises = exercises;
+        notifyDataSetChanged();
+    }
+
     public static class ExerciseViewHolder extends RecyclerView.ViewHolder {
         TextView exerciseName, setsText, repsText;
 
@@ -51,3 +55,4 @@ public class ExercisesAdapter extends RecyclerView.Adapter<ExercisesAdapter.Exer
         }
     }
 }
+
