@@ -1,13 +1,19 @@
 package com.example.heavymetals.Login_RegisterPage.LoginPage;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
-import com.example.heavymetals.Models.ResetResponse;
+
 import com.example.heavymetals.R;
 import com.example.heavymetals.network.ApiService;
+
+import java.io.IOException;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -19,8 +25,7 @@ public class ResetPasswordActivity extends AppCompatActivity {
     private EditText newPasswordField;
     private EditText confirmPasswordField;
     private Button resetPasswordButton;
-
-    private ApiService apiService;
+    private ApiService apiService;  // Declare ApiService instance
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,53 +38,55 @@ public class ResetPasswordActivity extends AppCompatActivity {
 
         // Initialize Retrofit and ApiService
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://heavymetals.scarlet2.io/")  // Your API base URL
+                .baseUrl("https://heavymetals.scarlet2.io/")  // Your base URL
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
-        apiService = retrofit.create(ApiService.class);
+        apiService = retrofit.create(ApiService.class);  // Initialize the ApiService
 
-        // Call resetPassword method when button is clicked
+        // Set click listener for the reset button
         resetPasswordButton.setOnClickListener(v -> resetPassword());
     }
 
     private void resetPassword() {
-        String token = getIntent().getStringExtra("token");  // Assume you are passing the token
         String newPassword = newPasswordField.getText().toString().trim();
         String confirmPassword = confirmPasswordField.getText().toString().trim();
+        String token = getIntent().getStringExtra("token");  // Retrieve the reset token, not user ID
 
         if (newPassword.isEmpty() || confirmPassword.isEmpty()) {
             showToast("Please enter and confirm your new password.");
-            return;
         } else if (!newPassword.equals(confirmPassword)) {
             showToast("Passwords do not match.");
-            return;
-        }
-
-        // Call the resetPassword API using Retrofit
-        Call<ResetResponse> call = apiService.resetPassword(token, newPassword, confirmPassword);
-        call.enqueue(new Callback<ResetResponse>() {
-            @Override
-            public void onResponse(Call<ResetResponse> call, Response<ResetResponse> response) {
-                if (response.isSuccessful() && response.body() != null) {
-                    ResetResponse resetResponse = response.body();
-                    if (resetResponse.getSuccess() == 1) {
+        } else {
+            // Call the backend to reset the password
+            Call<Void> call = apiService.resetPassword(token, newPassword, confirmPassword);
+            call.enqueue(new Callback<Void>() {
+                @Override
+                public void onResponse(Call<Void> call, Response<Void> response) {
+                    if (response.isSuccessful()) {
                         showToast("Password successfully reset!");
-                        // Optionally, navigate the user to the login screen
+                        Intent intent = new Intent(ResetPasswordActivity.this, LoginActivity.class);
+                        startActivity(intent);
+                        finish();
                     } else {
-                        showToast("Error: " + resetResponse.getMessage());
+                        showToast("Failed to reset password. Response Code: " + response.code());
+                        try {
+                            Log.e("ResetPasswordError", "Error body: " + response.errorBody().string());
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
                     }
-                } else {
-                    showToast("An error occurred. Please try again.");
                 }
-            }
 
-            @Override
-            public void onFailure(Call<ResetResponse> call, Throwable t) {
-                showToast("An error occurred: " + t.getMessage());
-            }
-        });
+                @Override
+                public void onFailure(Call<Void> call, Throwable t) {
+                    showToast("Error: " + t.getMessage());
+                }
+            });
+        }
     }
+
+
 
     private void showToast(String message) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();

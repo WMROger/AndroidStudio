@@ -99,10 +99,10 @@ public class ForgetPasswordActivity extends AppCompatActivity {
                 if (response.isSuccessful() && response.body() != null) {
                     ResetResponse resetResponse = response.body();
                     if (resetResponse.getSuccess() == 1) {
-                        showToast("Password reset link sent to your email.");
+                        showToast("Password reset Code sent to your email.");
 
                         // Navigate to the Reset Password screen
-                        Intent intent = new Intent(ForgetPasswordActivity.this, ResetPasswordActivity.class);
+                        Intent intent = new Intent(ForgetPasswordActivity.this, CodeInputActivity.class);
                         startActivity(intent);
                         finish();
                     } else {

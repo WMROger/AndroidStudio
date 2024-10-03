@@ -5,6 +5,7 @@ import com.example.heavymetals.Models.ExerciseResponse;
 import com.example.heavymetals.Models.LoginResponse;
 import com.example.heavymetals.Models.RegisterResponse;
 import com.example.heavymetals.Models.ResetResponse;
+import com.example.heavymetals.Models.VerifyCodeResponse;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -36,9 +37,14 @@ public interface ApiService {
 
 
     @FormUrlEncoded
+    @POST("/HeavyMetals/forgetpass/verify_code.php")  // The path to your verify_code.php
+    Call<VerifyCodeResponse> verifyCode(
+            @Field("reset_code") String resetCode  // Send the reset code as a form field
+    );
+    @FormUrlEncoded
     @POST("/HeavyMetals/forgetpass/reset_password.php")
-    Call<ResetResponse> resetPassword(
-            @Field("token") String token,
+    Call<Void> resetPassword(
+            @Field("token") String token,  // Use "token" here instead of "user_id"
             @Field("new_password") String newPassword,
             @Field("confirm_password") String confirmPassword
     );
