@@ -53,31 +53,39 @@ public class WorkoutAdapter extends RecyclerView.Adapter<WorkoutAdapter.WorkoutV
         return new WorkoutViewHolder(view);
     }
 
-    @Override
     public void onBindViewHolder(@NonNull WorkoutViewHolder holder, int position) {
         Workout workout = workoutList.get(position);
-        Log.d("WorkoutAdapter", "Binding workout title: " + workout.getTitle());
+
+        // Check if the workout ID is correctly set
+        Log.d("WorkoutAdapter", "Binding workout title: " + workout.getTitle() + " with ID: " + workout.getWorkoutId());
+
         holder.workoutTitle.setText(workout.getTitle());
 
-        // Handle view workout click
-        holder.viewWorkoutButton.setOnClickListener(v -> listener.onViewWorkoutClick(workout));
-
-        // Handle delete workout click
-        holder.deleteWorkout.setOnClickListener(v -> {
-            Log.d("WorkoutAdapter", "Deleting workout: " + workout.getTitle());
-            deleteWorkoutFromServer(holder.itemView.getContext(), workout.getWorkoutId(), () -> {
-                Log.d("WorkoutAdapter", "Workout deleted successfully from server");
-                listener.onWorkoutDeleted(workout);
-            });
+        // Set the click listener to open workout details
+        holder.itemView.setOnClickListener(v -> {
+            if (listener != null) {
+                listener.onViewWorkoutClick(workout);  // Passing the correct workout object
+            }
         });
     }
-
-
 
     @Override
     public int getItemCount() {
         return workoutList.size();
     }
+    public static class ExerciseViewHolder extends RecyclerView.ViewHolder {
+        TextView exerciseName, setsText, repsText;
+
+        public ExerciseViewHolder(@NonNull View itemView) {
+            super(itemView);
+            exerciseName = itemView.findViewById(R.id.exercise_name);
+            setsText = itemView.findViewById(R.id.set_value);
+            repsText = itemView.findViewById(R.id.reps_edit_text);
+        }
+    }
+
+
+
 
     static class WorkoutViewHolder extends RecyclerView.ViewHolder {
         TextView workoutTitle;

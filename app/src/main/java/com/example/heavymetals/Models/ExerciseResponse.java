@@ -5,14 +5,16 @@ import com.google.gson.annotations.SerializedName;
 import java.util.List;
 
 public class ExerciseResponse {
-    @SerializedName("success")
     private boolean success;
-
-    @SerializedName("exercises")
+    private String message;
     private List<AdaptersExercise> exercises;
 
     public boolean isSuccess() {
         return success;
+    }
+
+    public String getMessage() {
+        return message;
     }
 
     public List<AdaptersExercise> getExercises() {

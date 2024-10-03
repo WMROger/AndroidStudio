@@ -88,12 +88,18 @@ public class WorkoutModule2 extends AppCompatActivity {
                 }
 
                 // Set workoutId as 0 initially since this is a new workout
+                // Set workoutId as 0 initially since this is a new workout
                 Workout newWorkout = new Workout(0, workoutName, adaptersExerciseList);
+
+                // Save the workout ID to SharedPreferences for future use
+                saveWorkoutIdToPreferences(newWorkout.getWorkoutId());
+
                 saveWorkoutForUser(newWorkout);
 
                 Intent intent = new Intent(this, WorkoutModule4.class);
                 intent.putExtra("workout", newWorkout);
                 startActivity(intent);
+
             } else {
                 finish();  // Discard changes
             }
@@ -101,6 +107,12 @@ public class WorkoutModule2 extends AppCompatActivity {
 
 
         checkWorkoutContainerHeight();
+    }
+    private void saveWorkoutIdToPreferences(int workoutId) {
+        SharedPreferences sharedPreferences = getSharedPreferences("WorkoutPrefs", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt("last_workout_id", workoutId);  // Save the workout ID
+        editor.apply();  // Commit the changes
     }
 
     // Method to convert Exercise to AdaptersExercise

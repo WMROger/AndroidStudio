@@ -7,6 +7,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.heavymetals.Models.Adapters.AdaptersExercise;
+import com.example.heavymetals.Models.Adapters.Workout;
 import com.example.heavymetals.Models.ExerciseResponse;
 import com.example.heavymetals.R;
 import com.example.heavymetals.network.ApiService;
@@ -31,7 +32,6 @@ public class WorkoutDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_workout_detail);
 
-        // Find the LinearLayout inside the ScrollView
         exercisesContainer = findViewById(R.id.exercises_linear_layout);
         detailSave = findViewById(R.id.detailSave);
 
@@ -39,8 +39,11 @@ public class WorkoutDetailActivity extends AppCompatActivity {
         workoutId = getIntent().getIntExtra("workout_id", -1);
         sessionToken = getIntent().getStringExtra("session_token");
 
-        if (workoutId != -1 && sessionToken != null) {
-            fetchExercises(workoutId, sessionToken);
+        // Add debugging to check the received workout ID
+        Log.d("WorkoutDetailActivity", "Received workout_id: " + workoutId);
+
+        if (workoutId != -1) {
+            fetchExercises(workoutId, sessionToken);  // Fetch exercises based on the workoutId
         } else {
             Log.e("WorkoutDetailActivity", "Invalid workout_id or session_token.");
         }
@@ -48,7 +51,10 @@ public class WorkoutDetailActivity extends AppCompatActivity {
         detailSave.setOnClickListener(v -> finish());
     }
 
+
     private void fetchExercises(int workoutId, String sessionToken) {
+        Log.d("WorkoutDetailActivity", "Fetching exercises for workout ID: " + workoutId);
+
         Retrofit retrofit = RetrofitClient.getClient(getApplicationContext());
         ApiService exerciseApi = retrofit.create(ApiService.class);
 
@@ -59,18 +65,27 @@ public class WorkoutDetailActivity extends AppCompatActivity {
             public void onResponse(Call<ExerciseResponse> call, Response<ExerciseResponse> response) {
                 if (response.isSuccessful() && response.body() != null && response.body().isSuccess()) {
                     adaptersExerciseList = response.body().getExercises();
+
+                    // Debugging to log the number of exercises fetched
+                    Log.d("WorkoutDetailActivity", "Number of exercises fetched: " + adaptersExerciseList.size());
+
                     displayExercises(adaptersExerciseList);  // Display the fetched exercises
                 } else {
                     Log.e("WorkoutDetailActivity", "Failed to fetch exercises.");
+                    if (response.body() != null) {
+                        Log.e("WorkoutDetailActivity", "Error message: " + response.body().getMessage());
+                    }
                 }
             }
 
             @Override
             public void onFailure(Call<ExerciseResponse> call, Throwable t) {
-                Log.e("WorkoutDetailActivity", "Error: " + t.getMessage());
+                Log.e("WorkoutDetailActivity", "Error fetching exercises: " + t.getMessage());
             }
         });
     }
+
+
 
     // Method to display the fetched exercises in the LinearLayout
     private void displayExercises(List<AdaptersExercise> exercises) {

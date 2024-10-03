@@ -20,11 +20,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.heavymetals.Home_LandingPage.MainActivity;
 import com.example.heavymetals.Login_RegisterPage.LoginPage.LoginActivity;
 import com.example.heavymetals.Models.Adapters.AdaptersExercise;
+import com.example.heavymetals.Models.Adapters.ExercisesAdapter;
 import com.example.heavymetals.Models.Adapters.Workout;
 import com.example.heavymetals.Models.Adapters.WorkoutAdapter;
 import com.example.heavymetals.Models.Adapters.WorkoutApi;
 import com.example.heavymetals.Models.Adapters.WorkoutResponse;
+import com.example.heavymetals.Models.ExerciseResponse;
 import com.example.heavymetals.R;
+import com.example.heavymetals.network.ApiService;
 import com.example.heavymetals.network.RetrofitClient;
 import com.example.heavymetals.network.SaveWorkoutResponse;
 import com.example.heavymetals.network.ScheduleDailyNotification;
@@ -101,6 +104,47 @@ public class WorkoutModule4 extends AppCompatActivity {
         if (workoutCount > 0) {
             sendWorkoutNotification(workoutCount);
         }
+    }
+    private void fetchWorkoutsFromServer() {
+        String sessionToken = getSessionToken();
+        if (sessionToken == null) {
+            Toast.makeText(this, "Please log in to fetch workouts.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        SharedPreferences sharedPreferences = getSharedPreferences("WorkoutPrefs", MODE_PRIVATE);
+        int workoutId = sharedPreferences.getInt("last_workout_id", -1);  // Retrieve the workout ID
+
+        if (workoutId != -1) {
+            Log.d("WorkoutModule4", "Automatically detected workout ID: " + workoutId);
+            fetchExercises(workoutId, sessionToken);  // Use the workout ID to fetch exercises
+        } else {
+            Log.e("WorkoutModule4", "No workout ID detected.");
+        }
+
+        Retrofit retrofit = RetrofitClient.getClient(getApplicationContext());
+        WorkoutApi workoutApi = retrofit.create(WorkoutApi.class);
+
+        Call<WorkoutResponse> call = workoutApi.getWorkouts(sessionToken);
+        call.enqueue(new Callback<WorkoutResponse>() {
+            @Override
+            public void onResponse(Call<WorkoutResponse> call, Response<WorkoutResponse> response) {
+                if (response.isSuccessful() && response.body() != null && response.body().isSuccess()) {
+                    workoutList = response.body().getWorkouts();
+                    // Log the workout IDs to verify they're correct
+                    for (Workout workout : workoutList) {
+                        Log.d("WorkoutModule4", "Fetched workout ID: " + workout.getWorkoutId());
+                    }
+                    updateRecyclerView();
+                } else {
+                    Toast.makeText(WorkoutModule4.this, "Failed to load workouts.", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<WorkoutResponse> call, Throwable t) {
+                Toast.makeText(WorkoutModule4.this, "Error loading workouts: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     // Create the Notification Channel for Android O and above
@@ -326,19 +370,24 @@ public class WorkoutModule4 extends AppCompatActivity {
     }
 
     private void onWorkoutViewClicked(Workout workout) {
+        Log.d("WorkoutModule4", "Workout clicked with ID: " + workout.getWorkoutId());
+
         SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
         String sessionToken = sharedPreferences.getString("auth_token", null);
 
-        if (sessionToken != null && workout != null) {
+        if (sessionToken != null && workout != null && workout.getWorkoutId() != 0) {
             Intent intent = new Intent(this, WorkoutDetailActivity.class);
             intent.putExtra("workout_id", workout.getWorkoutId());  // Pass the workout ID
             intent.putExtra("session_token", sessionToken);         // Pass the session token
             startActivity(intent);
         } else {
-            Log.e("WorkoutModule4", "No workout selected or session token is null.");
+            Log.e("WorkoutModule4", "Workout ID is invalid or session token is null.");
             Toast.makeText(this, "Unable to open workout details. Please try again.", Toast.LENGTH_SHORT).show();
         }
     }
+
+
+
 
 
     private void navigateToMainActivity() {
@@ -350,34 +399,49 @@ public class WorkoutModule4 extends AppCompatActivity {
 
     // ------------ Server Integration Methods ------------
 
-    private void fetchWorkoutsFromServer() {
-        String sessionToken = getSessionToken();
-        if (sessionToken == null) {
-            Toast.makeText(this, "Please log in to fetch workouts.", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
+    private void fetchExercises(int workoutId, String sessionToken) {
         Retrofit retrofit = RetrofitClient.getClient(getApplicationContext());
-        WorkoutApi workoutApi = retrofit.create(WorkoutApi.class);
+        ApiService exerciseApi = retrofit.create(ApiService.class);
 
-        Call<WorkoutResponse> call = workoutApi.getWorkouts(sessionToken);
-        call.enqueue(new Callback<WorkoutResponse>() {
+        // Make the call to fetch exercises for the workoutId
+        Call<ExerciseResponse> call = exerciseApi.getExercises(sessionToken, workoutId);
+        call.enqueue(new Callback<ExerciseResponse>() {
             @Override
-            public void onResponse(Call<WorkoutResponse> call, Response<WorkoutResponse> response) {
+            public void onResponse(Call<ExerciseResponse> call, Response<ExerciseResponse> response) {
                 if (response.isSuccessful() && response.body() != null && response.body().isSuccess()) {
-                    workoutList = response.body().getWorkouts();
-                    updateRecyclerView();
+                    List<AdaptersExercise> exercises = response.body().getExercises();
+
+                    // Handle the fetched exercises
+                    if (exercises != null) {
+                        Log.d("WorkoutModule4", "Fetched exercises for workout ID: " + workoutId);
+                        // Display exercises, update UI or handle them as required
+                        displayExercises(exercises);
+                    }
                 } else {
-                    Toast.makeText(WorkoutModule4.this, "Failed to load workouts.", Toast.LENGTH_SHORT).show();
+                    Log.e("WorkoutModule4", "Failed to fetch exercises for workout ID: " + workoutId);
                 }
             }
 
             @Override
-            public void onFailure(Call<WorkoutResponse> call, Throwable t) {
-                Toast.makeText(WorkoutModule4.this, "Error loading workouts: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            public void onFailure(Call<ExerciseResponse> call, Throwable t) {
+                Log.e("WorkoutModule4", "Error fetching exercises: " + t.getMessage());
             }
         });
     }
+
+    private void displayExercises(List<AdaptersExercise> exercises) {
+        // Assuming you have a RecyclerView for displaying exercises
+        // Assuming you have a RecyclerView for displaying exercises
+        RecyclerView exercisesRecyclerView = findViewById(R.id.recyclerViewWorkouts);
+
+// Create an adapter and pass the list of exercises to it
+        ExercisesAdapter exercisesAdapter = new ExercisesAdapter(exercises);
+
+// Set up the RecyclerView with the adapter
+        exercisesRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        exercisesRecyclerView.setAdapter(exercisesAdapter);
+    }
+
 
     private String getSessionToken() {
         SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
