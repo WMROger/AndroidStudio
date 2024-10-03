@@ -58,6 +58,12 @@ public class WorkoutModule4 extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_workout_module4);
+
+
+
+        ScheduleDailyNotification notificationScheduler = new ScheduleDailyNotification();
+        notificationScheduler.scheduleDailyNotification(this);  // `this` refers to the context (in this case, the activity context)
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
             if (!alarmManager.canScheduleExactAlarms()) {

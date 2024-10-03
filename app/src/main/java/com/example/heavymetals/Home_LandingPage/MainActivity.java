@@ -1,11 +1,14 @@
 package com.example.heavymetals.Home_LandingPage;
 
 import android.Manifest;
+import android.app.AlarmManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
@@ -24,6 +27,7 @@ import com.example.heavymetals.Home_LandingPage.Workouts.WorkoutModule1;
 import com.example.heavymetals.Login_RegisterPage.AuthenticationActivity;
 import com.example.heavymetals.Login_RegisterPage.LoginPage.LoginActivity;
 import com.example.heavymetals.R;
+import com.example.heavymetals.network.ScheduleDailyNotification;
 import com.google.android.material.navigation.NavigationView;
 
 import org.json.JSONObject;
@@ -52,13 +56,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // Initialize Toolbar and DrawerLayout
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS)
-                    != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(this,
-                        new String[]{Manifest.permission.POST_NOTIFICATIONS}, 1);
+
+
+
+        ScheduleDailyNotification notificationScheduler = new ScheduleDailyNotification();
+        notificationScheduler.scheduleDailyNotification(this);  // `this` refers to the context (in this case, the activity context)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+            if (!alarmManager.canScheduleExactAlarms()) {
+                // Prompt the user to enable the exact alarm permission via system settings
+                Intent intent = new Intent(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM);
+                startActivity(intent);
             }
         }
+
 
         drawerLayout = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);

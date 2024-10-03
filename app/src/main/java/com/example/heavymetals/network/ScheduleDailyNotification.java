@@ -26,14 +26,7 @@ public class ScheduleDailyNotification {
         );
 
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        if (alarmManager != null) {
-            alarmManager.setExact(
-                    AlarmManager.RTC_WAKEUP,
-                    System.currentTimeMillis() + 60000, // Trigger after 1 minute for testing
-                    pendingIntent
-            );
-            Log.d("ScheduleNotification", "Notification set to trigger after 1 minute.");
-        }
+
 
         if (alarmManager != null) {
             alarmManager.setRepeating(

@@ -17,12 +17,14 @@ public class WorkoutReminderReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        // Create a notification channel if on Android 8.0 or higher
+        Log.d("WorkoutReminderReceiver", "onReceive called!");
+
+        // Create notification channel if necessary
         createNotificationChannel(context);
 
         // Trigger the workout reminder notification
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, "workout_notifications")
-                .setSmallIcon(R.drawable.human_icon)  // Set your icon
+                .setSmallIcon(R.drawable.human_icon)  // Replace with your app's notification icon
                 .setContentTitle("Workout Reminder")
                 .setContentText("You have workouts to complete. Let's get to work!")
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT);
@@ -32,6 +34,7 @@ public class WorkoutReminderReceiver extends BroadcastReceiver {
 
         Log.d("WorkoutReminderReceiver", "Workout reminder notification sent.");
     }
+
 
     private void createNotificationChannel(Context context) {
         // Only create the notification channel on Android 8.0 (API level 26) and above
