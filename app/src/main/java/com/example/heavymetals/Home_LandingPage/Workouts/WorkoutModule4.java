@@ -111,34 +111,28 @@ public class WorkoutModule4 extends AppCompatActivity {
             Toast.makeText(this, "Please log in to fetch workouts.", Toast.LENGTH_SHORT).show();
             return;
         }
-        SharedPreferences sharedPreferences = getSharedPreferences("WorkoutPrefs", MODE_PRIVATE);
-        int workoutId = sharedPreferences.getInt("last_workout_id", -1);  // Retrieve the workout ID
-
-        if (workoutId != -1) {
-            Log.d("WorkoutModule4", "Automatically detected workout ID: " + workoutId);
-            fetchExercises(workoutId, sessionToken);  // Use the workout ID to fetch exercises
-        } else {
-            Log.e("WorkoutModule4", "No workout ID detected.");
-        }
 
         Retrofit retrofit = RetrofitClient.getClient(getApplicationContext());
         WorkoutApi workoutApi = retrofit.create(WorkoutApi.class);
 
+        // Fetch workouts from the server
         Call<WorkoutResponse> call = workoutApi.getWorkouts(sessionToken);
         call.enqueue(new Callback<WorkoutResponse>() {
             @Override
             public void onResponse(Call<WorkoutResponse> call, Response<WorkoutResponse> response) {
                 if (response.isSuccessful() && response.body() != null && response.body().isSuccess()) {
                     workoutList = response.body().getWorkouts();
-                    // Log the workout IDs to verify they're correct
+
                     for (Workout workout : workoutList) {
-                        Log.d("WorkoutModule4", "Fetched workout ID: " + workout.getWorkoutId());
+                        Log.d("WorkoutModule4", "Fetched workout ID: " + workout.getWorkoutId() + ", workout name: " + workout.getTitle());
                     }
+
                     updateRecyclerView();
                 } else {
                     Toast.makeText(WorkoutModule4.this, "Failed to load workouts.", Toast.LENGTH_SHORT).show();
                 }
             }
+
 
             @Override
             public void onFailure(Call<WorkoutResponse> call, Throwable t) {
@@ -146,6 +140,7 @@ public class WorkoutModule4 extends AppCompatActivity {
             }
         });
     }
+
 
     // Create the Notification Channel for Android O and above
     private void createNotificationChannel() {
@@ -259,11 +254,25 @@ public class WorkoutModule4 extends AppCompatActivity {
             Gson gson = new Gson();
             Type workoutListType = new TypeToken<List<Workout>>() {}.getType();
             workoutList = gson.fromJson(workoutJson, workoutListType);
+
+            // Check for invalid workout IDs
             if (workoutList != null && !workoutList.isEmpty()) {
+                for (Workout workout : workoutList) {
+                    if (workout.getWorkoutId() > 0) {
+                        Log.d("LoadWorkouts", "Loaded valid workout ID from SharedPreferences: " + workout.getWorkoutId());
+                    } else {
+                        Log.e("LoadWorkouts", "Invalid workout ID found in SharedPreferences: " + workout.getWorkoutId());
+                        // You can skip this workout or clear it from SharedPreferences if needed
+                    }
+                }
+
                 updateRecyclerView();
             }
         }
     }
+
+
+
 
     /**
      * Saves the updated workout list to SharedPreferences.
@@ -319,6 +328,7 @@ public class WorkoutModule4 extends AppCompatActivity {
             workoutAdapter.notifyDataSetChanged();
         }
     }
+
 
     public void onWorkoutDeleted(Workout workout) {
         if (workout == null) {
