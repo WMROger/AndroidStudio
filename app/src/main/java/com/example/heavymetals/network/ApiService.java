@@ -4,6 +4,7 @@ import com.example.heavymetals.Models.Adapters.WorkoutResponse;
 import com.example.heavymetals.Models.ExerciseResponse;
 import com.example.heavymetals.Models.LoginResponse;
 import com.example.heavymetals.Models.RegisterResponse;
+import com.example.heavymetals.Models.ResetResponse;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -34,6 +35,13 @@ public interface ApiService {
     );
 
 
+    @FormUrlEncoded
+    @POST("/HeavyMetals/forgetpass/reset_password.php")
+    Call<ResetResponse> resetPassword(
+            @Field("token") String token,
+            @Field("new_password") String newPassword,
+            @Field("confirm_password") String confirmPassword
+    );
 
     @POST("HeavyMetals/workout_save/update_exercises.php")
     @FormUrlEncoded

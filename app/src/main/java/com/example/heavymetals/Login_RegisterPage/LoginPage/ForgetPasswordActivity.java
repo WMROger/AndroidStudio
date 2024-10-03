@@ -100,6 +100,11 @@ public class ForgetPasswordActivity extends AppCompatActivity {
                     ResetResponse resetResponse = response.body();
                     if (resetResponse.getSuccess() == 1) {
                         showToast("Password reset link sent to your email.");
+
+                        // Navigate to the Reset Password screen
+                        Intent intent = new Intent(ForgetPasswordActivity.this, ResetPasswordActivity.class);
+                        startActivity(intent);
+                        finish();
                     } else {
                         showToast("Error: " + resetResponse.getMessage());
                     }
@@ -115,6 +120,7 @@ public class ForgetPasswordActivity extends AppCompatActivity {
             }
         });
     }
+
 
     private void showToast(String message) {
         Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
