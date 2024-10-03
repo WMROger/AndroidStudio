@@ -154,39 +154,50 @@ public class WorkoutModule2 extends AppCompatActivity {
         LinearLayout setsContainer = exerciseCard.findViewById(R.id.sets_container);
         Button addSetButton = exerciseCard.findViewById(R.id.add_set_button);
 
+        // Set the exercise name and icon
         exerciseNameText.setText(exerciseName);
         Integer iconResource = exerciseIconMap.get(exerciseName);
         if (iconResource != null) {
             exerciseIcon.setImageResource(iconResource);
         } else {
-            exerciseIcon.setImageResource(R.drawable.human_icon);
+            exerciseIcon.setImageResource(R.drawable.human_icon);  // Default icon if exercise is not found
         }
 
+        // Add logic to remove an exercise
         removeButton.setOnClickListener(v -> {
             workoutContainer.removeView(exerciseCard);
             exerciseSetsMap.remove(exerciseName);
             checkWorkoutContainerHeight();
         });
 
+        // Automatically add 1 set when an exercise is added
+        exerciseSetsMap.put(exerciseName, 1);  // Set the default set count to 1
+        addSetToContainer(setsContainer, 1);  // Add 1 set to the container
+
+        // Button to add more sets
         addSetButton.setOnClickListener(v -> {
             int currentSetCount = exerciseSetsMap.getOrDefault(exerciseName, 0);
             currentSetCount += 1;
             exerciseSetsMap.put(exerciseName, currentSetCount);
-
-            View newSetLayout = LayoutInflater.from(this).inflate(R.layout.set_item_layout, setsContainer, false);
-            TextView setNumberTextView = newSetLayout.findViewById(R.id.set_value);
-            TextView repsTextView = newSetLayout.findViewById(R.id.reps_edit_text); // This was previously an EditText, now it's a TextView.
-
-            setNumberTextView.setText(String.valueOf(currentSetCount));
-            repsTextView.setText("10"); // Static text for 10 reps.
-
-            setsContainer.addView(newSetLayout);
+            addSetToContainer(setsContainer, currentSetCount);
         });
-
 
         workoutContainer.addView(exerciseCard);
         checkWorkoutContainerHeight();
     }
+
+    // Helper method to add a set layout to the container
+    private void addSetToContainer(LinearLayout setsContainer, int setCount) {
+        View newSetLayout = LayoutInflater.from(this).inflate(R.layout.set_item_layout, setsContainer, false);
+        TextView setNumberTextView = newSetLayout.findViewById(R.id.set_value);
+        TextView repsTextView = newSetLayout.findViewById(R.id.reps_edit_text);  // This was previously an EditText, now it's a TextView.
+
+        setNumberTextView.setText(String.valueOf(setCount));  // Display the set number
+        repsTextView.setText("10");  // Set default reps to 10
+
+        setsContainer.addView(newSetLayout);
+    }
+
 
     private void checkWorkoutContainerHeight() {
         workoutContainer.post(() -> {
