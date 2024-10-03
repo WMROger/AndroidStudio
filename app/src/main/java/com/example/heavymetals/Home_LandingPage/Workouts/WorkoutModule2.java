@@ -56,7 +56,6 @@ public class WorkoutModule2 extends AppCompatActivity {
         // Check user login session
         checkUserSession();
 
-        WM2discard_txt.setOnClickListener(v -> finish());
 
         // Get the selected exercises passed from another activity
         ArrayList<Exercise> selectedExercises = (ArrayList<Exercise>) getIntent().getSerializableExtra("selectedExercises");
@@ -88,7 +87,6 @@ public class WorkoutModule2 extends AppCompatActivity {
                 }
 
                 // Set workoutId as 0 initially since this is a new workout
-                // Set workoutId as 0 initially since this is a new workout
                 Workout newWorkout = new Workout(0, workoutName, adaptersExerciseList);
 
                 // Save the workout ID to SharedPreferences for future use
@@ -117,7 +115,7 @@ public class WorkoutModule2 extends AppCompatActivity {
 
     // Method to convert Exercise to AdaptersExercise
     private AdaptersExercise convertToAdaptersExercise(Exercise exercise) {
-        return new AdaptersExercise(exercise.getName(), 0, 10, false);
+        return new AdaptersExercise(exercise.getName(), 1, 10, false);
     }
 
     private void checkUserSession() {

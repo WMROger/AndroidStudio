@@ -5,11 +5,9 @@
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
-
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
-
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -21,7 +19,12 @@
         android:usesCleartextTraffic="true"
         android:windowSoftInputMode="adjustPan"
         tools:targetApi="31">
+        <activity
+            android:name=".Home_LandingPage.Workouts.ExercisesActivity"
+            android:exported="false" />
+
         <receiver android:name=".network.WorkoutReminderReceiver" />
+
         <activity
             android:name=".Home_LandingPage.Workouts.Exercises_All"
             android:exported="false" />
@@ -31,7 +34,6 @@
         <activity
             android:name=".Home_LandingPage.Workouts.WorkoutModule5"
             android:exported="false" />
-
         <activity
             android:name=".Home_LandingPage.Workouts.WorkoutModule4"
             android:exported="true" />
@@ -98,7 +100,6 @@
             android:name=".Login_RegisterPage.LoginPage.LoginActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustPan" />
-
     </application>
 
 </manifest>

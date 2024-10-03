@@ -1,8 +1,11 @@
 package com.example.heavymetals.Models.Adapters;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.io.Serializable;
 
 public class AdaptersExercise implements Serializable {
+    @SerializedName("exercise_name")
     private String name;
     private int sets;
     private int reps;
