@@ -112,7 +112,7 @@ public class WorkoutModule1 extends Fragment {
             boolean success = false;
 
             try {
-                URL url = new URL("https://heavymetals.scarlet2.io/HeavyMetals/exercise_save/add_exercise.php");
+                URL url = new URL("https://heavymetals.scarlet2.io/HeavyMetals/workout_save/add_exercise.php");
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                 conn.setRequestMethod("POST");
                 conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
@@ -163,7 +163,7 @@ public class WorkoutModule1 extends Fragment {
             boolean success = false;
 
             try {
-                URL url = new URL("https://heavymetals.scarlet2.io/HeavyMetals/exercise_save/remove_exercise.php");
+                URL url = new URL("https://heavymetals.scarlet2.io/HeavyMetals/workout_save/remove_exercise.php");
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                 conn.setRequestMethod("POST");
                 conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");

@@ -1,8 +1,11 @@
 package com.example.heavymetals.Home_LandingPage.Workouts;
 
+import android.app.AlarmManager;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.TextView;
@@ -55,7 +58,15 @@ public class WorkoutModule4 extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_workout_module4);
-
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+            if (!alarmManager.canScheduleExactAlarms()) {
+                // Show a dialog to guide the user to grant the permission
+                Intent intent = new Intent(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM,
+                        Uri.parse("package:" + getPackageName()));
+                startActivity(intent);
+            }
+        }
         // Initialize UI elements
         initializeUI();
         createNotificationChannel();  // Create notification channel
