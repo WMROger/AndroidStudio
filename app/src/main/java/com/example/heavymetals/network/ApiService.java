@@ -33,6 +33,16 @@ public interface ApiService {
             @Field("password") String password
     );
 
+
+
+    @POST("HeavyMetals/workout_save/update_exercises.php")
+    @FormUrlEncoded
+    Call<Void> updateExercises(
+            @Field("session_token") String sessionToken,
+            @Field("workout_id") int workoutId,
+            @Field("exercises") String exercisesJson  // JSON array of exercises
+    );
+
     // New method for saving workouts
     @POST("HeavyMetals/workout_save/save_workouts.php")  // Endpoint for saving workouts
     Call<SaveWorkoutResponse> saveWorkouts(

@@ -56,7 +56,6 @@ public class WorkoutModule2 extends AppCompatActivity {
         // Check user login session
         checkUserSession();
 
-        WM2discard_txt.setOnClickListener(v -> finish());
 
         // Get the selected exercises passed from another activity
         ArrayList<Exercise> selectedExercises = (ArrayList<Exercise>) getIntent().getSerializableExtra("selectedExercises");

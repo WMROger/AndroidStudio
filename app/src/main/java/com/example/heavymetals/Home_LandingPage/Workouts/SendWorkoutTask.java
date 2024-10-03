@@ -119,10 +119,17 @@ public class SendWorkoutTask extends AsyncTask<Workout, Void, Boolean> {
 
             // Send exercises linked to the workout
             List<AdaptersExercise> exercises = workout.getExercises();
-            String exercisesJson = URLEncoder.encode(gson.toJson(exercises), "UTF-8"); // Encode exercises list
 
-            String exercisePostData = "workout_id=" + workoutId +
-                    "&exercises=" + exercisesJson;
+            String exercisesJson = gson.toJson(exercises); // Just convert to JSON without encoding
+            Log.d(TAG, "Exercises JSON: " + exercisesJson);
+
+            String exercisePostData = "session_token=" + URLEncoder.encode(authToken, "UTF-8") +
+                    "&workout_id=" + workoutId +
+                    "&exercises=" + URLEncoder.encode(exercisesJson, "UTF-8");
+            Log.d(TAG, "Sending workout data: " + workoutPostData);
+            Log.d(TAG, "Sending exercise data: " + exercisePostData);
+
+
 
             // Set up connection for exercises
             URL exerciseUrl = new URL("https://heavymetals.scarlet2.io/HeavyMetals/workout_save/add_exercise.php");
