@@ -30,7 +30,7 @@ public class ScheduleDailyNotification {
             alarmManager.setRepeating(
                     AlarmManager.RTC_WAKEUP,
                     calendar.getTimeInMillis(),
-                    AlarmManager.INTERVAL_DAY,
+                    60000,                                //AlarmManager.INTERVAL_DAY,
                     pendingIntent
             );
             Log.d("ScheduleNotification", "Daily notification scheduled at 8 AM.");

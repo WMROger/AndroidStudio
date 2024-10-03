@@ -309,10 +309,20 @@ public class WorkoutModule4 extends AppCompatActivity {
     }
 
     private void onWorkoutViewClicked(Workout workout) {
-        Intent intent = new Intent(this, WorkoutDetailActivity.class);
-        intent.putExtra("exercises", (ArrayList<AdaptersExercise>) workout.getExercises());
-        startActivity(intent);
+        SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
+        String sessionToken = sharedPreferences.getString("auth_token", null);
+
+        if (sessionToken != null && workout != null) {
+            Intent intent = new Intent(this, WorkoutDetailActivity.class);
+            intent.putExtra("workout_id", workout.getWorkoutId());  // Pass the workout ID
+            intent.putExtra("session_token", sessionToken);         // Pass the session token
+            startActivity(intent);
+        } else {
+            Log.e("WorkoutModule4", "No workout selected or session token is null.");
+            Toast.makeText(this, "Unable to open workout details. Please try again.", Toast.LENGTH_SHORT).show();
+        }
     }
+
 
     private void navigateToMainActivity() {
         Intent intent = new Intent(WorkoutModule4.this, MainActivity.class);
