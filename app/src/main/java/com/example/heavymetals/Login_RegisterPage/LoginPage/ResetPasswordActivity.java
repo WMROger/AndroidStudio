@@ -1,5 +1,6 @@
 package com.example.heavymetals.Login_RegisterPage.LoginPage;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -8,6 +9,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.heavymetals.R;
@@ -26,7 +28,7 @@ public class ResetPasswordActivity extends AppCompatActivity {
     private EditText newPasswordField, confirmPasswordField;
     private TextView codePreview;
     private Button resetPasswordButton;
-    private ApiService apiService;  // Declare ApiService instance
+    private ApiService apiService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,27 +37,24 @@ public class ResetPasswordActivity extends AppCompatActivity {
 
         newPasswordField = findViewById(R.id.new_password);
         confirmPasswordField = findViewById(R.id.confirm_new_password);
-        codePreview = findViewById(R.id.codePreview);  // Assuming this TextView is in your XML
+        codePreview = findViewById(R.id.codePreview);
         resetPasswordButton = findViewById(R.id.reset_password_button);
 
-        // Initialize Retrofit and ApiService
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://heavymetals.scarlet2.io/HeavyMetals/")  // Your base URL
+                .baseUrl("https://heavymetals.scarlet2.io/HeavyMetals/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
-        apiService = retrofit.create(ApiService.class);  // Initialize the ApiService
+        apiService = retrofit.create(ApiService.class);
 
-        // Get the token and code from the Intent
         String token = getIntent().getStringExtra("token");
         String code = getIntent().getStringExtra("code");
 
-        // Display the code in the TextView
-        if (code != null) {
-            codePreview.setText("Verification Code: " + code);
+        if (token == null || code == null) {
+            showToast("Invalid reset link.");
+            return;
         }
 
-        // Set click listener for the reset button
         resetPasswordButton.setOnClickListener(v -> resetPassword(token, code));
     }
 
@@ -65,39 +64,61 @@ public class ResetPasswordActivity extends AppCompatActivity {
 
         if (newPassword.isEmpty() || confirmPassword.isEmpty()) {
             showToast("Please enter and confirm your new password.");
+            return;
+        } else if (newPassword.length() < 6) {
+            showToast("Password must be at least 6 characters long.");
+            return;
         } else if (!newPassword.equals(confirmPassword)) {
             showToast("Passwords do not match.");
-        } else {
-            // Call the backend to reset the password and pass the token and code
-            Call<Void> call = apiService.resetPassword(token, newPassword, confirmPassword, code);
-            call.enqueue(new Callback<Void>() {
-                @Override
-                public void onResponse(Call<Void> call, Response<Void> response) {
-                    if (response.isSuccessful()) {
-                        showToast("Password successfully reset!");
-                        Intent intent = new Intent(ResetPasswordActivity.this, LoginActivity.class);
-                        startActivity(intent);
-                        finish();
-                    } else {
-                        showToast("Failed to reset password. Response Code: " + response.code());
-                        try {
-                            Log.e("ResetPasswordError", "Error body: " + response.errorBody().string());
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
+            return;
+        }
+
+        ProgressDialog progressDialog = new ProgressDialog(ResetPasswordActivity.this);
+        progressDialog.setMessage("Resetting password...");
+        progressDialog.show();
+
+        Call<Void> call = apiService.resetPassword(token, newPassword, confirmPassword, code);
+        call.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                progressDialog.dismiss();
+                if (response.isSuccessful()) {
+                    showSuccessDialog();
+                } else {
+                    showToast("Failed to reset password. Response Code: " + response.code());
+                    try {
+                        Log.e("ResetPasswordError", "Error body: " + response.errorBody().string());
+                    } catch (IOException e) {
+                        e.printStackTrace();
                     }
                 }
+            }
 
-                @Override
-                public void onFailure(Call<Void> call, Throwable t) {
-                    showToast("Error: " + t.getMessage());
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                progressDialog.dismiss();
+                if (t instanceof IOException) {
+                    showToast("Network error. Please check your connection.");
+                } else {
+                    showToast("Unexpected error occurred. Please try again.");
                 }
-            });
-        }
+                Log.e("ResetPasswordFailure", "onFailure: " + t.getMessage(), t);
+            }
+        });
+    }
+
+    private void showSuccessDialog() {
+        new AlertDialog.Builder(ResetPasswordActivity.this)
+                .setMessage("Your password has been successfully reset!")
+                .setPositiveButton("OK", (dialog, which) -> {
+                    Intent intent = new Intent(ResetPasswordActivity.this, LoginActivity.class);
+                    startActivity(intent);
+                    finish();
+                })
+                .show();
     }
 
     private void showToast(String message) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 }
-

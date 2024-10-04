@@ -1,6 +1,7 @@
 package com.example.heavymetals.Home_LandingPage;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -27,8 +28,7 @@ import java.net.URLEncoder;
 
 public class ProfileFragment extends Fragment {
 
-    private TextView firstNameTextView;
-    private TextView emailTextView;
+    private TextView firstNameTextView, emailTextView, editProfile;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -39,6 +39,7 @@ public class ProfileFragment extends Fragment {
         // Initialize the TextViews
         firstNameTextView = view.findViewById(R.id.Menu_User_Firstname);
         emailTextView = view.findViewById(R.id.Menu_User_Email);
+        editProfile = view.findViewById(R.id.edit_profile);
 
         // Fetch user email from SharedPreferences
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences("UserPrefs", Context.MODE_PRIVATE);
@@ -49,6 +50,12 @@ public class ProfileFragment extends Fragment {
         } else {
             Toast.makeText(getActivity(), "No logged-in user found.", Toast.LENGTH_SHORT).show();
         }
+
+        // Set onClickListener to redirect to ProfileEditActivity
+        editProfile.setOnClickListener(v -> {
+            Intent intent = new Intent(getActivity(), ProfileEditActivity.class);
+            startActivity(intent);
+        });
 
         return view;
     }
