@@ -53,7 +53,8 @@ public class WorkoutDetailActivity extends AppCompatActivity {
         }
         detailSave.setOnClickListener(v -> {
             // Send the updated exercise statuses back to the server
-            updateExercisesOnServer();
+//            updateExercisesOnServer();
+            finish();
         });
     }
         private void updateExercisesOnServer() {

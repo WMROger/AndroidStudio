@@ -13,6 +13,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.heavymetals.Models.Exercise;
 import com.example.heavymetals.R;
 import com.example.heavymetals.network.ApiService;
 import com.example.heavymetals.network.RetrofitClient;
@@ -48,14 +49,26 @@ public class WorkoutAdapter extends RecyclerView.Adapter<WorkoutAdapter.WorkoutV
 
     @Override
     public void onBindViewHolder(@NonNull WorkoutViewHolder holder, int position) {
+        // Get the workout at this position
         Workout workout = workoutList.get(position);
 
-        // Bind workout title and ID
+        // Set the workout title and ID
         holder.workoutTitle.setText(workout.getTitle() + " (ID: " + workout.getWorkoutId() + ")");
 
+        // Get the number of exercises in the workout and handle null case
+        List<AdaptersExercise> exercises = workout.getExercises();
+        int exerciseCount = (exercises != null) ? exercises.size() : 0;  // Check if exercises is null, if so set count to 0
+
+        // Update the TextView with the exercise count
+        holder.exerciseCount.setText("Exercises: " + exerciseCount);
+
+        // Set up the view and delete button click listeners
         holder.viewWorkoutButton.setOnClickListener(v -> listener.onViewWorkoutClick(workout));
         holder.deleteWorkoutButton.setOnClickListener(v -> listener.onWorkoutDeleted(workout));
     }
+
+
+
 
     @Override
     public int getItemCount() {
@@ -63,7 +76,7 @@ public class WorkoutAdapter extends RecyclerView.Adapter<WorkoutAdapter.WorkoutV
     }
 
     public static class WorkoutViewHolder extends RecyclerView.ViewHolder {
-        TextView workoutTitle, deleteWorkoutButton;
+        TextView workoutTitle, deleteWorkoutButton, exerciseCount;
         Button viewWorkoutButton;
 
         public WorkoutViewHolder(@NonNull View itemView) {
@@ -71,6 +84,8 @@ public class WorkoutAdapter extends RecyclerView.Adapter<WorkoutAdapter.WorkoutV
             workoutTitle = itemView.findViewById(R.id.workoutTitle);
             viewWorkoutButton = itemView.findViewById(R.id.viewWorkoutButton);
             deleteWorkoutButton = itemView.findViewById(R.id.Deletetxtview);
+            exerciseCount = itemView.findViewById(R.id.exerciseCount);  // Initialize this
+
         }
     }
 
