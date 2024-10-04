@@ -324,7 +324,7 @@
             android:backgroundTint="@color/dark_gray"
             android:drawableLeft="@drawable/plus_icon"
             android:gravity="start|top"
-            android:text="create a workout"
+            android:text="Create a workout"
             android:textAllCaps="false"
             android:textColor="@color/custom_orange"
             android:textSize="16sp"
