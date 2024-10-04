@@ -8,12 +8,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.example.heavymetals.Home_LandingPage.Workouts.Exercises_All;
 import com.example.heavymetals.Home_LandingPage.Workouts.WorkoutModule1;
@@ -33,46 +36,66 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class HomeFragment extends Fragment {
-    private Button CreateWorkoutShortcut_btn,RecommendationsShortcut_btn;
+    private Button CreateWorkoutShortcut_btn, RecommendationsShortcut_btn;
     private TextView textViewCurrentTime;
     private API apiService;
     private final Handler handler = new Handler();
     private Runnable runnable;
 
-    // Replace onCreate with onCreateView for fragment initialization
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_home, container, false);
+
+        // Find views using the inflated view
         Button yourWorkoutBtn = view.findViewById(R.id.YourWorkout_btn);
-        textViewCurrentTime = view.findViewById(R.id.textDate); // Ensure this ID exists in your fragment_home.xml
+        textViewCurrentTime = view.findViewById(R.id.textDate);
         CreateWorkoutShortcut_btn = view.findViewById(R.id.CreateWorkoutShortcut_btn);
         RecommendationsShortcut_btn = view.findViewById(R.id.RecommendationsShortcut_btn);
 
+        // Fix for finding RelativeLayouts
+        ImageButton settingsHome = view.findViewById(R.id.Settings_home);
+        ImageButton profileHome = view.findViewById(R.id.Profile_home);
 
+        // Set click listener for Settings
+        settingsHome.setOnClickListener(v -> {
+            Log.d("HomeFragment", "Settings clicked");
+            // Navigate to SettingsFragment
+            FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
+            transaction.replace(R.id.fragment_container, new SettingsFragment());
+            transaction.addToBackStack(null);
+            transaction.commit();
+        });
 
+        // Set click listener for Profile
+        profileHome.setOnClickListener(v -> {
+            Log.d("HomeFragment", "Profile clicked");
+            // Navigate to ProfileFragment
+            FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
+            transaction.replace(R.id.fragment_container, new ProfileFragment());
+            transaction.addToBackStack(null);
+            transaction.commit();
+        });
+
+        // Set click listeners for other buttons
         CreateWorkoutShortcut_btn.setOnClickListener(v -> {
-            // Use requireActivity() or getActivity() to get the Activity context from the Fragment
             Intent intent = new Intent(requireActivity(), Exercises_All.class);
             startActivity(intent);
         });
-        // Replace `requireActivity()` with `requireActivity().getSupportFragmentManager()`
+
         RecommendationsShortcut_btn.setOnClickListener(v -> {
-            // Create an instance of the new fragment (WorkoutModule1)
             WorkoutModule1 fragment = new WorkoutModule1();
             requireActivity().getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.fragment_container, fragment)  // R.id.fragment_container is the FrameLayout or container where fragments are loaded
-                    .addToBackStack(null)  // Add this transaction to the back stack so the user can navigate back
+                    .replace(R.id.fragment_container, fragment)
+                    .addToBackStack(null)
                     .commit();
         });
 
         yourWorkoutBtn.setOnClickListener(v -> {
-            // Use requireActivity() or getActivity() to get the Activity context from the Fragment
             Intent intent = new Intent(requireActivity(), WorkoutModule4.class);
             startActivity(intent);
         });
-
 
         // Initialize Retrofit
         Retrofit retrofit = new Retrofit.Builder()
@@ -85,7 +108,7 @@ public class HomeFragment extends Fragment {
         // Fetch the time from server once and start local updating
         getCurrentTimeFromServer();
 
-        return view; // Return the view for the fragment
+        return view;  // Return the view for the fragment
     }
 
     private void getCurrentTimeFromServer() {
@@ -95,10 +118,8 @@ public class HomeFragment extends Fragment {
             public void onResponse(Call<CurrentTimeResponse> call, Response<CurrentTimeResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     String serverTime = response.body().getCurrentTime();
-                    // Set the text to your TextView
-                    textViewCurrentTime.setText(serverTime);
-                    // Start local time updates if needed
-                    startLocalTimeUpdate(serverTime);
+                    textViewCurrentTime.setText(serverTime);  // Set the server time
+                    startLocalTimeUpdate(serverTime);  // Start local updates
                 } else {
                     Toast.makeText(getActivity(), "Failed to retrieve time", Toast.LENGTH_SHORT).show();
                 }
@@ -123,15 +144,15 @@ public class HomeFragment extends Fragment {
                 runnable = new Runnable() {
                     @Override
                     public void run() {
-                        serverTimeMillis[0] += 1000; // Increment by 1 second
+                        serverTimeMillis[0] += 1000;  // Increment by 1 second
                         Date updatedTime = new Date(serverTimeMillis[0]);
                         String currentTime = dateFormat.format(updatedTime);
-                        textViewCurrentTime.setText(currentTime); // Update TextView
-                        handler.postDelayed(this, 1000); // Repeat every second
+                        textViewCurrentTime.setText(currentTime);  // Update TextView
+                        handler.postDelayed(this, 1000);  // Repeat every second
                     }
                 };
 
-                handler.post(runnable); // Start the update
+                handler.post(runnable);  // Start the update
             } else {
                 Log.e("Time Parse Error", "Parsed time is null.");
             }
@@ -143,7 +164,6 @@ public class HomeFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        // Stop the updates when the fragment is destroyed
-        handler.removeCallbacks(runnable);
+        handler.removeCallbacks(runnable);  // Stop updates when the fragment is destroyed
     }
 }
