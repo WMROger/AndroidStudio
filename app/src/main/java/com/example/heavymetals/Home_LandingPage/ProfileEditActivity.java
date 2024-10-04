@@ -32,7 +32,7 @@ import org.json.JSONException; // Import this to handle JSON exception
 public class ProfileEditActivity extends AppCompatActivity {
 
     private EditText firstNameEditText, lastNameEditText;
-    private TextView saveButton;
+    private TextView backButton,saveButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +50,8 @@ public class ProfileEditActivity extends AppCompatActivity {
         firstNameEditText = findViewById(R.id.edit_firstname);
         lastNameEditText = findViewById(R.id.edit_lastname);
         saveButton = findViewById(R.id.save_profile);
+        backButton = findViewById(R.id.back_profile);
+
 
         // Fetch user details from SharedPreferences to pre-fill the fields
         SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", Context.MODE_PRIVATE);
@@ -73,6 +75,7 @@ public class ProfileEditActivity extends AppCompatActivity {
                 Toast.makeText(ProfileEditActivity.this, "Please fill in all fields", Toast.LENGTH_SHORT).show();
             }
         });
+        backButton.setOnClickListener(v -> finish());
     }
 
     // Fetch the user details from the server
