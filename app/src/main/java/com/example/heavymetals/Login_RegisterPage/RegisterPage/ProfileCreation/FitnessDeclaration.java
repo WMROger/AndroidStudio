@@ -15,43 +15,64 @@ import java.lang.ref.WeakReference;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class FitnessDeclaration extends AppCompatActivity {
 
     Button btnPFDnext;
     ArrayList<String> selectedGoals = new ArrayList<>();
 
+    Button btnLoseWeight, btnIncreaseStrength, btnBuildMuscle, btnMobility, btnWellness, btnFitness;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile_fitness_declaration);
 
+        // Initialize buttons
+        btnLoseWeight = findViewById(R.id.button);
+        btnIncreaseStrength = findViewById(R.id.button6);
+        btnBuildMuscle = findViewById(R.id.button7);
+        btnMobility = findViewById(R.id.button8);
+        btnWellness = findViewById(R.id.button9);
+        btnFitness = findViewById(R.id.button14);
         btnPFDnext = findViewById(R.id.btnPFDnext1);
 
-        findViewById(R.id.button).setOnClickListener(v -> selectGoal("Lose Weight"));
-        findViewById(R.id.button6).setOnClickListener(v -> selectGoal("Increase Strength"));
-        findViewById(R.id.button7).setOnClickListener(v -> selectGoal("Build Muscle"));
-        findViewById(R.id.button8).setOnClickListener(v -> selectGoal("Mobility"));
-        findViewById(R.id.button9).setOnClickListener(v -> selectGoal("Wellness and Reduce Stress"));
-        findViewById(R.id.button14).setOnClickListener(v -> selectGoal("Fitness"));
+        // Set up click listeners for the goal buttons
+        btnLoseWeight.setOnClickListener(v -> toggleGoalSelection(btnLoseWeight, "Lose Weight"));
+        btnIncreaseStrength.setOnClickListener(v -> toggleGoalSelection(btnIncreaseStrength, "Increase Strength"));
+        btnBuildMuscle.setOnClickListener(v -> toggleGoalSelection(btnBuildMuscle, "Build Muscle"));
+        btnMobility.setOnClickListener(v -> toggleGoalSelection(btnMobility, "Mobility"));
+        btnWellness.setOnClickListener(v -> toggleGoalSelection(btnWellness, "Wellness and Reduce Stress"));
+        btnFitness.setOnClickListener(v -> toggleGoalSelection(btnFitness, "Fitness"));
 
+        // Send selected goals to server if they meet the criteria
         btnPFDnext.setOnClickListener(v -> {
-            if (!selectedGoals.isEmpty()) {
+            if (selectedGoals.isEmpty()) {
+                Toast.makeText(FitnessDeclaration.this, "Please select at least one goal", Toast.LENGTH_SHORT).show();
+            } else {
                 new SendDataToServer(FitnessDeclaration.this, selectedGoals).execute();
             }
         });
     }
 
-    private void selectGoal(String goal) {
+    // Helper method to toggle goal selection
+    private void toggleGoalSelection(Button button, String goal) {
         if (selectedGoals.contains(goal)) {
             selectedGoals.remove(goal);
+            button.setTextColor(getResources().getColor(R.color.unselected_color));
+            button.setBackgroundTintList(getResources().getColorStateList(R.color.black)); // Reset button style
         } else {
-            selectedGoals.add(goal);
+            if (selectedGoals.size() < 3) {
+                selectedGoals.add(goal);
+                button.setTextColor(getResources().getColor(R.color.white));
+                button.setBackgroundTintList(getResources().getColorStateList(R.color.custom_orange)); // Highlight button style
+            } else {
+                Toast.makeText(FitnessDeclaration.this, "You can select a maximum of 3 goals", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 
-    // Static inner class to prevent memory leaks
+    // Static inner class to send selected goals to server
     private static class SendDataToServer extends AsyncTask<Void, Void, String> {
         private WeakReference<FitnessDeclaration> activityReference;
         private ArrayList<String> selectedGoals;
@@ -72,7 +93,7 @@ public class FitnessDeclaration extends AppCompatActivity {
                 conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
                 conn.setDoOutput(true);
 
-                String userId = "123";
+                String userId = "123"; // Replace this with the actual user ID from session or intent
                 String goals = android.text.TextUtils.join(",", selectedGoals);
                 String postData = "user_id=" + userId + "&selected_goals=" + goals;
 

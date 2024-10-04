@@ -28,9 +28,7 @@ import java.util.Map;
 public class FitnessDeclaration2 extends AppCompatActivity {
 
     private TextView Profile_Declaration_2;
-    private Button btnPFDnext2;
-    private RadioGroup genderRadioGroup;
-    private RadioButton FemaleRadioButton, MaleRadioButton;
+    private Button btnPFDnext2, MaleButton, FemaleButton;
     private String selectedGender;
 
     // Declare all EditText fields for the measurements
@@ -50,9 +48,8 @@ public class FitnessDeclaration2 extends AppCompatActivity {
         // Initialize Views
         Profile_Declaration_2 = findViewById(R.id.Profile_Declaration_2);
         btnPFDnext2 = findViewById(R.id.btnPFDnext2);
-        genderRadioGroup = findViewById(R.id.genderRadioGroup);
-        MaleRadioButton = findViewById(R.id.MaleRadioButton);
-        FemaleRadioButton = findViewById(R.id.FemaleRadioButton);
+        MaleButton = findViewById(R.id.MaleRadioButton);
+        FemaleButton = findViewById(R.id.FemaleRadioButton);
 
         // Initialize EditText fields
         etBodyWeight = findViewById(R.id.et_body_weight);
@@ -68,17 +65,27 @@ public class FitnessDeclaration2 extends AppCompatActivity {
         etLeftCalf = findViewById(R.id.et_left_calf);
         etRightCalf = findViewById(R.id.et_right_calf);
 
-        // Gender selection listener
-        genderRadioGroup.setOnCheckedChangeListener((group, checkedId) -> {
-            if (checkedId == R.id.MaleRadioButton) {
-                selectedGender = "male";
-                MaleRadioButton.setTextColor(getResources().getColor(R.color.custom_orange));
-                FemaleRadioButton.setTextColor(getResources().getColor(R.color.unselected_color));
-            } else if (checkedId == R.id.FemaleRadioButton) {
-                selectedGender = "female";
-                FemaleRadioButton.setTextColor(getResources().getColor(R.color.custom_orange));
-                MaleRadioButton.setTextColor(getResources().getColor(R.color.unselected_color));
-            }
+        // Set up click listeners for the buttons
+        MaleButton.setOnClickListener(v -> {
+            selectedGender = "male";
+
+            // Highlight Male Button and Reset Female Button
+            MaleButton.setTextColor(getResources().getColor(R.color.white));
+            MaleButton.setBackgroundTintList(getResources().getColorStateList(R.color.custom_orange)); // Highlight Male
+
+            FemaleButton.setTextColor(getResources().getColor(R.color.unselected_color));
+            FemaleButton.setBackgroundTintList(getResources().getColorStateList(R.color.black)); // Reset Female
+        });
+
+        FemaleButton.setOnClickListener(v -> {
+            selectedGender = "female";
+
+            // Highlight Female Button and Reset Male Button
+            FemaleButton.setTextColor(getResources().getColor(R.color.white));
+            FemaleButton.setBackgroundTintList(getResources().getColorStateList(R.color.custom_orange)); // Highlight Female
+
+            MaleButton.setTextColor(getResources().getColor(R.color.unselected_color));
+            MaleButton.setBackgroundTintList(getResources().getColorStateList(R.color.black)); // Reset Male
         });
 
         // Button to submit data
@@ -95,7 +102,7 @@ public class FitnessDeclaration2 extends AppCompatActivity {
 
     // Method to send data to PHP server using Volley
     private void sendDataToServer() {
-        String url = "http://your-server-url/save_fitness_declaration.php";  // Replace with your server URL
+        String url = "http://heavymetals.scarlet2.io/HeavyMetals/profile/save_fitness_declaration.php";  // Replace with your server URL
 
         RequestQueue queue = Volley.newRequestQueue(FitnessDeclaration2.this);
 
