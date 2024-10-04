@@ -127,9 +127,15 @@ public class RegisterActivity extends AppCompatActivity {
 
                     if (success == 1) {
                         showToast("Registration successful. Please check your email to verify your account.");
+
+                        // Extract user_id from the RegisterResponse object
+                        String userId = registerResponse.getUserId();
+
+                        // Pass first_name, last_name, and user_id to the Terms and Conditions Activity
                         Intent intent = new Intent(RegisterActivity.this, TermsConditionsActivity.class);
                         intent.putExtra("first_name", firstName.getText().toString().trim());
                         intent.putExtra("last_name", lastName.getText().toString().trim());
+                        intent.putExtra("user_id", userId);  // Pass user_id to the next activity
                         startActivity(intent);
                     } else {
                         showToast("Registration failed: " + message);
@@ -146,6 +152,7 @@ public class RegisterActivity extends AppCompatActivity {
                 showToast("An error occurred. Please try again.");
             }
         });
+
     }
 
 

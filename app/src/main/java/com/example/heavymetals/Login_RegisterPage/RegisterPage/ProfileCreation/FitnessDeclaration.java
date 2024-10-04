@@ -3,6 +3,7 @@ package com.example.heavymetals.Login_RegisterPage.RegisterPage.ProfileCreation;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.Toast;
 
@@ -10,6 +11,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.heavymetals.R;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.lang.ref.WeakReference;
 import java.net.HttpURLConnection;
@@ -22,6 +25,7 @@ public class FitnessDeclaration extends AppCompatActivity {
     ArrayList<String> selectedGoals = new ArrayList<>();
 
     Button btnLoseWeight, btnIncreaseStrength, btnBuildMuscle, btnMobility, btnWellness, btnFitness;
+    static String userId;  // Ensure userId is passed
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +40,7 @@ public class FitnessDeclaration extends AppCompatActivity {
         btnWellness = findViewById(R.id.button9);
         btnFitness = findViewById(R.id.button14);
         btnPFDnext = findViewById(R.id.btnPFDnext1);
+        final String[] userId = {getIntent().getStringExtra("user_id")};
 
         // Set up click listeners for the goal buttons
         btnLoseWeight.setOnClickListener(v -> toggleGoalSelection(btnLoseWeight, "Lose Weight"));
@@ -49,25 +54,48 @@ public class FitnessDeclaration extends AppCompatActivity {
         btnPFDnext.setOnClickListener(v -> {
             if (selectedGoals.isEmpty()) {
                 Toast.makeText(FitnessDeclaration.this, "Please select at least one goal", Toast.LENGTH_SHORT).show();
+            } else if (selectedGoals.size() > 3) {
+                Toast.makeText(FitnessDeclaration.this, "You can only select up to 3 goals", Toast.LENGTH_SHORT).show();
             } else {
-                new SendDataToServer(FitnessDeclaration.this, selectedGoals).execute();
+                // Fetch userId before sending data
+                userId[0] = getIntent().getStringExtra("user_id");
+
+                // Log the userId for debugging purposes
+                Log.d("UserID", "User ID being sent: " + userId[0]);
+
+                // Send data to server
+                new SendDataToServer(FitnessDeclaration.this, selectedGoals, userId[0]).execute();
+
+                // Proceed to the next activity regardless of result
+                Intent intent = new Intent(FitnessDeclaration.this, FitnessDeclaration2.class);
+                startActivity(intent);
             }
+
         });
     }
 
-    // Helper method to toggle goal selection
+    // Helper method to toggle goal selection and update the button appearance
     private void toggleGoalSelection(Button button, String goal) {
         if (selectedGoals.contains(goal)) {
+            // If the goal is already selected, deselect it
             selectedGoals.remove(goal);
             button.setTextColor(getResources().getColor(R.color.unselected_color));
             button.setBackgroundTintList(getResources().getColorStateList(R.color.black)); // Reset button style
+
+            // Reset icon tint to original color (black or unselected color)
+            button.setCompoundDrawableTintList(getResources().getColorStateList(R.color.custom_orange));
         } else {
+            // Only allow selection if less than 3 goals are already selected
             if (selectedGoals.size() < 3) {
                 selectedGoals.add(goal);
                 button.setTextColor(getResources().getColor(R.color.white));
                 button.setBackgroundTintList(getResources().getColorStateList(R.color.custom_orange)); // Highlight button style
+
+                // Set icon tint to white when selected
+                button.setCompoundDrawableTintList(getResources().getColorStateList(R.color.white));
             } else {
-                Toast.makeText(FitnessDeclaration.this, "You can select a maximum of 3 goals", Toast.LENGTH_SHORT).show();
+                // If 3 goals are already selected, show a message
+                Toast.makeText(FitnessDeclaration.this, "You can only select up to 3 goals", Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -76,26 +104,35 @@ public class FitnessDeclaration extends AppCompatActivity {
     private static class SendDataToServer extends AsyncTask<Void, Void, String> {
         private WeakReference<FitnessDeclaration> activityReference;
         private ArrayList<String> selectedGoals;
-        private String urlString = "http://heavymetals.scarlet2.io/HeavyMetals/profile/handle_user_goals.php";
+        private String userId;
+        private String urlString = "https://heavymetals.scarlet2.io/HeavyMetals/profile/handle_user_goals.php";
 
         // Constructor
-        SendDataToServer(FitnessDeclaration context, ArrayList<String> goals) {
+        SendDataToServer(FitnessDeclaration context, ArrayList<String> goals, String userId) {
             activityReference = new WeakReference<>(context);
             this.selectedGoals = goals;
+            this.userId = userId;
         }
 
         @Override
         protected String doInBackground(Void... voids) {
+            HttpURLConnection conn = null;
+            BufferedReader reader = null;
             try {
                 URL url = new URL(urlString);
-                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                conn = (HttpURLConnection) url.openConnection();
+                conn.setInstanceFollowRedirects(true); // Allow following redirects
                 conn.setRequestMethod("POST");
                 conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
                 conn.setDoOutput(true);
 
-                String userId = "123"; // Replace this with the actual user ID from session or intent
-                String goals = android.text.TextUtils.join(",", selectedGoals);
-                String postData = "user_id=" + userId + "&selected_goals=" + goals;
+                String postData = "user_id=" + userId
+                        + "&lose_weight=" + (selectedGoals.contains("Lose Weight") ? 1 : 0)
+                        + "&increase_strength=" + (selectedGoals.contains("Increase Strength") ? 1 : 0)
+                        + "&build_muscle=" + (selectedGoals.contains("Build Muscle") ? 1 : 0)
+                        + "&mobility=" + (selectedGoals.contains("Mobility") ? 1 : 0)
+                        + "&wellness_reduce_stress=" + (selectedGoals.contains("Wellness and Reduce Stress") ? 1 : 0)
+                        + "&fitness=" + (selectedGoals.contains("Fitness") ? 1 : 0);
 
                 OutputStream os = conn.getOutputStream();
                 os.write(postData.getBytes());
@@ -103,14 +140,30 @@ public class FitnessDeclaration extends AppCompatActivity {
                 os.close();
 
                 int responseCode = conn.getResponseCode();
+                Log.d("HTTP Response", "Response Code: " + responseCode);
+
+                reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                StringBuilder response = new StringBuilder();
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    response.append(line);
+                }
+
+                Log.d("HTTP Response", "Response Body: " + response.toString());
+
                 if (responseCode == HttpURLConnection.HTTP_OK) {
-                    return "Data sent successfully!";
+                    return response.toString();
                 } else {
                     return "Failed to send data, response code: " + responseCode;
                 }
             } catch (Exception e) {
                 e.printStackTrace();
                 return "Exception occurred: " + e.getMessage();
+            } finally {
+                try {
+                    if (conn != null) conn.disconnect();
+                    if (reader != null) reader.close();
+                } catch (Exception ignored) {}
             }
         }
 
@@ -119,7 +172,9 @@ public class FitnessDeclaration extends AppCompatActivity {
             FitnessDeclaration activity = activityReference.get();
             if (activity == null || activity.isFinishing()) return;
 
-            if (result.equals("Data sent successfully!")) {
+            Log.d("POST Result", "Result: " + result);
+
+            if (result.contains("success")) {
                 Intent intent = new Intent(activity, FitnessDeclaration2.class);
                 activity.startActivity(intent);
             } else {
@@ -127,4 +182,5 @@ public class FitnessDeclaration extends AppCompatActivity {
             }
         }
     }
+
 }

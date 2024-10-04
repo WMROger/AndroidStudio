@@ -438,7 +438,7 @@
     </ScrollView>
 
     <TextView
-        android:id="@+id/textView12"
+        android:id="@+id/FD2_Skip"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="4dp"

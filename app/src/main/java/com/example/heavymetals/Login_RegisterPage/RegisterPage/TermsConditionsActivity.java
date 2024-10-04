@@ -51,11 +51,13 @@ public class TermsConditionsActivity extends AppCompatActivity {
                 // Retrieve the first name and last name from the intent
                 String firstName = getIntent().getStringExtra("first_name");
                 String lastName = getIntent().getStringExtra("last_name");
+                String userId = getIntent().getStringExtra("user_id");
 
-                Intent intent = new Intent(TermsConditionsActivity.this, ProfileCreation.class);
-                intent.putExtra("first_name", firstName);
-                intent.putExtra("last_name", lastName);
-                startActivity(intent);
+                Intent fitnessIntent = new Intent(TermsConditionsActivity.this, ProfileCreation.class);
+                fitnessIntent.putExtra("user_id", userId);  // Pass user_id to FitnessDeclaration
+                fitnessIntent.putExtra("first_name", firstName);
+                fitnessIntent.putExtra("last_name", lastName);
+                startActivity(fitnessIntent);
             }
         });
     }

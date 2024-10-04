@@ -17,10 +17,6 @@ public interface API {
             @Field("passwordConfirmation") String passwordConfirmation
     );
 
-
-
-
-
     @POST("forget_password.php")
     @FormUrlEncoded
     Call<ResetResponse> requestPasswordReset(

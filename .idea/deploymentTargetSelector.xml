@@ -17,6 +17,9 @@
       <SelectionState runConfigName="FitnessDeclaration3">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
+      <SelectionState runConfigName="FitnessDeclaration">
+        <option name="selectionMode" value="DROPDOWN" />
+      </SelectionState>
     </selectionStates>
   </component>
 </project>

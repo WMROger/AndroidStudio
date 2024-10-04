@@ -2,6 +2,7 @@ package com.example.heavymetals.Login_RegisterPage.RegisterPage.ProfileCreation;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
@@ -27,7 +28,7 @@ import java.util.Map;
 
 public class FitnessDeclaration2 extends AppCompatActivity {
 
-    private TextView Profile_Declaration_2;
+    private TextView Profile_Declaration_2,FD2_Save;
     private Button btnPFDnext2, MaleButton, FemaleButton;
     private String selectedGender;
 
@@ -50,6 +51,7 @@ public class FitnessDeclaration2 extends AppCompatActivity {
         btnPFDnext2 = findViewById(R.id.btnPFDnext2);
         MaleButton = findViewById(R.id.MaleRadioButton);
         FemaleButton = findViewById(R.id.FemaleRadioButton);
+        FD2_Save = findViewById(R.id.FD2_Skip);
 
         // Initialize EditText fields
         etBodyWeight = findViewById(R.id.et_body_weight);
@@ -65,6 +67,14 @@ public class FitnessDeclaration2 extends AppCompatActivity {
         etLeftCalf = findViewById(R.id.et_left_calf);
         etRightCalf = findViewById(R.id.et_right_calf);
 
+
+        FD2_Save.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(FitnessDeclaration2.this, FitnessDeclaration3.class);
+                startActivity(intent);
+            }
+        });
         // Set up click listeners for the buttons
         MaleButton.setOnClickListener(v -> {
             selectedGender = "male";
