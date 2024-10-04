@@ -6,8 +6,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/bg_gradient"
-    tools:ignore="HardcodedText, TextSizeCheck"
-    tools:context=".Home_LandingPage.HomeFragment">
+    tools:context=".Home_LandingPage.HomeFragment"
+    tools:ignore="HardcodedText, TextSizeCheck">
 
     <!-- TODO: Update blank fragment layout -->
 
@@ -68,6 +68,71 @@
             android:layout_centerHorizontal="true"
             android:drawableTop="@drawable/baseline_event_note_24"
             android:text="Saturday - Sunday"
+            android:textColor="@color/custom_orange"
+            android:textSize="16sp" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="175dp"
+        android:layout_height="81dp"
+        android:layout_marginTop="128dp"
+        app:layout_constraintEnd_toStartOf="@+id/relativeLayout2"
+        app:layout_constraintHorizontal_bias="0.432"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/relativeLayout">
+
+        <ImageButton
+            android:id="@+id/Profile_home"
+            android:layout_width="175dp"
+            android:layout_height="81dp"
+            android:background="@drawable/bg_blackgradient"
+            android:padding="2dp"
+            android:scaleType="fitCenter" />
+
+        <TextView
+            android:id="@+id/textView5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:drawableTop="@drawable/ic_profile_round"
+
+            android:text="Profile"
+            android:textColor="@color/custom_orange"
+            android:textSize="16sp" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="175dp"
+        android:layout_height="273dp"
+        android:layout_marginTop="35dp"
+        android:layout_marginRight="25dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.499"
+        app:layout_constraintStart_toEndOf="@+id/Profile_home"
+        app:layout_constraintTop_toBottomOf="@+id/relativeLayout2"
+        app:layout_constraintVertical_bias="0.0">
+
+        <ImageButton
+            android:id="@+id/Settings_home"
+            android:layout_width="175dp"
+            android:layout_height="81dp"
+            android:background="@drawable/bg_blackgradient"
+            android:padding="2dp"
+            android:scaleType="fitCenter" />
+
+        <TextView
+            android:id="@+id/textView5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:drawableTop="@drawable/ic_settings"
+
+            android:text="Settings"
             android:textColor="@color/custom_orange"
             android:textSize="16sp" />
 
@@ -140,8 +205,8 @@
             android:layout_height="match_parent"
             android:layout_centerInParent="true"
             android:background="@drawable/orange_border"
-            android:scaleType="fitXY"
             android:padding="2dp"
+            android:scaleType="fitXY"
             android:src="@drawable/progress_tracker" />
 
         <TextView
@@ -168,11 +233,11 @@
             android:layout_alignStart="@+id/imageView4"
             android:layout_alignEnd="@+id/imageView4"
             android:layout_alignParentBottom="true"
-            android:gravity="center"
             android:layout_marginStart="125dp"
             android:layout_marginTop="2dp"
             android:layout_marginEnd="120dp"
             android:layout_marginBottom="40dp"
+            android:gravity="center"
             android:text="No data yet"
             android:textColor="@color/custom_orange" />
     </RelativeLayout>

@@ -13,10 +13,10 @@ import retrofit2.http.POST;
 import retrofit2.http.Query;
 
 public interface WorkoutApi {
-    // Define the GET request with user_id as a query parameter
-    @GET("/HeavyMetals/workout_save/get_workout.php")
-    Call<WorkoutResponse> getWorkouts(@Query("session_token") String userId);
 
+    // Fetch workouts for a user
+    @GET("/HeavyMetals/workout_save/get_workout.php")
+    Call<WorkoutResponse> getWorkouts(@Query("session_token") String sessionToken);
 
     // Save workouts for the user
     @POST("/HeavyMetals/workout_save/add_workout.php")
@@ -29,7 +29,4 @@ public interface WorkoutApi {
             @Field("workout_id") int workoutId,
             @Field("session_token") String sessionToken
     );
-
-
-
 }

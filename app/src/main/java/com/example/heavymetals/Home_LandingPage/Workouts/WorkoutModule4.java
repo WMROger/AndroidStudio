@@ -212,7 +212,16 @@ public class WorkoutModule4 extends AppCompatActivity {
 
                 @Override
                 public void onWorkoutDeleted(Workout workout) {
-                    onWorkoutDeleted(workout);  // Call the deletion method in WorkoutModule4
+                    if (workout == null) {
+                        Log.e("WorkoutModule4", "Attempted to delete a null workout.");
+                        return;
+                    }
+
+                    Log.d("WorkoutModule4", "Deleting workout: " + workout.getTitle());
+
+                    // Call the server to delete the workout
+                    deleteWorkoutFromServer(workout);
+
                 }
             });
 
@@ -221,6 +230,7 @@ public class WorkoutModule4 extends AppCompatActivity {
             workoutAdapter.notifyDataSetChanged();
         }
     }
+
 
 
     /**
@@ -290,6 +300,7 @@ public class WorkoutModule4 extends AppCompatActivity {
         return sharedPreferences.getString("loggedInUser", null);
     }
 
+
     /**
      * Updates the RecyclerView with the workout list.
      */
@@ -298,32 +309,34 @@ public class WorkoutModule4 extends AppCompatActivity {
             workoutAdapter = new WorkoutAdapter(workoutList, new WorkoutAdapter.OnWorkoutClickListener() {
                 @Override
                 public void onViewWorkoutClick(Workout workout) {
-                    onWorkoutViewClicked(workout);
+                    onWorkoutViewClicked(workout);  // Respond to viewing workout
                 }
 
                 @Override
                 public void onWorkoutDeleted(Workout workout) {
-                    onWorkoutDeleted(workout);
-                }
+                    if (workout == null) {
+                        Log.e("WorkoutModule4", "Attempted to delete a null workout.");
+                        return;
+                    }
 
+                    Log.d("WorkoutModule4", "Deleting workout: " + workout.getTitle());
+
+                    // Call the server to delete the workout
+                    deleteWorkoutFromServer(workout);
+
+                }
             });
+
             recyclerView.setAdapter(workoutAdapter);
         } else {
             workoutAdapter.notifyDataSetChanged();
         }
+
     }
 
 
-    public void onWorkoutDeleted(Workout workout) {
-        if (workout == null) {
-            Log.e("WorkoutModule4", "Attempted to delete a null workout.");
-            Toast.makeText(this, "Workout not found.", Toast.LENGTH_SHORT).show();
-            return;
-        }
 
-        // Call the server to delete the workout first
-        deleteWorkoutFromServer(workout);
-    }
+
 
     private void deleteWorkoutFromServer(Workout workout) {
         String sessionToken = getSessionToken();
@@ -343,25 +356,32 @@ public class WorkoutModule4 extends AppCompatActivity {
                 if (response.isSuccessful()) {
                     Log.d("WorkoutModule4", "Workout deleted from server: " + workout.getTitle());
 
-                    // Remove workout from local list
-                    workoutList.remove(workout);
-                    workoutAdapter.notifyDataSetChanged();
+                    runOnUiThread(() -> {
+                        workoutList.remove(workout);
+                        workoutAdapter.notifyDataSetChanged();
 
-                    // Save the updated list locally
-                    saveWorkoutsForUser(workoutList);
+                        // Save the updated list locally
+                        saveWorkoutsForUser(workoutList);
 
-                    Toast.makeText(WorkoutModule4.this, "Workout deleted successfully", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(WorkoutModule4.this, "Workout deleted successfully", Toast.LENGTH_SHORT).show();
+                    });
+
                 } else {
-                    Toast.makeText(WorkoutModule4.this, "Failed to delete workout on the server", Toast.LENGTH_SHORT).show();
+                    Log.e("WorkoutModule4", "Server failed to delete workout. Response code: " + response.code());
+                    runOnUiThread(() -> Toast.makeText(WorkoutModule4.this, "Failed to delete workout on the server", Toast.LENGTH_SHORT).show());
                 }
             }
 
             @Override
             public void onFailure(Call<Void> call, Throwable t) {
-                Toast.makeText(WorkoutModule4.this, "Error deleting workout: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                Log.e("WorkoutModule4", "Error deleting workout", t);
+                runOnUiThread(() -> Toast.makeText(WorkoutModule4.this, "Error deleting workout: " + t.getMessage(), Toast.LENGTH_SHORT).show());
             }
         });
     }
+
+
+
 
     private void onWorkoutViewClicked(Workout workout) {
         Log.d("WorkoutModule4", "Workout clicked with ID: " + workout.getWorkoutId());
