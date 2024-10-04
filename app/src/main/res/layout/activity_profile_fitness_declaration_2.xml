@@ -242,6 +242,7 @@
 
 
             <EditText
+                android:id="@+id/et_body_weight"
                 android:layout_width="match_parent"
                 android:layout_height="40.10dp"
                 android:height="38.10dp"
@@ -256,6 +257,7 @@
 
 
             <EditText
+                android:id="@+id/et_height"
                 android:layout_width="match_parent"
                 android:layout_height="40.10dp"
                 android:layout_marginTop="10dp"
@@ -271,6 +273,7 @@
 
 
             <EditText
+                android:id="@+id/et_chest"
                 android:layout_width="match_parent"
                 android:layout_height="40.10dp"
                 android:layout_marginTop="10dp"
@@ -284,8 +287,8 @@
                 android:textColorHint="#FFFFFF"
                 android:textSize="15sp" />
 
-
             <EditText
+                android:id="@+id/et_shoulder"
                 android:layout_width="match_parent"
                 android:layout_height="40.10dp"
                 android:layout_marginTop="10dp"
@@ -299,8 +302,8 @@
                 android:textColorHint="#FFFFFF"
                 android:textSize="15sp" />
 
-
             <EditText
+                android:id="@+id/et_waist"
                 android:layout_width="match_parent"
                 android:layout_height="40.10dp"
                 android:layout_marginTop="10dp"
@@ -315,6 +318,7 @@
                 android:textSize="15sp" />
 
             <EditText
+                android:id="@+id/et_hips"
                 android:layout_width="match_parent"
                 android:layout_height="40.10dp"
                 android:layout_marginTop="10dp"
@@ -328,23 +332,19 @@
                 android:textColorHint="#FFFFFF"
                 android:textSize="15sp" />
 
-
             <GridLayout
                 android:layout_width="370dp"
                 android:layout_height="wrap_content"
                 android:columnCount="2"
                 android:rowCount="3">
 
-
-                <!-- Plain text views in 2 columns and 3 rows -->
-
-
+                <!-- Left Bicep -->
                 <EditText
+                    android:id="@+id/et_left_bicep"
                     android:layout_width="173dp"
                     android:layout_height="40.10dp"
                     android:layout_row="0"
                     android:layout_column="0"
-                    android:layout_columnWeight="0"
                     android:layout_marginTop="10dp"
                     android:layout_marginRight="15dp"
                     android:height="38dp"
@@ -358,11 +358,11 @@
                     android:textColorHint="#E4E4E4"
                     android:textSize="15sp" />
 
-
+                <!-- Right Bicep -->
                 <EditText
+                    android:id="@+id/et_right_bicep"
                     android:layout_width="173dp"
                     android:layout_height="40.10dp"
-                    android:layout_columnWeight="0"
                     android:layout_marginTop="10dp"
                     android:height="38dp"
                     android:background="@drawable/bg_blackgradient"
@@ -375,11 +375,11 @@
                     android:textColorHint="#FFFFFF"
                     android:textSize="15sp" />
 
-
+                <!-- Left Forearm -->
                 <EditText
+                    android:id="@+id/et_left_forearm"
                     android:layout_width="173dp"
                     android:layout_height="40.10dp"
-                    android:layout_columnWeight="0"
                     android:layout_marginTop="10dp"
                     android:layout_marginRight="15dp"
                     android:height="38dp"
@@ -393,11 +393,11 @@
                     android:textColorHint="#E4E4E4"
                     android:textSize="15sp" />
 
-
+                <!-- Right Forearm -->
                 <EditText
+                    android:id="@+id/et_right_forearm"
                     android:layout_width="173dp"
                     android:layout_height="40.10dp"
-                    android:layout_columnWeight="0"
                     android:layout_marginTop="10dp"
                     android:height="38dp"
                     android:background="@drawable/bg_blackgradient"
@@ -410,11 +410,11 @@
                     android:textColorHint="#FFFFFF"
                     android:textSize="15sp" />
 
-
+                <!-- Left Calf -->
                 <EditText
+                    android:id="@+id/et_left_calf"
                     android:layout_width="173dp"
                     android:layout_height="40.10dp"
-                    android:layout_columnWeight="0"
                     android:layout_marginTop="10dp"
                     android:layout_marginRight="10dp"
                     android:height="38dp"
@@ -428,11 +428,11 @@
                     android:textColorHint="#E4E4E4"
                     android:textSize="15sp" />
 
-
+                <!-- Right Calf -->
                 <EditText
+                    android:id="@+id/et_right_calf"
                     android:layout_width="173dp"
                     android:layout_height="40.10dp"
-                    android:layout_columnWeight="0"
                     android:layout_marginTop="10dp"
                     android:height="38dp"
                     android:background="@drawable/bg_blackgradient"
@@ -445,8 +445,8 @@
                     android:textColorHint="#FFFFFF"
                     android:textSize="15sp" />
 
-
             </GridLayout>
+
         </LinearLayout>
 
 

@@ -35,7 +35,15 @@ as a result of your use of the app.
     <string name="Profile_Add"><u>Add a Profile Picture</u></string>
     <string name="BUG"><u>Report a bug</u></string>
     <string name="HeavyMetals">2024 Heavy Metals\nHeavy Metals v1</string>
-
-
     <string name="Disclaimer">Disclaimer &amp; Safety \nInstructions</string>
+
+    <string-array name="strength_experience_array">
+        <item>I\'ve never done resistance training</item>
+        <item>I usually do 1-2 full-body sessions per week (Beginner)</item>
+        <item>I do 2-4 resistance sessions per week (Intermediate)</item>
+        <item>I do 4-5 intense sessions per week (Advanced)</item>
+        <item>I train 5-6 times a week, advanced techniques (Pro)</item>
+    </string-array>
+
+
 </resources>

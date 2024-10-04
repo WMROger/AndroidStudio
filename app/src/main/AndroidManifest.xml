@@ -59,7 +59,7 @@
             android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".Login_RegisterPage.RegisterPage.ProfileCreation.FitnessDeclaration3"
-            android:exported="false"
+            android:exported="true"
             android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".Login_RegisterPage.RegisterPage.ProfileCreation.FitnessDeclaration"
