@@ -47,7 +47,7 @@
         app:cornerRadius="20sp" />
 
     <TextView
-        android:id="@+id/Deletetxtview"
+        android:id="@+id/Delete_txt_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"

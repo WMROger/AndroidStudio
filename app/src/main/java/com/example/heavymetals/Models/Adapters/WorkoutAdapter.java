@@ -64,8 +64,11 @@ public class WorkoutAdapter extends RecyclerView.Adapter<WorkoutAdapter.WorkoutV
 
         // Set up the view and delete button click listeners
         holder.viewWorkoutButton.setOnClickListener(v -> listener.onViewWorkoutClick(workout));
+
+        // Fix: use deleteWorkoutButton instead of deleteButton
         holder.deleteWorkoutButton.setOnClickListener(v -> listener.onWorkoutDeleted(workout));
     }
+
 
 
 
@@ -83,7 +86,7 @@ public class WorkoutAdapter extends RecyclerView.Adapter<WorkoutAdapter.WorkoutV
             super(itemView);
             workoutTitle = itemView.findViewById(R.id.workoutTitle);
             viewWorkoutButton = itemView.findViewById(R.id.viewWorkoutButton);
-            deleteWorkoutButton = itemView.findViewById(R.id.Deletetxtview);
+            deleteWorkoutButton = itemView.findViewById(R.id.Delete_txt_view);
             exerciseCount = itemView.findViewById(R.id.exerciseCount);  // Initialize this
 
         }
