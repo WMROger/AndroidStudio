@@ -37,16 +37,19 @@ public interface ApiService {
 
 
     @FormUrlEncoded
-    @POST("/HeavyMetals/forgetpass/verify_code.php")  // The path to your verify_code.php
+    @POST("forgetpass/verify_code.php")  // The path to your verify_code.php
     Call<VerifyCodeResponse> verifyCode(
             @Field("reset_code") String resetCode  // Send the reset code as a form field
     );
+
+
     @FormUrlEncoded
-    @POST("/HeavyMetals/forgetpass/reset_password.php")
+    @POST("forgetpass/reset_password.php")
     Call<Void> resetPassword(
             @Field("token") String token,  // Use "token" here instead of "user_id"
             @Field("new_password") String newPassword,
-            @Field("confirm_password") String confirmPassword
+            @Field("confirm_password") String confirmPassword,
+            @Field("code") String code  // Include the code in the request
     );
 
     @POST("HeavyMetals/workout_save/update_exercises.php")
