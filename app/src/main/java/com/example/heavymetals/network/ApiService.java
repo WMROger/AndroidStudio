@@ -19,7 +19,8 @@ public interface ApiService {
 
     // Existing login method
     @FormUrlEncoded
-    @POST("login.php")  // Endpoint for login
+    @POST("login.php")
+    // Endpoint for login
     Call<LoginResponse> login(
             @Field("email") String email,
             @Field("password") String password
@@ -27,7 +28,8 @@ public interface ApiService {
 
     // Existing registration method
     @FormUrlEncoded
-    @POST("register.php")  // Endpoint for registration
+    @POST("register.php")
+    // Endpoint for registration
     Call<RegisterResponse> registerUser(
             @Field("first_name") String firstName,
             @Field("last_name") String lastName,
@@ -35,22 +37,21 @@ public interface ApiService {
             @Field("password") String password
     );
 
-
     @FormUrlEncoded
-    @POST("forgetpass/verify_code.php")  // The path to your verify_code.php
+    @POST("forgetpass/verify_code.php")
+        // The path to your verify_code.php
     Call<VerifyCodeResponse> verifyCode(
             @Field("reset_code") String resetCode  // Send the reset code as a form field
     );
 
-
     @FormUrlEncoded
-    @POST("forgetpass/reset_password.php")
-    Call<Void> resetPassword(
-            @Field("token") String token,  // Use "token" here instead of "user_id"
+    @POST("forgetpass/reset_password.php") // Adjust this path based on your project structure
+    Call<ResetResponse> resetPassword(
+            @Field("user_id") String userId,  // Change token to user_id
             @Field("new_password") String newPassword,
-            @Field("confirm_password") String confirmPassword,
-            @Field("code") String code  // Include the code in the request
+            @Field("confirm_password") String confirmPassword
     );
+
 
     @POST("HeavyMetals/workout_save/update_exercises.php")
     @FormUrlEncoded
@@ -61,23 +62,28 @@ public interface ApiService {
     );
 
     // New method for saving workouts
-    @POST("HeavyMetals/workout_save/save_workouts.php")  // Endpoint for saving workouts
+    @POST("HeavyMetals/workout_save/save_workouts.php")
+    // Endpoint for saving workouts
     Call<SaveWorkoutResponse> saveWorkouts(
             @Body WorkoutResponse workoutResponse  // Sending the WorkoutRequest object
     );
 
     // New method for fetching workouts
-    @POST("HeavyMetals/workout_save/get_workout.php")  // Endpoint for fetching workouts
+    @POST("HeavyMetals/workout_save/get_workout.php")
+    // Endpoint for fetching workouts
     Call<FetchWorkoutsResponse> fetchWorkouts(
             @Body UserIdRequest userIdRequest  // Sending the UserIdRequest object
     );
+
     @GET("HeavyMetals/workout_save/get_exercise.php")
     Call<ExerciseResponse> getExercises(
             @Query("session_token") String sessionToken,
             @Query("workout_id") int workoutId
     );
+
     @FormUrlEncoded
-    @POST("HeavyMetals/workout_save/delete_workout.php")  // Endpoint for deleting workouts
+    @POST("HeavyMetals/workout_save/delete_workout.php")
+        // Endpoint for deleting workouts
     Call<Void> deleteWorkout(
             @Field("workout_id") int workoutId,  // Workout ID to be deleted
             @Field("session_token") String sessionToken  // Session token for authentication

@@ -174,6 +174,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new SettingsFragment()).commit();
         } else if (itemId == R.id.nav_logout) {
             logoutUser();  // Call the logout method
+
         }
 
         drawerLayout.closeDrawer(GravityCompat.START);
@@ -245,6 +246,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         String message = jsonResponse.getString("message");
                         runOnUiThread(() -> {
                             Toast.makeText(MainActivity.this, "Logout failed: " + message, Toast.LENGTH_LONG).show();
+                            Intent intent = new Intent(MainActivity.this , AuthenticationActivity.class);
+                            startActivity(intent);
                         });
                     }
 

@@ -6,12 +6,12 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.heavymetals.Models.ResetResponse;
 import com.example.heavymetals.R;
 import com.example.heavymetals.network.ApiService;
 
@@ -26,7 +26,6 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class ResetPasswordActivity extends AppCompatActivity {
 
     private EditText newPasswordField, confirmPasswordField;
-    private TextView codePreview;
     private Button resetPasswordButton;
     private ApiService apiService;
 
@@ -37,7 +36,6 @@ public class ResetPasswordActivity extends AppCompatActivity {
 
         newPasswordField = findViewById(R.id.new_password);
         confirmPasswordField = findViewById(R.id.confirm_new_password);
-        codePreview = findViewById(R.id.codePreview);
         resetPasswordButton = findViewById(R.id.reset_password_button);
 
         Retrofit retrofit = new Retrofit.Builder()
@@ -47,21 +45,22 @@ public class ResetPasswordActivity extends AppCompatActivity {
 
         apiService = retrofit.create(ApiService.class);
 
-        String token = getIntent().getStringExtra("token");
-        String code = getIntent().getStringExtra("code");
+        // Retrieve user_id from Intent
+        String userId = getIntent().getStringExtra("user_id");
 
-        if (token == null || code == null) {
+        if (userId == null) {
             showToast("Invalid reset link.");
             return;
         }
 
-        resetPasswordButton.setOnClickListener(v -> resetPassword(token, code));
+        resetPasswordButton.setOnClickListener(v -> resetPassword(userId));
     }
 
-    private void resetPassword(String token, String code) {
+    private void resetPassword(String userId) {
         String newPassword = newPasswordField.getText().toString().trim();
         String confirmPassword = confirmPasswordField.getText().toString().trim();
 
+        // Input validation
         if (newPassword.isEmpty() || confirmPassword.isEmpty()) {
             showToast("Please enter and confirm your new password.");
             return;
@@ -77,13 +76,19 @@ public class ResetPasswordActivity extends AppCompatActivity {
         progressDialog.setMessage("Resetting password...");
         progressDialog.show();
 
-        Call<Void> call = apiService.resetPassword(token, newPassword, confirmPassword, code);
-        call.enqueue(new Callback<Void>() {
+        // Updated API call to match backend parameters
+        Call<ResetResponse> call = apiService.resetPassword(userId, newPassword, confirmPassword);
+        call.enqueue(new Callback<ResetResponse>() {
             @Override
-            public void onResponse(Call<Void> call, Response<Void> response) {
+            public void onResponse(Call<ResetResponse> call, Response<ResetResponse> response) {
                 progressDialog.dismiss();
-                if (response.isSuccessful()) {
-                    showSuccessDialog();
+                if (response.isSuccessful() && response.body() != null) {
+                    ResetResponse resetPasswordResponse = response.body();
+                    if (resetPasswordResponse.getSuccess() == 1) {
+                        showSuccessDialog();
+                    } else {
+                        showToast(resetPasswordResponse.getMessage());
+                    }
                 } else {
                     showToast("Failed to reset password. Response Code: " + response.code());
                     try {
@@ -95,7 +100,7 @@ public class ResetPasswordActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<Void> call, Throwable t) {
+            public void onFailure(Call<ResetResponse> call, Throwable t) {
                 progressDialog.dismiss();
                 if (t instanceof IOException) {
                     showToast("Network error. Please check your connection.");

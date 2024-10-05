@@ -22,7 +22,10 @@
         <activity
             android:name=".Home_LandingPage.ProfileEditActivity"
             android:exported="false" />
-        <activity android:name=".Login_RegisterPage.LoginPage.CodeInputActivity" />
+        <activity
+            android:name=".Login_RegisterPage.LoginPage.CodeInputActivity"
+            android:exported="true" />
+
         <activity
             android:name=".Login_RegisterPage.LoginPage.ResetPasswordActivity"
             android:exported="false" />

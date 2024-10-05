@@ -108,11 +108,11 @@ public class CodeInputActivity extends AppCompatActivity {
         }
     }
 
-    private void navigateToResetPasswordActivity(String resetToken) {
+    private void navigateToResetPasswordActivity(String userId) {
         Intent intent = new Intent(CodeInputActivity.this, ResetPasswordActivity.class);
-        intent.putExtra("token", resetToken);  // Pass the reset token
-        intent.putExtra("code", codeInputField.getText().toString().trim());  // Pass the inputted code
+        intent.putExtra("user_id", userId); // Replace yourResetToken with the actual token
         startActivity(intent);
+
         finish(); // Optionally call finish() to close the current activity
     }
 
