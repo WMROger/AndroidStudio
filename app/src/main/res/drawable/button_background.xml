@@ -5,10 +5,10 @@
 
     <!-- Border with orange color -->
     <stroke
-        android:width="2dp"
+        android:width="1dp"
         android:color="@color/custom_orange" /> <!-- Orange color for the corners -->
 
     <!-- Corner radius for rounded edges -->
-    <corners android:radius="16dp" /> <!-- Same radius as the button -->
+    <corners android:radius="20dp" /> <!-- Same radius as the button -->
 
 </shape>
