@@ -32,7 +32,7 @@
     <Button
         android:id="@+id/FEPAddWorkout"
         android:layout_width="329dp"
-        android:layout_height="60dp"
+        android:layout_height="55dp"
         android:backgroundTint="#000000"
         android:includeFontPadding="false"
         android:paddingLeft="25dp"

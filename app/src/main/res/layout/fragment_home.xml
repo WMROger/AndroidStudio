@@ -18,7 +18,7 @@
         android:layout_height="81dp"
         android:layout_marginTop="12dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.902"
+        app:layout_constraintHorizontal_bias="0.863"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/relativeLayout">
 
@@ -47,8 +47,8 @@
         android:layout_width="176dp"
         android:layout_height="81dp"
         android:layout_marginTop="12dp"
-        app:layout_constraintEnd_toStartOf="@+id/relativeLayout2"
-        app:layout_constraintHorizontal_bias="0.372"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.114"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/relativeLayout">
 
@@ -74,11 +74,12 @@
     </RelativeLayout>
 
     <RelativeLayout
+        android:id="@+id/relativeLayout5"
         android:layout_width="175dp"
         android:layout_height="81dp"
-        android:layout_marginTop="128dp"
+        android:layout_marginTop="112dp"
         app:layout_constraintEnd_toStartOf="@+id/relativeLayout2"
-        app:layout_constraintHorizontal_bias="0.432"
+        app:layout_constraintHorizontal_bias="0.571"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/relativeLayout">
 
@@ -107,14 +108,13 @@
     <RelativeLayout
         android:layout_width="175dp"
         android:layout_height="81dp"
-        android:layout_marginTop="35dp"
-        android:layout_marginRight="25dp"
+        android:layout_marginEnd="15dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.499"
-        app:layout_constraintStart_toEndOf="@+id/Profile_home"
+        app:layout_constraintHorizontal_bias="0.488"
+        app:layout_constraintStart_toEndOf="@+id/relativeLayout5"
         app:layout_constraintTop_toBottomOf="@+id/relativeLayout2"
-        app:layout_constraintVertical_bias="0.0">
+        app:layout_constraintVertical_bias="0.21">
 
         <ImageButton
             android:id="@+id/Settings_home"

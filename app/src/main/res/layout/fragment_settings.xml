@@ -34,7 +34,7 @@
         android:layout_height="49dp"
         android:text="Log out"
         android:textAllCaps="false"
-        app:cornerRadius="16dp"
+        app:cornerRadius="20dp"
         app:layout_constraintBottom_toTopOf="@+id/textView35"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -50,7 +50,7 @@
         android:textAlignment="textStart"
         android:textAllCaps="false"
         android:textColor="@color/custom_orange"
-        app:cornerRadius="10dp"
+        app:cornerRadius="20dp"
         app:layout_constraintBottom_toTopOf="@+id/Login_LoginButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -90,7 +90,7 @@
             android:text="Advanced"
             android:textAlignment="textStart"
             android:textAllCaps="false"
-            app:cornerRadius="10dp"
+            app:cornerRadius="20dp"
             app:strokeColor="#DE612B"
             app:strokeWidth="1dp" />
 
@@ -104,7 +104,7 @@
             android:text="Licenses"
             android:textAlignment="textStart"
             android:textAllCaps="false"
-            app:cornerRadius="10dp"
+            app:cornerRadius="20dp"
             app:strokeColor="#DE612B"
             app:strokeWidth="1dp" />
 
@@ -117,7 +117,7 @@
             android:text="Notification"
             android:textAlignment="textStart"
             android:textAllCaps="false"
-            app:cornerRadius="10dp"
+            app:cornerRadius="20dp"
             app:strokeColor="#DE612B"
             app:strokeWidth="1dp" />
     </LinearLayout>
@@ -153,7 +153,7 @@
             android:text="Help Center"
             android:textAlignment="textStart"
             android:textAllCaps="false"
-            app:cornerRadius="10dp"
+            app:cornerRadius="20dp"
             app:strokeColor="#DE612B"
             app:strokeWidth="1dp" />
 
@@ -167,7 +167,7 @@
             android:text="Workout Preference"
             android:textAlignment="textStart"
             android:textAllCaps="false"
-            app:cornerRadius="10dp"
+            app:cornerRadius="20dp"
             app:strokeColor="#DE612B"
             app:strokeWidth="1dp" />
 
@@ -219,7 +219,7 @@
             android:text="Profile"
             android:textAlignment="textStart"
             android:textAllCaps="false"
-            app:cornerRadius="10dp"
+            app:cornerRadius="20dp"
             app:strokeColor="#DE612B"
             app:strokeWidth="1dp" />
 
@@ -233,7 +233,7 @@
             android:text="Goals"
             android:textAlignment="textStart"
             android:textAllCaps="false"
-            app:cornerRadius="10dp"
+            app:cornerRadius="20dp"
             app:strokeColor="#DE612B"
             app:strokeWidth="1dp" />
 
@@ -246,7 +246,7 @@
             android:text="Measurement"
             android:textAlignment="textStart"
             android:textAllCaps="false"
-            app:cornerRadius="10dp"
+            app:cornerRadius="20dp"
             app:strokeColor="#DE612B"
             app:strokeWidth="1dp" />
     </LinearLayout>
