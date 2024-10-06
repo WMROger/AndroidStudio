@@ -206,7 +206,7 @@
             android:layout_height="match_parent"
             android:layout_centerInParent="true"
             android:background="@drawable/orange_border"
-            android:padding="2dp"
+            android:padding="1dp"
             android:scaleType="fitXY"
             android:src="@drawable/progress_tracker" />
 
