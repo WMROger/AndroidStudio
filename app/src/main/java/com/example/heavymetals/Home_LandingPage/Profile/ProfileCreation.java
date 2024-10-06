@@ -1,10 +1,9 @@
-package com.example.heavymetals.Login_RegisterPage.RegisterPage.ProfileCreation;
+package com.example.heavymetals.Home_LandingPage.Profile;
 
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;

@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:background="@drawable/bg_gradient"
     android:textAlignment="center"
-    tools:context=".Login_RegisterPage.RegisterPage.ProfileCreation.FitnessDeclaration2"
+    tools:context=".Home_LandingPage.Profile.FitnessDeclaration2"
     tools:ignore="HardcodedText"
     tools:layout_editor_absoluteY="24dp">
 

@@ -1,4 +1,4 @@
-package com.example.heavymetals.Home_LandingPage;
+package com.example.heavymetals.Home_LandingPage.Profile;
 
 import android.content.Context;
 import android.content.Intent;
@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 
+import com.example.heavymetals.Home_LandingPage.ProfileEditActivity;
 import com.example.heavymetals.R;
 
 import org.json.JSONObject;

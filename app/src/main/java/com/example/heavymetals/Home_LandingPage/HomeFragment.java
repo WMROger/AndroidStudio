@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -18,6 +17,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.example.heavymetals.Home_LandingPage.Profile.ProfileFragment;
 import com.example.heavymetals.Home_LandingPage.Workouts.Exercises_All;
 import com.example.heavymetals.Home_LandingPage.Workouts.WorkoutModule1;
 import com.example.heavymetals.Home_LandingPage.Workouts.WorkoutModule4;

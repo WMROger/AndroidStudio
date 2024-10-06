@@ -8,34 +8,22 @@
     android:background="@drawable/bg_gradient"
     tools:context=".Login_RegisterPage.RegisterPage.RegisterActivity">
 
-    <TextView
-        android:id="@+id/textView6"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="HEAVY METALS"
-        android:textColor="@color/white"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView7"
-        app:layout_constraintVertical_bias="0.0" />
 
     <ImageView
         android:id="@+id/imageView7"
-        android:layout_width="100dp"
-        android:layout_height="107dp"
+        android:layout_width="350dp"
+        android:layout_height="331dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.508"
+        app:layout_constraintHorizontal_bias="0.491"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.134"
-        app:srcCompat="@mipmap/ic_launcher_round" />
+        app:layout_constraintVertical_bias="0.04"
+        app:srcCompat="@mipmap/ic_nobglauncher_foreground" />
 
     <LinearLayout
         android:id="@+id/linearLayout"
-        android:layout_width="387dp"
+        android:layout_width="357dp"
         android:layout_height="351dp"
         android:layout_marginTop="276dp"
         android:orientation="vertical"
@@ -60,7 +48,7 @@
             android:ems="10"
             android:hint="First Name"
             android:inputType="text"
-            android:padding="10dp"
+            android:paddingStart="10dp"
             android:textColor="@color/white"
             android:textColorHint="@color/gray"
             android:textSize="20sp" />
@@ -75,7 +63,7 @@
             android:ems="10"
             android:hint="Last Name"
             android:inputType="text"
-            android:padding="10dp"
+            android:paddingStart="10dp"
             android:textColor="@color/white"
             android:textColorHint="@color/gray"
             android:textSize="20sp" />
@@ -88,7 +76,7 @@
             android:ems="10"
             android:hint="Email"
             android:inputType="text|textEmailAddress"
-            android:padding="10dp"
+            android:paddingStart="10dp"
             android:textColor="@color/white"
             android:textColorHint="@color/gray"
             android:textSize="20sp" />
@@ -103,7 +91,7 @@
             android:ems="10"
             android:hint="Password"
             android:inputType="text|textPassword"
-            android:padding="10dp"
+            android:paddingStart="10dp"
             android:textColor="@color/white"
             android:textColorHint="@color/gray"
             android:textSize="20sp" />
@@ -116,7 +104,7 @@
             android:ems="10"
             android:hint="Confirm Password"
             android:inputType="text|textPassword"
-            android:padding="10dp"
+            android:paddingStart="10dp"
             android:textColor="@color/white"
             android:textColorHint="@color/gray"
             android:textSize="20sp" />
@@ -125,10 +113,10 @@
 
     <Button
         android:id="@+id/btnDone"
-        android:layout_width="250dp"
+        android:layout_width="220dp"
         android:layout_height="50dp"
         android:text="Done"
-        app:cornerRadius="10dp"
+        app:cornerRadius="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.496"
@@ -140,22 +128,22 @@
         android:id="@+id/textView13"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="ALREADY HAVE AN ACCOUNT?"
+        android:text="Already have an account?"
         android:textColor="@color/white"
         android:textSize="13sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/SignUpLoginTxt"
-        app:layout_constraintHorizontal_bias="0.439"
+        app:layout_constraintHorizontal_bias="0.572"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout"
-        app:layout_constraintVertical_bias="0.452" />
+        app:layout_constraintVertical_bias="0.445" />
 
     <TextView
         android:id="@+id/SignUpLoginTxt"
         android:layout_width="97dp"
         android:layout_height="55dp"
         android:gravity="center"
-        android:text="LOG IN"
+        android:text="Log in"
         android:textColor="@color/custom_orange"
         android:textSize="15sp"
         app:layout_constraintBottom_toBottomOf="parent"

@@ -1,11 +1,9 @@
 package com.example.heavymetals.Home_LandingPage;
 
-import android.Manifest;
 import android.app.AlarmManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -18,14 +16,12 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import com.example.heavymetals.Home_LandingPage.Profile.ProfileFragment;
 import com.example.heavymetals.Home_LandingPage.Workouts.WorkoutModule1;
 import com.example.heavymetals.Login_RegisterPage.AuthenticationActivity;
-import com.example.heavymetals.Login_RegisterPage.LoginPage.LoginActivity;
 import com.example.heavymetals.R;
 import com.example.heavymetals.network.ScheduleDailyNotification;
 import com.google.android.material.navigation.NavigationView;

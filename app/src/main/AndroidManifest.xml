@@ -61,19 +61,19 @@
             android:exported="false"
             android:windowSoftInputMode="adjustPan" />
         <activity
-            android:name=".Login_RegisterPage.RegisterPage.ProfileCreation.FitnessDeclaration3"
+            android:name=".Home_LandingPage.Profile.FitnessDeclaration3"
             android:exported="true"
             android:windowSoftInputMode="adjustPan" />
         <activity
-            android:name=".Login_RegisterPage.RegisterPage.ProfileCreation.FitnessDeclaration"
+            android:name=".Home_LandingPage.Profile.FitnessDeclaration"
             android:exported="true"
             android:windowSoftInputMode="adjustPan" />
         <activity
-            android:name=".Login_RegisterPage.RegisterPage.ProfileCreation.FitnessDeclaration2"
+            android:name=".Home_LandingPage.Profile.FitnessDeclaration2"
             android:exported="true"
             android:windowSoftInputMode="adjustPan" />
         <activity
-            android:name=".Login_RegisterPage.RegisterPage.ProfileCreation.ProfileCreation"
+            android:name=".Home_LandingPage.Profile.ProfileCreation"
             android:exported="true"
             android:windowSoftInputMode="adjustPan" />
         <activity

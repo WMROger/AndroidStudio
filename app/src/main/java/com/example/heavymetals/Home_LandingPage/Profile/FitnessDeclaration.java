@@ -1,4 +1,4 @@
-package com.example.heavymetals.Login_RegisterPage.RegisterPage.ProfileCreation;
+package com.example.heavymetals.Home_LandingPage.Profile;
 
 import android.content.Intent;
 import android.os.AsyncTask;
