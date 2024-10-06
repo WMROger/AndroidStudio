@@ -104,8 +104,6 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:text="Workouts"
-            android:paddingTop="10dp"
-            android:textSize="22sp"
             android:textColor="#DE612B" />
 
 
@@ -244,7 +242,7 @@
 
     <LinearLayout
         android:id="@+id/summary_tracker"
-        android:layout_width="370dp"
+        android:layout_width="350dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="50dp"
         android:layout_marginBottom="172dp"
