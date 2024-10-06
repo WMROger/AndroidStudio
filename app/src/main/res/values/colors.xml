@@ -16,5 +16,6 @@
     <color name="gray_orange">#63493E</color>
     <color name="selected_color">#FFEB3B</color> <!-- Example highlight color -->
     <color name="unselected_color">#FFFFFF</color> <!-- Example unhighlight color -->
+    <color name="nav_item_selected_text_color">#FFA500</color>
 
 </resources>

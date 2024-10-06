@@ -1,34 +1,57 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:showIn="navigation_view">
+    tools:showIn="navigation_view"
+    app:itemIconTint="@color/white"
+    app:itemTextColor="@drawable/nav_item_text_color_selector"
+    >
 
     <group android:checkableBehavior="single">
 
         <item
             android:id="@+id/nav_home"
+            android:background="@drawable/nav_item_background"
             android:icon="@drawable/baseline_home_24"
-            android:title="Home" />
+            android:iconTint="@color/white"
+            android:title="Home"
+            android:titleTextColor="@color/white"
+            app:actionLayout="@layout/nav_item_layout" />
 
         <item
             android:id="@+id/nav_profile"
+            android:background="@drawable/nav_item_background"
             android:icon="@drawable/baseline_person_24"
-            android:title="Profile" />
+            android:iconTint="@color/white"
+            android:title="Profile"
+            android:titleTextColor="@color/white"
+            app:actionLayout="@layout/nav_item_layout" />
 
         <item
             android:id="@+id/nav_progress"
+            android:background="@drawable/nav_item_background"
             android:icon="@drawable/baseline_tracker_24"
+            android:iconTint="@color/white"
             android:title="Progress Tracker"
-            />
+            android:titleTextColor="@color/white"
+            app:actionLayout="@layout/nav_item_layout" />
 
         <item
             android:id="@+id/nav_exercise"
+            android:background="@drawable/nav_item_background"
             android:icon="@drawable/baseline_event_note_24"
-            android:title="Exercise Plan" />
+            android:iconTint="@color/white"
+            android:title="Exercise Plan"
+            android:titleTextColor="@color/white"
+            app:actionLayout="@layout/nav_item_layout" />
 
         <item
             android:id="@+id/nav_settings"
+            android:background="@drawable/nav_item_background"
             android:icon="@drawable/baseline_settings_24"
-            android:title="Settings" />
+            android:iconTint="@color/white"
+            android:title="Settings"
+            android:titleTextColor="@color/white"
+            app:actionLayout="@layout/nav_item_layout" />
 
 
     </group>
