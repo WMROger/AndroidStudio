@@ -11,14 +11,14 @@
 
     <ImageView
         android:id="@+id/imageView7"
-        android:layout_width="350dp"
-        android:layout_height="331dp"
+        android:layout_width="296dp"
+        android:layout_height="288dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.491"
+        app:layout_constraintHorizontal_bias="0.513"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.04"
+        app:layout_constraintVertical_bias="0.05"
         app:srcCompat="@mipmap/ic_nobglauncher_foreground" />
 
     <LinearLayout
@@ -34,9 +34,10 @@
 
         <TextView
             android:id="@+id/textView18"
-            android:layout_width="100dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Sign up"
+            android:paddingStart="20dp"
             android:textColor="@color/white"
             android:textSize="27sp" />
 
