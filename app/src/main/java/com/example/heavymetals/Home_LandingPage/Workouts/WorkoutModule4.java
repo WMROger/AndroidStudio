@@ -46,6 +46,9 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.os.Build;
+import android.os.Handler;
+import android.os.Looper;
+
 
 public class WorkoutModule4 extends AppCompatActivity {
 
@@ -56,6 +59,9 @@ public class WorkoutModule4 extends AppCompatActivity {
     private TextView wm4_Back_txt, wm4_Save_txt;
     private static final String CHANNEL_ID = "workout_notifications";  // Define CHANNEL_ID as a constant
     private static final int NOTIFICATION_ID = 100;  // Unique ID for notifications
+    private Handler handler = new Handler(Looper.getMainLooper()); // Use Handler to schedule the task
+    private Runnable refreshRunnable;  // Define the runnable task
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,7 +110,37 @@ public class WorkoutModule4 extends AppCompatActivity {
         if (workoutCount > 0) {
             sendWorkoutNotification(workoutCount);
         }
+
+
+
+
+
+
+        // Define the periodic refresh task
+        refreshRunnable = new Runnable() {
+            @Override
+            public void run() {
+                fetchWorkoutsFromServer();  // Fetch new workouts from the server
+                handler.postDelayed(this, 5000);  // Re-run this task every 5 seconds
+            }
+        };
+
+        // Start the periodic refresh
+        handler.post(refreshRunnable);
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        // Remove the callback to stop the periodic updates when activity is destroyed
+        if (handler != null && refreshRunnable != null) {
+            handler.removeCallbacks(refreshRunnable);
+        }
+    }
+
+
+
+
     private void fetchWorkoutsFromServer() {
         String sessionToken = getSessionToken();
         if (sessionToken == null) {
@@ -122,17 +158,11 @@ public class WorkoutModule4 extends AppCompatActivity {
             public void onResponse(Call<WorkoutResponse> call, Response<WorkoutResponse> response) {
                 if (response.isSuccessful() && response.body() != null && response.body().isSuccess()) {
                     workoutList = response.body().getWorkouts();
-
-                    for (Workout workout : workoutList) {
-                        Log.d("WorkoutModule4", "Fetched workout ID: " + workout.getWorkoutId() + ", workout name: " + workout.getTitle());
-                    }
-                    updateRecyclerView();
+                    updateRecyclerView();  // Update RecyclerView with new data
                 } else {
                     Toast.makeText(WorkoutModule4.this, "Failed to load workouts.", Toast.LENGTH_SHORT).show();
                 }
             }
-
-
 
             @Override
             public void onFailure(Call<WorkoutResponse> call, Throwable t) {
@@ -140,6 +170,7 @@ public class WorkoutModule4 extends AppCompatActivity {
             }
         });
     }
+
 
 
 
@@ -174,7 +205,6 @@ public class WorkoutModule4 extends AppCompatActivity {
     private void initializeUI() {
         addWorkout = findViewById(R.id.btnAddWorkout);
         wm4_Back_txt = findViewById(R.id.wm4_Back_txt);
-        wm4_Save_txt = findViewById(R.id.wm4_Save_txt);
         recyclerView = findViewById(R.id.recyclerViewWorkouts);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -189,15 +219,7 @@ public class WorkoutModule4 extends AppCompatActivity {
         // Navigate back to the main activity
         wm4_Back_txt.setOnClickListener(v -> navigateToMainActivity());
 
-        // Save workouts button listener
-        wm4_Save_txt.setOnClickListener(v -> {
-            if (!workoutList.isEmpty()) {
-                saveWorkoutsForUser(workoutList);
-                Toast.makeText(WorkoutModule4.this, "Workout manually saving!", Toast.LENGTH_SHORT).show();
-            } else {
-                Toast.makeText(WorkoutModule4.this, "No workout to save.", Toast.LENGTH_SHORT).show();
-            }
-        });
+
     }
 
     private void addNewWorkout(Workout workout) {
@@ -452,13 +474,12 @@ public class WorkoutModule4 extends AppCompatActivity {
 
     private void displayExercises(List<AdaptersExercise> exercises) {
         // Assuming you have a RecyclerView for displaying exercises
-        // Assuming you have a RecyclerView for displaying exercises
         RecyclerView exercisesRecyclerView = findViewById(R.id.recyclerViewWorkouts);
 
-// Create an adapter and pass the list of exercises to it
+        // Create an adapter and pass the list of exercises to it
         ExercisesAdapter exercisesAdapter = new ExercisesAdapter(exercises);
 
-// Set up the RecyclerView with the adapter
+        // Set up the RecyclerView with the adapter
         exercisesRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         exercisesRecyclerView.setAdapter(exercisesAdapter);
     }

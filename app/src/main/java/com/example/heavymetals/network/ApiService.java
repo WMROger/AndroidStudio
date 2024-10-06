@@ -12,7 +12,9 @@ import retrofit2.http.Body;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
+import retrofit2.http.Header;
 import retrofit2.http.POST;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 public interface ApiService {
@@ -79,7 +81,10 @@ public interface ApiService {
     Call<ExerciseResponse> getExercises(
             @Query("session_token") String sessionToken,
             @Query("workout_id") int workoutId
+
     );
+
+
 
     @FormUrlEncoded
     @POST("HeavyMetals/workout_save/delete_workout.php")

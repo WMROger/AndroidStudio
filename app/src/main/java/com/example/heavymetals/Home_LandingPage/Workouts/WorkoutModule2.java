@@ -37,7 +37,7 @@ public class WorkoutModule2 extends AppCompatActivity {
     private HashMap<String, Integer> exerciseSetsMap = new HashMap<>();
     private HashMap<String, Integer> exerciseIconMap = new HashMap<>();
     private EditText workoutNameInput;
-
+    private Button WM2AddExercisebtn;
     private static final String TAG = "WorkoutModule2";
 
     @Override
@@ -49,6 +49,8 @@ public class WorkoutModule2 extends AppCompatActivity {
         workoutNameInput = findViewById(R.id.workout_name_input);
         workoutContainer = findViewById(R.id.workout_container);
         WM2discard_txt = findViewById(R.id.WM2discard_txt);
+        WM2AddExercisebtn = findViewById(R.id.WM2AddExercisebtn);
+
 
         // Initialize the icon map
         initializeExerciseIconMap();
@@ -102,10 +104,13 @@ public class WorkoutModule2 extends AppCompatActivity {
                 finish();  // Discard changes
             }
         });
-
+        WM2AddExercisebtn.setOnClickListener(view -> {
+            finish();
+        });
 
         checkWorkoutContainerHeight();
     }
+
     private void saveWorkoutIdToPreferences(int workoutId) {
         SharedPreferences sharedPreferences = getSharedPreferences("WorkoutPrefs", MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();

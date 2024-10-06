@@ -4,6 +4,6 @@
     <stroke
         android:width="1dp"
          /> <!-- Stroke color -->
-    <corners android:bottomLeftRadius="20dp" android:bottomRightRadius="20dp"/> <!-- Optional: for rounded corners -->
+    <corners android:bottomLeftRadius="10dp" android:bottomRightRadius="20dp"/> <!-- Optional: for rounded corners -->
 
 </shape>
