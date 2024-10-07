@@ -5,65 +5,67 @@
     android:id="@+id/code_input_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Login_RegisterPage.LoginPage.CodeInputActivity"
-    android:background="@drawable/bg_gradient" >
+    android:background="@drawable/bg_gradient"
+    tools:context=".Login_RegisterPage.LoginPage.CodeInputActivity">
 
     <TextView
         android:id="@+id/code_input_header"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
         android:text="Enter Verification Code"
         android:textColor="@color/white"
         android:textSize="24sp"
-        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@+id/code_input_field"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="32dp" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/code_input_instructions"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:gravity="center_horizontal"
         android:text="Please enter the 5-character code sent to your email"
         android:textColor="@color/gray"
         android:textSize="16sp"
-        app:layout_constraintTop_toBottomOf="@+id/code_input_header"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="16dp" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/code_input_header" />
 
     <EditText
         android:id="@+id/code_input_field"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
+        android:layout_marginHorizontal="32dp"
+        android:background="@drawable/button_background"
+        android:gravity="center_horizontal"
         android:hint="XXXXX"
-        android:maxLength="5"
         android:inputType="text"
+        android:maxLength="5"
+        android:paddingTop="5dp"
         android:textColor="@color/white"
         android:textColorHint="@color/gray"
-        android:gravity="center"
-        android:background="@drawable/button_background"
         android:textSize="24sp"
-        app:layout_constraintTop_toBottomOf="@+id/code_input_instructions"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginHorizontal="32dp"
-        android:padding="10dp"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/code_input_instructions" />
 
     <Button
         android:id="@+id/verify_code_button"
-        android:layout_width="0dp"
+        android:layout_width="210dp"
         android:layout_height="wrap_content"
-        android:text="Verify Code"
-        android:textColor="@color/white"
+        android:layout_marginHorizontal="32dp"
+        android:layout_marginTop="32dp"
         android:backgroundTint="@color/custom_orange"
         android:padding="12dp"
-        app:cornerRadius="16dp"
-        app:layout_constraintTop_toBottomOf="@+id/code_input_field"
-        app:layout_constraintStart_toStartOf="parent"
+        android:text="Verify Code"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        app:cornerRadius="25dp"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginHorizontal="32dp"
-        android:layout_marginTop="32dp" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/code_input_field" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

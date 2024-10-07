@@ -23,8 +23,6 @@
         app:srcCompat="@mipmap/ic_nobglauncher_foreground" />
 
 
-
-
     <TextView
         android:id="@+id/textView7"
         android:layout_width="wrap_content"
@@ -34,7 +32,7 @@
         android:textSize="24sp"
         app:layout_constraintBottom_toTopOf="@+id/linearLayout"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.102"
+        app:layout_constraintHorizontal_bias="0.15"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView7"
         app:layout_constraintVertical_bias="1.0" />
@@ -47,16 +45,17 @@
         android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.883"
+        app:layout_constraintHorizontal_bias="0.83"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.631" />
+        app:layout_constraintVertical_bias="0.63" />
 
     <Button
         android:id="@+id/Login_LoginButton"
         android:layout_width="200dp"
         android:layout_height="50dp"
-        android:text="LOG IN"
+        android:text="Log in"
+        android:textAllCaps="false"
         app:cornerRadius="20dp"
         app:layout_constraintBottom_toTopOf="@+id/textView13"
         app:layout_constraintEnd_toEndOf="parent"
@@ -111,6 +110,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Don't have an account?"
+        android:textAllCaps="true"
         android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -125,8 +125,10 @@
         android:layout_height="43dp"
         android:gravity="center"
         android:text="Sign up"
+        android:textAllCaps="true"
         android:textColor="@color/custom_orange"
         android:textSize="17sp"
+        android:layout_marginBottom="5dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"

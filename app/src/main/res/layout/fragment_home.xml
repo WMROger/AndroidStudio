@@ -299,6 +299,7 @@
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:text="Workouts"
+            android:paddingTop="10dp"
             android:textColor="@color/custom_orange"
             android:textSize="21sp" />
 
