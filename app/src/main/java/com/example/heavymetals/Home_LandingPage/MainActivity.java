@@ -20,6 +20,7 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.example.heavymetals.Home_LandingPage.Profile.ProfileFragment;
+import com.example.heavymetals.Home_LandingPage.Tracker.ProgressFragment;
 import com.example.heavymetals.Home_LandingPage.Workouts.WorkoutModule1;
 import com.example.heavymetals.Login_RegisterPage.AuthenticationActivity;
 import com.example.heavymetals.R;

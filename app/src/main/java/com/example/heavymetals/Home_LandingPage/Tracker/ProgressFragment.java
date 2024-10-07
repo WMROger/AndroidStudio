@@ -1,4 +1,4 @@
-package com.example.heavymetals.Home_LandingPage;
+package com.example.heavymetals.Home_LandingPage.Tracker;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;

@@ -20,12 +20,14 @@
         android:windowSoftInputMode="adjustPan"
         tools:targetApi="31">
         <activity
+            android:name=".Home_LandingPage.Tracker.WorkoutTrackerActivity"
+            android:exported="false" />
+        <activity
             android:name=".Home_LandingPage.ProfileEditActivity"
             android:exported="false" />
         <activity
             android:name=".Login_RegisterPage.LoginPage.CodeInputActivity"
             android:exported="true" />
-
         <activity
             android:name=".Login_RegisterPage.LoginPage.ResetPasswordActivity"
             android:exported="true" />
