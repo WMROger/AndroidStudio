@@ -91,12 +91,12 @@ public class LoginActivity extends AppCompatActivity {
         if (isPasswordVisible) {
             // Hide password
             passwordEditText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
-            passwordToggle.setImageResource(R.drawable.ic_visibility_off);  // Update icon to 'hide' icon
+            passwordToggle.setImageResource(R.drawable.ic_visibility);  // Update icon to 'hide' icon
             isPasswordVisible = false;
         } else {
             // Show password
             passwordEditText.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
-            passwordToggle.setImageResource(R.drawable.ic_visibility);  // Update icon to 'show' icon
+            passwordToggle.setImageResource(R.drawable.ic_visibility_off);  // Update icon to 'show' icon
             isPasswordVisible = true;
         }
 
