@@ -14,17 +14,18 @@
 
     <RelativeLayout
         android:id="@+id/relativeLayout2"
-        android:layout_width="176dp"
+        android:layout_width="186dp"
         android:layout_height="81dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginStart="130dp"
+        android:layout_marginTop="15dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.863"
+        app:layout_constraintHorizontal_bias="0.854"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/relativeLayout">
 
         <ImageButton
             android:id="@+id/imageView4"
-            android:layout_width="175dp"
+            android:layout_width="186dp"
             android:layout_height="81dp"
             android:background="@drawable/bg_blackgradient"
             android:padding="2dp"
@@ -44,17 +45,20 @@
     </RelativeLayout>
 
     <RelativeLayout
-        android:layout_width="176dp"
+        android:layout_width="186dp"
         android:layout_height="81dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginStart="-12dp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintBottom_toTopOf="@+id/relativeLayout5"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.114"
+        app:layout_constraintHorizontal_bias="0.122"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/relativeLayout">
+        app:layout_constraintTop_toBottomOf="@+id/relativeLayout"
+        app:layout_constraintVertical_bias="0.227">
 
         <ImageButton
             android:id="@+id/imageView4"
-            android:layout_width="175dp"
+            android:layout_width="186dp"
             android:layout_height="81dp"
             android:background="@drawable/bg_blackgradient"
             android:padding="2dp"
@@ -75,10 +79,11 @@
 
     <RelativeLayout
         android:id="@+id/relativeLayout5"
-        android:layout_width="175dp"
+        android:layout_width="186dp"
         android:layout_height="81dp"
-        android:layout_marginTop="112dp"
+        android:layout_marginTop="50dp"
         android:layout_marginEnd="5dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/relativeLayout2"
         app:layout_constraintHorizontal_bias="0.571"
         app:layout_constraintStart_toStartOf="parent"
@@ -86,7 +91,7 @@
 
         <ImageButton
             android:id="@+id/Profile_home"
-            android:layout_width="175dp"
+            android:layout_width="186dp"
             android:layout_height="81dp"
             android:background="@drawable/bg_blackgradient"
             android:padding="2dp"
@@ -107,19 +112,19 @@
     </RelativeLayout>
 
     <RelativeLayout
-        android:layout_width="175dp"
+        android:layout_width="186dp"
         android:layout_height="81dp"
-        android:layout_marginEnd="15dp"
+        android:layout_marginStart="210dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.488"
-        app:layout_constraintStart_toEndOf="@+id/relativeLayout5"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/relativeLayout2"
         app:layout_constraintVertical_bias="0.21">
 
         <ImageButton
             android:id="@+id/Settings_home"
-            android:layout_width="175dp"
+            android:layout_width="186dp"
             android:layout_height="81dp"
             android:background="@drawable/bg_blackgradient"
             android:padding="2dp"
@@ -164,7 +169,7 @@
         android:layout_marginTop="-30dp"
         android:fontFamily="@font/koulen"
         android:text="WHAT YOU DOING"
-        android:textColor="#FFFFFF"
+        android:textColor="@color/white"
         android:textSize="57sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -177,13 +182,13 @@
         android:id="@+id/textView2"
         android:layout_width="362dp"
         android:layout_height="78dp"
-        android:layout_marginTop="-60sp"
+        android:layout_marginTop="-70sp"
         android:fontFamily="@font/koulen"
         android:foregroundGravity="top|center"
         android:gravity="fill"
         android:includeFontPadding="true"
         android:text="GOOD LOOKING"
-        android:textColor="#FFFFFF"
+        android:textColor="@color/white"
         android:textSize="57sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -216,6 +221,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
+            android:paddingTop="5dp"
             android:text="Tracker"
             android:textColor="@color/custom_orange"
             android:textSize="21sp" />
@@ -304,7 +310,7 @@
             android:layout_alignParentBottom="true"
             android:layout_marginStart="20dp"
             android:layout_marginTop="2dp"
-            android:layout_marginEnd="225dp"
+            android:layout_marginEnd="265dp"
             android:layout_marginBottom="155dp"
             android:gravity="center"
             android:text="Quick start"
@@ -353,7 +359,7 @@
             android:textAllCaps="false"
             android:textColor="@color/custom_orange"
             android:textSize="14sp"
-            app:cornerRadius="20dp" />
+            app:cornerRadius="25dp" />
 
     </RelativeLayout>
 

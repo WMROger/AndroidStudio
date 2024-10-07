@@ -61,12 +61,12 @@
     <Button
         android:id="@+id/Auth_register_button"
         android:layout_width="360dp"
-        android:layout_height="53dp"
+        android:layout_height="60dp"
         android:letterSpacing="0.00000001"
         android:text="SIGN UP"
         android:textColor="#000000"
         android:textSize="20sp"
-        app:cornerRadius="20dp"
+        app:cornerRadius="25dp"
         app:layout_constraintBottom_toTopOf="@+id/textView3"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.49"
@@ -90,23 +90,23 @@
     <Button
         android:id="@+id/Auth_login_button"
         android:layout_width="360dp"
-        android:layout_height="53dp"
+        android:layout_height="60dp"
         android:letterSpacing="0.00000001"
         android:text="LOG IN"
         android:textColor="#000000"
         android:textSize="20sp"
-        app:cornerRadius="20dp"
+        app:cornerRadius="25dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.49"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.631" />
+        app:layout_constraintVertical_bias="0.609" />
 
     <TextView
         android:id="@+id/textView3"
         android:layout_width="352dp"
-        android:layout_height="46dp"
+        android:layout_height="50dp"
         android:gravity="center"
         android:lineSpacingExtra="-8sp"
         android:text="BY CONTINUING, YOU ACKNOWLEDGE THAT YOU HAVE ACCEPTED OUR TERMS OF SERVICES AND PRIVACY."

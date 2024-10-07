@@ -28,7 +28,7 @@
 
         <activity
             android:name=".Login_RegisterPage.LoginPage.ResetPasswordActivity"
-            android:exported="false" />
+            android:exported="true" />
 
         <receiver android:name=".network.WorkoutReminderReceiver" />
 

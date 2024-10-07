@@ -45,7 +45,7 @@
         android:layout_height="wrap_content"
         android:text="Back"
         android:textColor="@color/white"
-        android:textSize="22sp"
+        android:textSize="21sp"
         app:layout_constraintBottom_toTopOf="@+id/btnAddWorkout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.843"
