@@ -5,9 +5,9 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/bg_gradient"
     tools:context=".Login_RegisterPage.LoginPage.LoginActivity"
-    tools:ignore="HardcodedText"
-    android:background="@drawable/bg_gradient" >
+    tools:ignore="HardcodedText">
 
 
     <ImageView
@@ -75,7 +75,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="1.0">
 
-
+        <!-- Email field -->
         <EditText
             android:id="@+id/Login_UserEmail"
             android:layout_width="match_parent"
@@ -91,19 +91,47 @@
             android:textColor="@color/white"
             android:textColorHint="@color/gray" />
 
-        <EditText
-            android:id="@+id/Password_Usertext"
+        <!-- Password field with show/hide icon -->
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="45dp"
-            android:background="@drawable/button_background"
-            android:ems="10"
-            android:hint="Password"
-            android:inputType="text|textPassword"
-            android:paddingStart="15dp"
-            android:textColor="@color/white"
-            android:textColorHint="@color/gray" />
+            android:background="@drawable/button_background">
+
+            <!-- Password EditText -->
+            <EditText
+                android:id="@+id/Password_Usertext"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:background="@drawable/button_background"
+                android:backgroundTint="@android:color/transparent"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:fontFamily="@font/konkhmer_sleokchher"
+                android:hint="Password"
+                android:inputType="textPassword"
+                android:maxLength="24"
+                android:paddingStart="15dp"
+                android:textColor="@color/white"
+                android:textColorHint="@color/gray" />
+
+
+            <!-- Show/Hide Password Icon -->
+            <ImageView
+                android:id="@+id/password_toggle"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:clickable="true"
+                android:contentDescription="Toggle Password Visibility"
+                android:focusable="true"
+                android:fontFamily="@font/konkhmer_sleokchher"
+                android:padding="10dp"
+                android:src="@drawable/ic_visibility" />
+        </RelativeLayout>
 
     </LinearLayout>
+
 
     <TextView
         android:id="@+id/textView13"
@@ -123,12 +151,12 @@
         android:id="@+id/LoginSignUpTxt"
         android:layout_width="77dp"
         android:layout_height="43dp"
+        android:layout_marginBottom="5dp"
         android:gravity="center"
         android:text="Sign up"
         android:textAllCaps="true"
         android:textColor="@color/custom_orange"
         android:textSize="17sp"
-        android:layout_marginBottom="5dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"

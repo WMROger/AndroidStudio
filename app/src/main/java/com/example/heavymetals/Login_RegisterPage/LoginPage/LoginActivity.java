@@ -1,16 +1,19 @@
 package com.example.heavymetals.Login_RegisterPage.LoginPage;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Typeface;
 import android.os.Bundle;
+import android.text.InputType;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.res.ResourcesCompat;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -31,13 +34,15 @@ public class LoginActivity extends AppCompatActivity {
     private EditText email, passwordEditText;
     private Button loginBtn;
     private TextView signUp, forgetPassword;
+    private ImageView passwordToggle;
+    private boolean isPasswordVisible = false;  // Track password visibility state
     private final String URL_LOGIN = "https://heavymetals.scarlet2.io/HeavyMetals/login_user.php";
     private SharedPreferences sharedPreferences;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Typeface customTypeface = ResourcesCompat.getFont(this, R.font.konkhmer_sleokchher);
 
         sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
         checkLoggedInUser();  // Check if the user is already logged in
@@ -57,7 +62,52 @@ public class LoginActivity extends AppCompatActivity {
 
         forgetPassword.setOnClickListener(v -> navigateToForgetPassword());
         signUp.setOnClickListener(v -> navigateToSignUp());
+
+        // Set onClickListener for toggling password visibility
+        passwordToggle.setOnClickListener(v -> togglePasswordVisibility());
+
+
+        // Set the typeface on the EditText or other text components
+        passwordEditText = findViewById(R.id.Password_Usertext);
+        passwordEditText.setTypeface(customTypeface);
+
     }
+
+    // Initialize UI components
+    private void initializeUI() {
+        email = findViewById(R.id.Login_UserEmail);
+        passwordEditText = findViewById(R.id.Password_Usertext);
+        passwordToggle = findViewById(R.id.password_toggle);  // ImageView for toggling password visibility
+        loginBtn = findViewById(R.id.Login_LoginButton);
+        forgetPassword = findViewById(R.id.Login_ForgetPassPage);
+        signUp = findViewById(R.id.LoginSignUpTxt);
+    }
+
+
+    private void togglePasswordVisibility() {
+        // Save the cursor position so it doesn’t move when we reapply the input type
+        int cursorPosition = passwordEditText.getSelectionStart();
+
+        if (isPasswordVisible) {
+            // Hide password
+            passwordEditText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+            passwordToggle.setImageResource(R.drawable.ic_visibility_off);  // Update icon to 'hide' icon
+            isPasswordVisible = false;
+        } else {
+            // Show password
+            passwordEditText.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+            passwordToggle.setImageResource(R.drawable.ic_visibility);  // Update icon to 'show' icon
+            isPasswordVisible = true;
+        }
+
+        // Reapply the custom font to prevent it from resetting
+        Typeface customTypeface = ResourcesCompat.getFont(this, R.font.konkhmer_sleokchher);
+        passwordEditText.setTypeface(customTypeface);
+
+        // Restore the cursor position
+        passwordEditText.setSelection(cursorPosition);
+    }
+
 
     // Check if the user is already logged in
     private void checkLoggedInUser() {
@@ -68,15 +118,6 @@ public class LoginActivity extends AppCompatActivity {
             // If both user and token are present, consider user as logged in
             navigateToMainActivity();
         }
-    }
-
-    // Initialize UI components
-    private void initializeUI() {
-        email = findViewById(R.id.Login_UserEmail);
-        passwordEditText = findViewById(R.id.Password_Usertext);
-        loginBtn = findViewById(R.id.Login_LoginButton);
-        forgetPassword = findViewById(R.id.Login_ForgetPassPage);
-        signUp = findViewById(R.id.LoginSignUpTxt);
     }
 
     // Validate email and password
@@ -151,8 +192,6 @@ public class LoginActivity extends AppCompatActivity {
         Log.d("LoginActivity", "Saved Token: " + token);
         Log.d("LoginActivity", "Saved User ID: " + userId);
     }
-
-
 
     // Handle Volley errors
     private void handleVolleyError(VolleyError error) {
