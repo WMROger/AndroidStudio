@@ -28,12 +28,13 @@
 
     <TextView
         android:id="@+id/textView26"
-        android:layout_width="347dp"
+        android:layout_width="match_parent"
         android:layout_height="26dp"
         android:layout_marginTop="4dp"
+        android:layout_marginStart="35dp"
         android:layout_weight="1"
         android:letterSpacing="-0.1"
-        android:text="__________________________________________________________________"
+        android:text="___________________________________________________________________________"
         android:textColor="@color/custom_orange"
         android:textStyle="bold"
 
@@ -172,7 +173,7 @@
     <LinearLayout
         android:id="@+id/linearLayout5"
         android:layout_width="357dp"
-        android:layout_height="43dp"
+        android:layout_height="50dp"
         android:layout_marginTop="8dp"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
@@ -180,30 +181,35 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView23">
 
-            <Button
-                android:id="@+id/MaleRadioButton"
-                android:layout_width="130dp"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="10dp"
-                android:layout_weight="1"
-                android:backgroundTint="#000000"
-                android:text="Male"
-                app:cornerRadius="10dp"
-                app:strokeColor="#DE612B"
-                app:strokeWidth="1dp" />
+        <Button
+            android:id="@+id/MaleRadioButton"
+            android:layout_width="130dp"
+            android:layout_height="50dp"
+            android:layout_marginRight="10dp"
+            android:layout_weight="1"
+            android:backgroundTint="#000000"
+            android:text="Male"
+            android:textSize="18sp"
+            android:textAllCaps="false"
+            app:cornerRadius="25dp"
+            app:strokeColor="#DE612B"
+            app:strokeWidth="1dp" />
 
 
-            <Button
-                android:id="@+id/FemaleRadioButton"
-                android:layout_width="130dp"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="10dp"
-                android:layout_weight="1"
-                android:backgroundTint="#000000"
-                android:text="Female"
-                app:cornerRadius="10dp"
-                app:strokeColor="#DE612B"
-                app:strokeWidth="1dp" />
+        <Button
+            android:id="@+id/FemaleRadioButton"
+            android:layout_width="130dp"
+            android:layout_height="50dp"
+            android:layout_marginRight="10dp"
+            android:layout_weight="1"
+            android:backgroundTint="#000000"
+            android:text="Female"
+            android:textSize="18sp"
+
+            android:textAllCaps="false"
+            app:cornerRadius="25dp"
+            app:strokeColor="#DE612B"
+            app:strokeWidth="1dp" />
 
     </LinearLayout>
 
@@ -212,6 +218,7 @@
         android:id="@+id/scrollView2"
         android:layout_width="361dp"
         android:layout_height="440dp"
+        android:scrollbars="none"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.482"
@@ -229,7 +236,7 @@
             <EditText
                 android:id="@+id/et_body_weight"
                 android:layout_width="match_parent"
-                android:layout_height="40.10dp"
+                android:layout_height="50dp"
                 android:height="38.10dp"
                 android:background="@drawable/bg_blackgradient"
                 android:hint="Body Weight (kg)"
@@ -238,13 +245,13 @@
                 android:paddingTop="5dp"
                 android:textColor="#FDFDFD"
                 android:textColorHint="#FFFFFF"
-                android:textSize="15sp" />
+                android:textSize="18sp" />
 
 
             <EditText
                 android:id="@+id/et_height"
                 android:layout_width="match_parent"
-                android:layout_height="40.10dp"
+                android:layout_height="50dp"
                 android:layout_marginTop="10dp"
                 android:height="38.10dp"
                 android:background="@drawable/bg_blackgradient"
@@ -254,13 +261,13 @@
                 android:paddingTop="5dp"
                 android:textColor="#FFFFFF"
                 android:textColorHint="#F2F2F2"
-                android:textSize="15sp" />
+                android:textSize="18sp" />
 
 
             <EditText
                 android:id="@+id/et_chest"
                 android:layout_width="match_parent"
-                android:layout_height="40.10dp"
+                android:layout_height="50dp"
                 android:layout_marginTop="10dp"
                 android:height="38.10dp"
                 android:background="@drawable/bg_blackgradient"
@@ -270,12 +277,12 @@
                 android:paddingTop="5dp"
                 android:textColor="#FFFFFF"
                 android:textColorHint="#FFFFFF"
-                android:textSize="15sp" />
+                android:textSize="18sp" />
 
             <EditText
                 android:id="@+id/et_shoulder"
                 android:layout_width="match_parent"
-                android:layout_height="40.10dp"
+                android:layout_height="50dp"
                 android:layout_marginTop="10dp"
                 android:height="38.10dp"
                 android:background="@drawable/bg_blackgradient"
@@ -285,12 +292,12 @@
                 android:paddingTop="5dp"
                 android:textColor="#FFFFFF"
                 android:textColorHint="#FFFFFF"
-                android:textSize="15sp" />
+                android:textSize="18sp" />
 
             <EditText
                 android:id="@+id/et_waist"
                 android:layout_width="match_parent"
-                android:layout_height="40.10dp"
+                android:layout_height="50dp"
                 android:layout_marginTop="10dp"
                 android:height="38.10dp"
                 android:background="@drawable/bg_blackgradient"
@@ -300,12 +307,12 @@
                 android:paddingTop="5dp"
                 android:textColor="#FFFFFF"
                 android:textColorHint="#FFFFFF"
-                android:textSize="15sp" />
+                android:textSize="18sp" />
 
             <EditText
                 android:id="@+id/et_hips"
                 android:layout_width="match_parent"
-                android:layout_height="40.10dp"
+                android:layout_height="50dp"
                 android:layout_marginTop="10dp"
                 android:height="38.10dp"
                 android:background="@drawable/bg_blackgradient"
@@ -315,7 +322,7 @@
                 android:paddingTop="5dp"
                 android:textColor="#FFFFFF"
                 android:textColorHint="#FFFFFF"
-                android:textSize="15sp" />
+                android:textSize="18sp" />
 
             <GridLayout
                 android:layout_width="370dp"
@@ -327,7 +334,7 @@
                 <EditText
                     android:id="@+id/et_left_bicep"
                     android:layout_width="173dp"
-                    android:layout_height="40.10dp"
+                    android:layout_height="50dp"
                     android:layout_row="0"
                     android:layout_column="0"
                     android:layout_marginTop="10dp"
@@ -341,13 +348,13 @@
                     android:textAlignment="textStart"
                     android:textColor="#FFFFFF"
                     android:textColorHint="#E4E4E4"
-                    android:textSize="15sp" />
+                    android:textSize="18sp" />
 
                 <!-- Right Bicep -->
                 <EditText
                     android:id="@+id/et_right_bicep"
                     android:layout_width="173dp"
-                    android:layout_height="40.10dp"
+                    android:layout_height="50dp"
                     android:layout_marginTop="10dp"
                     android:height="38dp"
                     android:background="@drawable/bg_blackgradient"
@@ -358,13 +365,13 @@
                     android:textAlignment="textStart"
                     android:textColor="#FFFFFF"
                     android:textColorHint="#FFFFFF"
-                    android:textSize="15sp" />
+                    android:textSize="18sp" />
 
                 <!-- Left Forearm -->
                 <EditText
                     android:id="@+id/et_left_forearm"
                     android:layout_width="173dp"
-                    android:layout_height="40.10dp"
+                    android:layout_height="50dp"
                     android:layout_marginTop="10dp"
                     android:layout_marginRight="15dp"
                     android:height="38dp"
@@ -376,13 +383,13 @@
                     android:textAlignment="textStart"
                     android:textColor="#FFFFFF"
                     android:textColorHint="#E4E4E4"
-                    android:textSize="15sp" />
+                    android:textSize="18sp" />
 
                 <!-- Right Forearm -->
                 <EditText
                     android:id="@+id/et_right_forearm"
                     android:layout_width="173dp"
-                    android:layout_height="40.10dp"
+                    android:layout_height="50dp"
                     android:layout_marginTop="10dp"
                     android:height="38dp"
                     android:background="@drawable/bg_blackgradient"
@@ -393,13 +400,13 @@
                     android:textAlignment="textStart"
                     android:textColor="#FFFFFF"
                     android:textColorHint="#FFFFFF"
-                    android:textSize="15sp" />
+                    android:textSize="18sp" />
 
                 <!-- Left Calf -->
                 <EditText
                     android:id="@+id/et_left_calf"
                     android:layout_width="173dp"
-                    android:layout_height="40.10dp"
+                    android:layout_height="50dp"
                     android:layout_marginTop="10dp"
                     android:layout_marginRight="10dp"
                     android:height="38dp"
@@ -411,13 +418,13 @@
                     android:textAlignment="textStart"
                     android:textColor="#FFFFFF"
                     android:textColorHint="#E4E4E4"
-                    android:textSize="15sp" />
+                    android:textSize="18sp" />
 
                 <!-- Right Calf -->
                 <EditText
                     android:id="@+id/et_right_calf"
                     android:layout_width="173dp"
-                    android:layout_height="40.10dp"
+                    android:layout_height="50dp"
                     android:layout_marginTop="10dp"
                     android:height="38dp"
                     android:background="@drawable/bg_blackgradient"
@@ -428,7 +435,7 @@
                     android:textAlignment="textStart"
                     android:textColor="#FFFFFF"
                     android:textColorHint="#FFFFFF"
-                    android:textSize="15sp" />
+                    android:textSize="18sp" />
 
             </GridLayout>
 

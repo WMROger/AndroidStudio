@@ -12,7 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.heavymetals.R;
 
 public class FitnessDeclaration3 extends AppCompatActivity {
-    private TextView Fitness_Declaration_2;
+    private TextView Fitness_Declaration_2,BMI;
     private Button btnPFDnext3;
     private Button btn33, btn34,btn27,btn28,btn29;  // Declare the YES and NO buttons
     private String selectedDays; // Declare selectedDays variable here
@@ -21,6 +21,10 @@ public class FitnessDeclaration3 extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile_fitness_declaration_3);
+
+
+
+
 
         // Initialize Views
         Fitness_Declaration_2 = findViewById(R.id.Fitness_Declaration_2);
@@ -31,6 +35,7 @@ public class FitnessDeclaration3 extends AppCompatActivity {
         btn28 = findViewById(R.id.button28); // 5+ days button
         btn29 = findViewById(R.id.button29); // 3-4 days button
         Spinner spinnerStrengthExperience = findViewById(R.id.spinner_strength_experience);
+        BMI = findViewById(R.id.BMI);  // Initialize the TextView for BMI
 
 
         // Set Listeners for the Days buttons (btn27, btn28, btn29)
@@ -115,5 +120,18 @@ public class FitnessDeclaration3 extends AppCompatActivity {
 
         // Apply the adapter to the spinner
         spinnerStrengthExperience.setAdapter(adapter);
+        setBmiText();
     }
+
+
+
+    private void setBmiText() {
+        // Retrieve the BMI value from the Intent
+        Intent intent = getIntent();
+        double bmi = intent.getDoubleExtra("BMI_VALUE", 0.0);  // Default value is 0.0 if not found
+
+        // Display the BMI in the TextView
+        BMI.setText(String.format("%.2f", bmi));
+    }
+
 }

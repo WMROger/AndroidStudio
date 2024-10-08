@@ -220,8 +220,14 @@ public class WorkoutModule4 extends AppCompatActivity {
         // Navigate back to the main activity
         wm4_Back_txt.setOnClickListener(v -> navigateToMainActivity());
 
+        // Save workouts button listener
         wm4_Save_btn.setOnClickListener(v -> {
-            Toast.makeText(getApplicationContext(), "Workout saved successfully", Toast.LENGTH_SHORT).show();
+            if (!workoutList.isEmpty()) {
+                saveWorkoutsForUser(workoutList);
+                Toast.makeText(WorkoutModule4.this, "Workout saved successfully!", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(WorkoutModule4.this, "No workout to save.", Toast.LENGTH_SHORT).show();
+            }
         });
 
     }

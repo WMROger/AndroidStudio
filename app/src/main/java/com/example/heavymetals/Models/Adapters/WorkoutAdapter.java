@@ -1,5 +1,6 @@
 package com.example.heavymetals.Models.Adapters;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
@@ -61,7 +62,23 @@ public class WorkoutAdapter extends RecyclerView.Adapter<WorkoutAdapter.WorkoutV
 
         // Set up the view and delete button click listeners
         holder.viewWorkoutButton.setOnClickListener(v -> listener.onViewWorkoutClick(workout));
-        holder.deleteWorkoutButton.setOnClickListener(v -> listener.onWorkoutDeleted(workout));
+        holder.deleteWorkoutButton.setOnClickListener(v -> {
+            // Create an AlertDialog for confirmation
+            new AlertDialog.Builder(v.getContext())
+                    .setTitle("Delete Workout")
+                    .setMessage("Are you sure you want to delete this workout?")
+                    .setPositiveButton("Yes", (dialog, which) -> {
+                        // If the user confirms, delete the workout
+                        listener.onWorkoutDeleted(workout);
+                        Toast.makeText(v.getContext(), "Workout deleted successfully", Toast.LENGTH_SHORT).show();
+                    })
+                    .setNegativeButton("No", (dialog, which) -> {
+                        // If the user cancels, dismiss the dialog
+                        dialog.dismiss();
+                    })
+                    .create()
+                    .show();
+        });
     }
 
 

@@ -64,6 +64,7 @@ public class FitnessDeclaration2 extends AppCompatActivity {
         etRightCalf = findViewById(R.id.et_right_calf);
 
 
+
         FD2_Save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -94,10 +95,30 @@ public class FitnessDeclaration2 extends AppCompatActivity {
             MaleButton.setBackgroundTintList(getResources().getColorStateList(R.color.black)); // Reset Male
         });
 
-        // Button to submit data
         btnPFDnext2.setOnClickListener(v -> {
-            sendDataToServer();  // Send the data when the "Next" button is clicked
+            String weightText = etBodyWeight.getText().toString();
+            String heightText = etHeight.getText().toString();
+
+            if (!weightText.isEmpty() && !heightText.isEmpty()) {
+                try {
+                    double weight = Double.parseDouble(weightText);
+                    double height = Double.parseDouble(heightText) / 100; // Convert height to meters
+
+                    double bmi = weight / (height * height);
+
+                    // Pass the BMI value to the next activity
+                    Intent intent = new Intent(FitnessDeclaration2.this, FitnessDeclaration3.class);
+                    intent.putExtra("BMI_VALUE", bmi);  // Passing the BMI
+                    startActivity(intent);
+
+                } catch (NumberFormatException e) {
+                    Toast.makeText(FitnessDeclaration2.this, "Invalid input", Toast.LENGTH_SHORT).show();
+                }
+            } else {
+                Toast.makeText(FitnessDeclaration2.this, "Please enter weight and height", Toast.LENGTH_SHORT).show();
+            }
         });
+
 
         // Navigate to previous activity
         Profile_Declaration_2.setOnClickListener(v -> {

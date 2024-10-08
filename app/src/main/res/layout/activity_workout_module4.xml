@@ -55,7 +55,7 @@
     <Button
         android:id="@+id/btnAddWorkout"
         android:layout_width="300dp"
-        android:layout_height="wrap_content"
+        android:layout_height="65dp"
         android:backgroundTint="#000000"
         android:includeFontPadding="false"
         android:text="Add Workout"
@@ -63,6 +63,7 @@
         android:textAllCaps="false"
         android:textColor="#FFFFFF"
         android:textSize="17sp"
+        android:paddingEnd="25dp"
         app:cornerRadius="20dp"
         app:icon="@drawable/plus_icon"
         app:iconTint="#DE612B"
