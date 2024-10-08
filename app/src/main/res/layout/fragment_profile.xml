@@ -127,7 +127,9 @@
             android:layout_marginTop="10dp"
             android:backgroundTint="#DE612B"
             android:text="Continue"
-            android:textColor="#FFFFFF" />
+            android:textAllCaps="false"
+            android:textColor="#FFFFFF"
+            app:cornerRadius="25dp" />
 
     </LinearLayout>
 
