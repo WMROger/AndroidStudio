@@ -52,11 +52,11 @@ import android.os.Looper;
 
 public class WorkoutModule4 extends AppCompatActivity {
 
-    private Button addWorkout;
+    private Button addWorkout, wm4_Save_btn;
     private RecyclerView recyclerView;
     private WorkoutAdapter workoutAdapter;
     private List<Workout> workoutList;
-    private TextView wm4_Back_txt, wm4_Save_txt;
+    private TextView wm4_Back_txt;
     private static final String CHANNEL_ID = "workout_notifications";  // Define CHANNEL_ID as a constant
     private static final int NOTIFICATION_ID = 100;  // Unique ID for notifications
     private Handler handler = new Handler(Looper.getMainLooper()); // Use Handler to schedule the task
@@ -205,6 +205,7 @@ public class WorkoutModule4 extends AppCompatActivity {
     private void initializeUI() {
         addWorkout = findViewById(R.id.btnAddWorkout);
         wm4_Back_txt = findViewById(R.id.wm4_Back_txt);
+        wm4_Save_btn = findViewById(R.id.wm4_save_btn);
         recyclerView = findViewById(R.id.recyclerViewWorkouts);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -219,6 +220,9 @@ public class WorkoutModule4 extends AppCompatActivity {
         // Navigate back to the main activity
         wm4_Back_txt.setOnClickListener(v -> navigateToMainActivity());
 
+        wm4_Save_btn.setOnClickListener(v -> {
+            Toast.makeText(getApplicationContext(), "Workout saved successfully", Toast.LENGTH_SHORT).show();
+        });
 
     }
 
