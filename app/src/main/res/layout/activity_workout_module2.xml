@@ -81,7 +81,6 @@
         android:layout_width="378dp"
         android:layout_height="571dp"
         android:background="@drawable/bg_blackgradient"
-
         app:layout_constraintBottom_toTopOf="@+id/WM2AddExercisebtn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.515"
