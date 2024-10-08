@@ -29,7 +29,7 @@
         app:layout_constraintVertical_bias="0.96" />
 
     <Button
-        android:id="@+id/Login_LoginButton"
+        android:id="@+id/Settings_LogoutButton"
         android:layout_width="357dp"
         android:layout_height="49dp"
         android:text="Log out"
@@ -51,7 +51,7 @@
         android:textAllCaps="false"
         android:textColor="@color/custom_orange"
         app:cornerRadius="20dp"
-        app:layout_constraintBottom_toTopOf="@+id/Login_LoginButton"
+        app:layout_constraintBottom_toTopOf="@+id/Settings_LogoutButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -150,7 +150,7 @@
             android:layout_marginBottom="-10dp"
             android:backgroundTint="#000000"
             android:drawableEnd="@drawable/right_arrow_icon"
-            android:text="Help Center"
+            android:text="FAQs"
             android:textAlignment="textStart"
             android:textAllCaps="false"
             app:cornerRadius="20dp"
