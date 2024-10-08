@@ -13,6 +13,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.heavymetals.Home_LandingPage.Profile.ProfileFinish;
+import com.example.heavymetals.Login_RegisterPage.LoginPage.LoginActivity;
 import com.example.heavymetals.R;
 
 public class TermsConditionsActivity extends AppCompatActivity {
@@ -51,7 +52,7 @@ public class TermsConditionsActivity extends AppCompatActivity {
                 String lastName = getIntent().getStringExtra("last_name");
                 String userId = getIntent().getStringExtra("user_id");
 
-                Intent fitnessIntent = new Intent(TermsConditionsActivity.this, ProfileFinish.class);
+                Intent fitnessIntent = new Intent(TermsConditionsActivity.this, LoginActivity.class);
                 fitnessIntent.putExtra("user_id", userId);  // Pass user_id to FitnessDeclaration
                 fitnessIntent.putExtra("first_name", firstName);
                 fitnessIntent.putExtra("last_name", lastName);

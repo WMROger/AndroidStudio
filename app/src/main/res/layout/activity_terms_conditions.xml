@@ -8,71 +8,87 @@
     android:background="@drawable/bg_gradient"
     tools:context=".Login_RegisterPage.RegisterPage.TermsConditionsActivity">
 
+    <TextView
+        android:id="@+id/textView8"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:paddingStart="10dp"
+        android:text="@string/Disclaimer"
+        android:textColor="@color/white"
+        android:textSize="37sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.487"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.094"
+        app:lineHeight="70px" />
+
     <ScrollView
+        android:id="@+id/scrollView3"
         android:layout_width="409dp"
-        android:layout_height="729dp"
+        android:layout_height="500dp"
+        android:layout_marginBottom="150dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@+id/textView8">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical" >
+            android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/textView8"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="30dp"
-                android:layout_marginEnd="30dp"
-                android:gravity="center"
-                android:text="@string/Disclaimer"
-                android:textColor="@color/white"
-                android:textSize="37sp"
-                app:lineHeight="70px" />
 
             <TextView
                 android:id="@+id/textView9"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="50dp"
-                android:layout_marginEnd="50dp"
+                android:layout_marginStart="30dp"
+                android:layout_marginEnd="30dp"
                 android:gravity="center"
                 android:text="@string/terms_and_conditions_1"
                 android:textColor="@color/white"
-                android:textSize="16sp"
-                app:lineHeight="50px" />
+                android:textSize="18sp"
+                app:lineHeight="40px" />
 
             <CheckBox
                 android:id="@+id/tncConfirmation"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="30dp"
                 android:layout_marginTop="20dp"
+                android:layout_marginEnd="30dp"
                 android:layout_marginBottom="10dp"
-                android:layout_marginStart="50dp"
-                android:layout_marginEnd="50dp"
-                android:background="@drawable/button_background"
+                android:background="@drawable/workout_bg_gray"
                 android:button="@null"
                 android:drawableEnd="?android:attr/listChoiceIndicatorMultiple"
-                android:paddingLeft="20sp"
+                android:paddingStart="20sp"
+                android:paddingTop="10sp"
+                android:paddingEnd="10dp"
+                android:paddingBottom="10sp"
                 android:text="@string/ConfirmationTnC"
                 android:textAlignment="inherit"
                 android:textColor="@color/white"
-                android:textSize="12sp" />
+                android:textSize="16sp" />
 
-            <Button
-                android:id="@+id/tncIagree"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="50dp"
-                android:layout_marginEnd="50dp"
-                android:enabled="false"
-                android:text="I agree"
-                android:textColor="@color/white"
-                app:cornerRadius="16sp" />
 
         </LinearLayout>
     </ScrollView>
+
+    <Button
+        android:id="@+id/tncIagree"
+        android:layout_width="250dp"
+        android:layout_height="70dp"
+        android:enabled="false"
+        android:text="I agree"
+        android:textAllCaps="false"
+        android:textSize="18sp"
+        android:textColor="@color/white"
+        app:cornerRadius="50sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/scrollView3" />
 </androidx.constraintlayout.widget.ConstraintLayout>

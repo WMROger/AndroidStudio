@@ -14,6 +14,7 @@
         android:icon="@mipmap/heavymetals"
         android:label="HeavyMetals"
         android:roundIcon="@mipmap/heavymetals_round"
+        android:screenOrientation="portrait"
         android:supportsRtl="true"
         android:theme="@style/Theme.NavigationDrawer"
         android:usesCleartextTraffic="true"
