@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,7 +30,7 @@ import java.net.URLEncoder;
 public class ProfileFragment extends Fragment {
 
     private TextView firstNameTextView, emailTextView, editProfile;
-
+    private Button continue_btn;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -40,7 +41,7 @@ public class ProfileFragment extends Fragment {
         firstNameTextView = view.findViewById(R.id.Menu_User_Firstname);
         emailTextView = view.findViewById(R.id.Menu_User_Email);
         editProfile = view.findViewById(R.id.edit_profile);
-
+        continue_btn = view.findViewById(R.id.continue_button);
         // Fetch user email from SharedPreferences
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences("UserPrefs", Context.MODE_PRIVATE);
         String userEmail = sharedPreferences.getString("loggedInUser", null);
@@ -50,7 +51,11 @@ public class ProfileFragment extends Fragment {
         } else {
             Toast.makeText(getActivity(), "No logged-in user found.", Toast.LENGTH_SHORT).show();
         }
-
+        // Set onClickListener to redirect to Profile Infos
+        continue_btn.setOnClickListener(v -> {
+            Intent intent = new Intent(getActivity(), ProfileCreation.class);
+            startActivity(intent);
+        });
         // Set onClickListener to redirect to ProfileEditActivity
         editProfile.setOnClickListener(v -> {
             Intent intent = new Intent(getActivity(), ProfileEditActivity.class);
