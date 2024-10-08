@@ -272,17 +272,17 @@
 
         <Button
             android:id="@+id/RecommendationsShortcut_btn"
-            android:layout_width="183dp"
+            android:layout_width="163dp"
             android:layout_height="91dp"
             android:layout_alignStart="@+id/imageView4"
             android:layout_alignEnd="@+id/imageView4"
             android:layout_alignParentTop="true"
             android:layout_alignParentBottom="true"
             android:layout_centerInParent="true"
-            android:layout_marginStart="187dp"
-            android:layout_marginTop="114dp"
+            android:layout_marginStart="207dp"
+            android:layout_marginTop="116dp"
             android:layout_marginEnd="16dp"
-            android:layout_marginBottom="11dp"
+            android:layout_marginBottom="8dp"
             android:backgroundTint="@color/dark_gray"
             android:drawableTop="@drawable/like_icon"
             android:gravity="center|bottom"
@@ -290,7 +290,7 @@
             android:text="Recommendations"
             android:textAllCaps="false"
             android:textColor="@color/custom_orange"
-            android:textSize="14sp"
+            android:textSize="12sp"
             app:cornerRadius="20dp" />
 
         <TextView
@@ -351,7 +351,7 @@
             android:layout_centerInParent="true"
             android:layout_marginStart="25dp"
             android:layout_marginTop="115dp"
-            android:layout_marginEnd="206dp"
+            android:layout_marginEnd="200dp"
             android:layout_marginBottom="8dp"
             android:backgroundTint="@color/dark_gray"
             android:drawableTop="@drawable/build_muscle"
