@@ -9,7 +9,6 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.heavymetals.Login_RegisterPage.RegisterPage.ProfileCreation.ProfileFinish;
 import com.example.heavymetals.R;
 
 public class FitnessDeclaration3 extends AppCompatActivity {

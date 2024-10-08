@@ -12,7 +12,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import com.example.heavymetals.Login_RegisterPage.RegisterPage.ProfileCreation.ProfileFinish;
+import com.example.heavymetals.Home_LandingPage.Profile.ProfileFinish;
 import com.example.heavymetals.R;
 
 public class TermsConditionsActivity extends AppCompatActivity {

@@ -1,9 +1,8 @@
-package com.example.heavymetals.Home_LandingPage;
+package com.example.heavymetals.Home_LandingPage.Profile;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;

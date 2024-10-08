@@ -23,7 +23,7 @@
             android:name=".Home_LandingPage.Tracker.WorkoutTrackerActivity"
             android:exported="false" />
         <activity
-            android:name=".Home_LandingPage.ProfileEditActivity"
+            android:name=".Home_LandingPage.Profile.ProfileEditActivity"
             android:exported="false" />
         <activity
             android:name=".Login_RegisterPage.LoginPage.CodeInputActivity"
@@ -59,7 +59,7 @@
             android:name=".Login_RegisterPage.LoginPage.ForgetPasswordActivity"
             android:exported="false" />
         <activity
-            android:name=".Login_RegisterPage.RegisterPage.ProfileCreation.ProfileFinish"
+            android:name=".Home_LandingPage.Profile.ProfileFinish"
             android:exported="false"
             android:windowSoftInputMode="adjustPan" />
         <activity

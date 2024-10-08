@@ -1,4 +1,4 @@
-package com.example.heavymetals.Login_RegisterPage.RegisterPage.ProfileCreation;
+package com.example.heavymetals.Home_LandingPage.Profile;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -7,9 +7,6 @@ import android.widget.Button;
 
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 import com.example.heavymetals.Login_RegisterPage.LoginPage.LoginActivity;
 import com.example.heavymetals.R;
