@@ -139,7 +139,7 @@ public class ProfileFragment extends Fragment {
             }
 
             // Move the other layout to the top by removing margins
-            View mainLayout = view.findViewById(R.id.fragment_container);  // Reference to the layout that should move up
+            View mainLayout = view.findViewById(R.id.workout_layout);  // Reference to the layout that should move up
             if (mainLayout != null) {
                 // Remove margins programmatically if using LinearLayout or similar layout
                 ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) mainLayout.getLayoutParams();
