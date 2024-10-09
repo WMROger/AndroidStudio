@@ -23,6 +23,9 @@
         tools:ignore="DiscouragedApi,LockedOrientationActivity"
         tools:targetApi="31">
         <activity
+            android:name=".Home_LandingPage.MeasurementsActivity"
+            android:exported="false" />
+        <activity
             android:name=".Home_LandingPage.Tracker.WorkoutTrackerActivity"
             android:exported="false" />
         <activity

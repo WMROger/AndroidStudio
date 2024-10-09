@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Home_LandingPage.MeasurementsActivity"
+    android:background="@drawable/bg_gradient">
+
+    <TextView
+        android:id="@+id/msrstng"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Measurements"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.114"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.058" />
+
+    <TextView
+        android:id="@+id/msrstng"
+        android:layout_width="350dp"
+        android:layout_height="wrap_content"
+        android:text="@string/measurement_msg"
+        android:textColor="@color/white"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.142"
+        app:lineHeight="10dp" />
+
+    <TextView
+        android:id="@+id/back_profile"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Back"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.917"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.058" />
+
+    <Button
+        android:id="@+id/save_profile"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:text="Save"
+        android:textAllCaps="false"
+
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        app:cornerRadius="25sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.883" />
+
+    <ScrollView
+        android:id="@+id/scrollView4"
+        android:layout_width="wrap_content"
+        android:layout_height="530dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+
+        <LinearLayout
+            android:layout_width="350dp"
+            android:layout_height="wrap_content"
+            android:isScrollContainer="true"
+            android:orientation="vertical"
+            android:scrollbars="none"
+            android:verticalScrollbarPosition="defaultPosition"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.354"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:layout_editor_absoluteY="276dp">
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/button_background"
+                android:hint="Body Weight (kg)"
+                android:paddingLeft="15dp"
+                android:paddingTop="10dp"
+                android:textColor="#FFFFFF"
+                android:textColorHint="#F2F2F2" />
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginTop="10dp"
+                android:height="38.10dp"
+                android:background="@drawable/button_background"
+                android:hint="Height (cm)"
+                android:paddingLeft="15dp"
+                android:paddingTop="10dp"
+                android:textColor="#FFFFFF"
+                android:textColorHint="#F2F2F2" />
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginTop="10dp"
+                android:height="38.10dp"
+                android:background="@drawable/button_background"
+                android:hint="Chest (cm)"
+                android:paddingLeft="15dp"
+                android:paddingTop="10dp"
+                android:textColor="#FFFFFF"
+                android:textColorHint="#FFFFFF" />
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginTop="10dp"
+                android:height="38.10dp"
+                android:background="@drawable/button_background"
+                android:hint="Shoulder (cm)"
+                android:paddingLeft="15dp"
+                android:paddingTop="10dp"
+
+
+                android:textColor="#FFFFFF"
+                android:textColorHint="#FFFFFF" />
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginTop="10dp"
+                android:height="38.10dp"
+                android:background="@drawable/button_background"
+                android:hint="Waist (cm)"
+                android:paddingLeft="15dp"
+                android:paddingTop="10dp"
+                android:textColor="#FFFFFF"
+                android:textColorHint="#FFFFFF" />
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginTop="10dp"
+                android:height="38.10dp"
+                android:background="@drawable/button_background"
+                android:hint="Hips (cm)"
+                android:paddingLeft="15dp"
+                android:paddingTop="10dp"
+                android:textColor="#FFFFFF"
+                android:textColorHint="#FFFFFF" />
+
+
+            <GridLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:columnCount="2"
+                android:rowCount="3">
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="48dp"
+                    android:layout_row="0"
+                    android:layout_column="0"
+                    android:layout_columnWeight="1"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginRight="15dp"
+                    android:height="38dp"
+                    android:background="@drawable/button_background"
+                    android:hint="Left Bicep (cm)"
+                    android:paddingLeft="15dp"
+                    android:paddingTop="10dp"
+                    android:textAlignment="textStart"
+                    android:textColor="#FFFFFF"
+                    android:textColorHint="#E4E4E4" />
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="48dp"
+                    android:layout_columnWeight="1"
+                    android:layout_marginTop="10dp"
+                    android:height="38dp"
+                    android:background="@drawable/button_background"
+                    android:hint="Right Bicep (cm)"
+                    android:paddingLeft="15dp"
+                    android:paddingTop="10dp"
+                    android:textAlignment="textStart"
+                    android:textColor="#FFFFFF"
+                    android:textColorHint="#FFFFFF" />
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="48dp"
+                    android:layout_columnWeight="1"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginRight="15dp"
+                    android:height="38dp"
+                    android:background="@drawable/button_background"
+                    android:hint="Left Forearm (cm)"
+                    android:paddingLeft="15dp"
+                    android:paddingTop="10dp"
+
+
+                    android:textAlignment="textStart"
+                    android:textColor="#FFFFFF"
+                    android:textColorHint="#E4E4E4" />
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="48dp"
+                    android:layout_columnWeight="1"
+                    android:layout_marginTop="10dp"
+                    android:height="38dp"
+                    android:background="@drawable/button_background"
+                    android:hint="Right Forearm (cm)"
+                    android:paddingLeft="15dp"
+                    android:paddingTop="10dp"
+                    android:textAlignment="textStart"
+                    android:textColor="#FFFFFF"
+                    android:textColorHint="#FFFFFF" />
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="48dp"
+                    android:layout_columnWeight="1"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginRight="15dp"
+                    android:height="38dp"
+                    android:background="@drawable/button_background"
+                    android:hint="Left Calf (cm)"
+                    android:paddingLeft="15dp"
+                    android:paddingTop="10dp"
+                    android:textAlignment="textStart"
+                    android:textColor="#FFFFFF"
+                    android:textColorHint="#E4E4E4" />
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="48dp"
+                    android:layout_columnWeight="1"
+                    android:layout_marginTop="10dp"
+                    android:height="38dp"
+                    android:background="@drawable/button_background"
+                    android:hint="Right Calf (cm)"
+                    android:paddingLeft="15dp"
+                    android:paddingTop="10dp"
+                    android:textAlignment="textStart"
+                    android:textColor="#FFFFFF"
+                    android:textColorHint="#FFFFFF" />
+            </GridLayout>
+
+
+        </LinearLayout>
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

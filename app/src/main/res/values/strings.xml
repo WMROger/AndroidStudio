@@ -44,6 +44,6 @@ as a result of your use of the app.
         <item>I do 4-5 intense sessions per week (Advanced)</item>
         <item>I train 5-6 times a week, advanced techniques (Pro)</item>
     </string-array>
-
+<string name="measurement_msg">This measurements are information you have given when you first created your account feel free to edit your data to fully observe your transformation.</string>
 
 </resources>

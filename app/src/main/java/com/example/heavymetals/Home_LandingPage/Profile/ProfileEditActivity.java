@@ -1,8 +1,10 @@
 package com.example.heavymetals.Home_LandingPage.Profile;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -12,6 +14,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.heavymetals.Home_LandingPage.MeasurementsActivity;
 import com.example.heavymetals.R;
 
 import org.json.JSONObject;
@@ -31,8 +34,8 @@ import org.json.JSONException; // Import this to handle JSON exception
 public class ProfileEditActivity extends AppCompatActivity {
 
     private EditText firstNameEditText, lastNameEditText;
-    private TextView backButton,saveButton;
-
+    private TextView backButton;
+    private Button ViewMeasurements;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,9 +51,8 @@ public class ProfileEditActivity extends AppCompatActivity {
         // Initialize UI components
         firstNameEditText = findViewById(R.id.edit_firstname);
         lastNameEditText = findViewById(R.id.edit_lastname);
-        saveButton = findViewById(R.id.save_profile);
         backButton = findViewById(R.id.back_profile);
-
+        ViewMeasurements = findViewById(R.id.View_Measurements);
 
         // Fetch user details from SharedPreferences to pre-fill the fields
         SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", Context.MODE_PRIVATE);
@@ -62,18 +64,10 @@ public class ProfileEditActivity extends AppCompatActivity {
             Toast.makeText(this, "No logged-in user found.", Toast.LENGTH_SHORT).show();
         }
 
-        // Save button listener to save the changes
-        saveButton.setOnClickListener(v -> {
-            String firstName = firstNameEditText.getText().toString().trim();
-            String lastName = lastNameEditText.getText().toString().trim();
-
-            // Perform the update operation
-            if (!firstName.isEmpty() && !lastName.isEmpty() ) {
-                updateUserDetails(firstName, lastName);
-            } else {
-                Toast.makeText(ProfileEditActivity.this, "Please fill in all fields", Toast.LENGTH_SHORT).show();
-            }
+        ViewMeasurements.setOnClickListener(view -> {
+            Intent intent = new Intent(ProfileEditActivity.this, MeasurementsActivity.class);
         });
+
         backButton.setOnClickListener(v -> finish());
     }
 

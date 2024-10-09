@@ -91,6 +91,12 @@ public class RegisterActivity extends AppCompatActivity {
             return false;
         }
 
+        // Check password for at least one uppercase letter, one lowercase letter, and one digit
+        if (!password.matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).+$")) {
+            showToast("Password must contain at least one uppercase letter, one lowercase letter, and a number.");
+            return false;
+        }
+
         if (password.length() < 6) {
             showToast("Password must be at least 6 characters long.");
             return false;
@@ -103,6 +109,7 @@ public class RegisterActivity extends AppCompatActivity {
 
         return true;
     }
+
 
     private void registerUser() {
         btnDone.setEnabled(false); // Disable button to prevent multiple clicks
