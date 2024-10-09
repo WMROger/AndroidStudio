@@ -1,6 +1,8 @@
 package com.example.heavymetals.Home_LandingPage.Profile;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -24,13 +26,27 @@ import java.util.Map;
 
 public class FitnessDeclaration2 extends AppCompatActivity {
 
-    private TextView Profile_Declaration_2,FD2_Save;
+    private TextView Profile_Declaration_2, FD2_Save;
     private Button btnPFDnext2, MaleButton, FemaleButton;
     private String selectedGender;
 
     // Declare all EditText fields for the measurements
     private EditText etBodyWeight, etHeight, etChest, etShoulder, etWaist, etHips, etLeftBicep, etRightBicep, etLeftForearm, etRightForearm, etLeftCalf, etRightCalf;
 
+    // Constants for progress tracking
+    private static final String PREFS_NAME = "UserProgressPrefs";
+    private static final String PROGRESS_KEY = "progress";
+    private static final String STEP_COMPLETED_KEY = "fitness_declaration_2_completed";
+    private static final int FITNESS_DECLARATION_2_PROGRESS = 25;  // Each step gives 25% progress
+    private static final String FITNESS_DECLARATION_2_COMPLETED = "fitness_declaration_2_completed";
+
+    // Update method to mark step as completed
+    private void markStepAsCompleted() {
+        SharedPreferences sharedPreferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean(FITNESS_DECLARATION_2_COMPLETED, true);  // Mark step as completed
+        editor.apply();
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,19 +79,19 @@ public class FitnessDeclaration2 extends AppCompatActivity {
         etLeftCalf = findViewById(R.id.et_left_calf);
         etRightCalf = findViewById(R.id.et_right_calf);
 
-
-
+        // Skip button to move to the next step without saving data
         FD2_Save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                updateProgress(FITNESS_DECLARATION_2_PROGRESS);
                 Intent intent = new Intent(FitnessDeclaration2.this, FitnessDeclaration3.class);
                 startActivity(intent);
             }
         });
-        // Set up click listeners for the buttons
+
+        // Set up click listeners for the gender buttons
         MaleButton.setOnClickListener(v -> {
             selectedGender = "male";
-
             // Highlight Male Button and Reset Female Button
             MaleButton.setTextColor(getResources().getColor(R.color.white));
             MaleButton.setBackgroundTintList(getResources().getColorStateList(R.color.custom_orange)); // Highlight Male
@@ -86,7 +102,6 @@ public class FitnessDeclaration2 extends AppCompatActivity {
 
         FemaleButton.setOnClickListener(v -> {
             selectedGender = "female";
-
             // Highlight Female Button and Reset Male Button
             FemaleButton.setTextColor(getResources().getColor(R.color.white));
             FemaleButton.setBackgroundTintList(getResources().getColorStateList(R.color.custom_orange)); // Highlight Female
@@ -95,6 +110,7 @@ public class FitnessDeclaration2 extends AppCompatActivity {
             MaleButton.setBackgroundTintList(getResources().getColorStateList(R.color.black)); // Reset Male
         });
 
+        // Next button to proceed to the next step
         btnPFDnext2.setOnClickListener(v -> {
             String weightText = etBodyWeight.getText().toString();
             String heightText = etHeight.getText().toString();
@@ -106,7 +122,11 @@ public class FitnessDeclaration2 extends AppCompatActivity {
 
                     double bmi = weight / (height * height);
 
-                    // Pass the BMI value to the next activity
+                    // Send data to the server and proceed to the next activity
+                    sendDataToServer();
+
+                    // Update progress after submission
+                    updateProgress(FITNESS_DECLARATION_2_PROGRESS);
                     Intent intent = new Intent(FitnessDeclaration2.this, FitnessDeclaration3.class);
                     intent.putExtra("BMI_VALUE", bmi);  // Passing the BMI
                     startActivity(intent);
@@ -118,7 +138,6 @@ public class FitnessDeclaration2 extends AppCompatActivity {
                 Toast.makeText(FitnessDeclaration2.this, "Please enter weight and height", Toast.LENGTH_SHORT).show();
             }
         });
-
 
         // Navigate to previous activity
         Profile_Declaration_2.setOnClickListener(v -> {
@@ -167,5 +186,15 @@ public class FitnessDeclaration2 extends AppCompatActivity {
 
         // Add the request to the RequestQueue
         queue.add(stringRequest);
+    }
+
+    // Method to update the progress in SharedPreferences
+    private void updateProgress(int progressIncrement) {
+        SharedPreferences sharedPreferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        int currentProgress = sharedPreferences.getInt(PROGRESS_KEY, 0);
+
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt(PROGRESS_KEY, currentProgress + progressIncrement);  // Increment progress
+        editor.apply();
     }
 }

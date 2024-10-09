@@ -1,6 +1,7 @@
 package com.example.heavymetals.Home_LandingPage.Profile;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -17,14 +18,16 @@ public class FitnessDeclaration3 extends AppCompatActivity {
     private Button btn33, btn34,btn27,btn28,btn29;  // Declare the YES and NO buttons
     private String selectedDays; // Declare selectedDays variable here
 
+
+    // Constants for SharedPreferences
+    private static final String PREFS_NAME = "UserProgressPrefs";
+    private static final String PROGRESS_KEY = "progress";
+    private static final String FITNESS_DECLARATION_3_COMPLETED = "fitness_declaration_3_completed";
+    private static final int FITNESS_DECLARATION_3_PROGRESS = 25; // 25% for this step
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile_fitness_declaration_3);
-
-
-
-
 
         // Initialize Views
         Fitness_Declaration_2 = findViewById(R.id.Fitness_Declaration_2);
@@ -102,11 +105,15 @@ public class FitnessDeclaration3 extends AppCompatActivity {
             startActivity(intent);
         });
 
+        // In your btnPFDnext3 onClickListener, after setting the next intent:
         btnPFDnext3.setOnClickListener(v -> {
-            // Optional: Change text color for visual feedback (you can remove this line if not needed)
             btnPFDnext3.setTextColor(getResources().getColor(R.color.white));
 
-            // Navigate to the next screen
+            // Mark this step as completed and update progress
+            markStepAsCompleted();
+            updateProgress(FITNESS_DECLARATION_3_PROGRESS);
+
+            // Proceed to the next screen (ProfileFinish)
             Intent intent = new Intent(FitnessDeclaration3.this, ProfileFinish.class);
             startActivity(intent);
         });
@@ -123,7 +130,23 @@ public class FitnessDeclaration3 extends AppCompatActivity {
         setBmiText();
     }
 
+    // Method to mark this step as completed
+    private void markStepAsCompleted() {
+        SharedPreferences sharedPreferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean(FITNESS_DECLARATION_3_COMPLETED, true);  // Mark step as completed
+        editor.apply();
+    }
 
+    // Method to update progress
+    private void updateProgress(int progressIncrement) {
+        SharedPreferences sharedPreferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        int currentProgress = sharedPreferences.getInt(PROGRESS_KEY, 0);
+
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt(PROGRESS_KEY, currentProgress + progressIncrement);  // Increment progress
+        editor.apply();
+    }
 
     private void setBmiText() {
         // Retrieve the BMI value from the Intent

@@ -1,6 +1,8 @@
 package com.example.heavymetals.Home_LandingPage.Profile;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -27,6 +29,12 @@ public class FitnessDeclaration extends AppCompatActivity {
     Button btnLoseWeight, btnIncreaseStrength, btnBuildMuscle, btnMobility, btnWellness, btnFitness;
     static String userId;  // Ensure userId is passed
 
+    // Constants for progress tracking
+    private static final String PREFS_NAME = "UserProgressPrefs";
+    private static final String PROGRESS_KEY = "progress";
+    private static final String STEP_COMPLETED_KEY = "fitness_declaration_completed";
+    private static final int FITNESS_DECLARATION_PROGRESS = 25;  // Each step gives 25% progress
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,7 +58,7 @@ public class FitnessDeclaration extends AppCompatActivity {
         btnWellness.setOnClickListener(v -> toggleGoalSelection(btnWellness, "Wellness and Reduce Stress"));
         btnFitness.setOnClickListener(v -> toggleGoalSelection(btnFitness, "Fitness"));
 
-        // Send selected goals to server if they meet the criteria
+        // Send selected goals to the server if they meet the criteria
         btnPFDnext.setOnClickListener(v -> {
             if (selectedGoals.isEmpty()) {
                 Toast.makeText(FitnessDeclaration.this, "Please select at least one goal", Toast.LENGTH_SHORT).show();
@@ -66,11 +74,14 @@ public class FitnessDeclaration extends AppCompatActivity {
                 // Send data to server
                 new SendDataToServer(FitnessDeclaration.this, selectedGoals, userId[0]).execute();
 
-                // Proceed to the next activity regardless of result
+                // Update progress after data submission
+                markStepAsCompleted();  // Mark this step as completed
+                updateProgress(FITNESS_DECLARATION_PROGRESS);  // Increment progress
+
+                // Proceed to the next activity
                 Intent intent = new Intent(FitnessDeclaration.this, FitnessDeclaration2.class);
                 startActivity(intent);
             }
-
         });
     }
 
@@ -100,7 +111,25 @@ public class FitnessDeclaration extends AppCompatActivity {
         }
     }
 
-    // Static inner class to send selected goals to server
+    // Method to mark this step as completed in SharedPreferences
+    private void markStepAsCompleted() {
+        SharedPreferences sharedPreferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean(STEP_COMPLETED_KEY, true);  // Mark this step as completed
+        editor.apply();
+    }
+
+    // Method to update the progress in SharedPreferences
+    private void updateProgress(int progressIncrement) {
+        SharedPreferences sharedPreferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        int currentProgress = sharedPreferences.getInt(PROGRESS_KEY, 0);
+
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt(PROGRESS_KEY, currentProgress + progressIncrement);  // Increment progress
+        editor.apply();
+    }
+
+    // Static inner class to send selected goals to the server
     private static class SendDataToServer extends AsyncTask<Void, Void, String> {
         private WeakReference<FitnessDeclaration> activityReference;
         private ArrayList<String> selectedGoals;
@@ -182,5 +211,4 @@ public class FitnessDeclaration extends AppCompatActivity {
             }
         }
     }
-
 }

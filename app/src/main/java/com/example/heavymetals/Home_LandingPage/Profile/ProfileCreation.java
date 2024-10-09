@@ -1,6 +1,8 @@
 package com.example.heavymetals.Home_LandingPage.Profile;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
@@ -12,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
+import com.example.heavymetals.Home_LandingPage.MainActivity;
 import com.example.heavymetals.R;
 
 import android.app.DatePickerDialog;
@@ -22,9 +25,15 @@ import java.util.Calendar;
 public class ProfileCreation extends AppCompatActivity {
     private Button btnPFDnext;
     private EditText dateEditText;
-    private TextView ProfileAdd_create,PCFirstName,PCLastName;
+    private TextView ProfileAdd_create, PCFirstName, PCLastName;
     private ImageView ProfilePicture;
     private static final int PICK_IMAGE_REQUEST = 100;
+
+    // Progress tracking keys and constants
+    private static final String PREFS_NAME = "UserProgressPrefs";
+    private static final String PROGRESS_KEY = "progress";
+    private static final String STEP1_COMPLETED_KEY = "profile_creation_completed";  // Adjust this for each step
+    private static final int PROFILE_CREATION_PROGRESS = 25;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +77,13 @@ public class ProfileCreation extends AppCompatActivity {
         // Handle the "Next" button click event
         btnPFDnext.setOnClickListener(v -> {
             if (areFieldsFilled()) {
+                // Mark this step as completed
+                markStepAsCompleted();
+
+                // Update progress by 25 (the amount for this step)
+                updateProgress(PROFILE_CREATION_PROGRESS);
+
+                // Proceed to the next activity (FitnessDeclaration)
                 Intent intent = new Intent(ProfileCreation.this, FitnessDeclaration.class);
                 startActivity(intent);
             } else {
@@ -76,14 +92,13 @@ public class ProfileCreation extends AppCompatActivity {
         });
     }
 
-
+    // Method to check if all required fields are filled
     private boolean areFieldsFilled() {
-
         String dob = dateEditText.getText().toString().trim();
-
         return !dob.isEmpty();
     }
 
+    // Method to display the date picker dialog
     private void showDatePickerDialog() {
         final Calendar calendar = Calendar.getInstance();
         int year = calendar.get(Calendar.YEAR);
@@ -92,7 +107,7 @@ public class ProfileCreation extends AppCompatActivity {
 
         DatePickerDialog datePickerDialog = new DatePickerDialog(
                 this,
-                R.style.CustomDatePicker,  // Ensure this style is applied
+                R.style.CustomDatePicker,
                 (view, year1, month1, dayOfMonth) -> {
                     String selectedDate = dayOfMonth + "/" + (month1 + 1) + "/" + year1;
                     dateEditText.setText(selectedDate);
@@ -112,7 +127,7 @@ public class ProfileCreation extends AppCompatActivity {
         datePickerDialog.show();
     }
 
-
+    // Method to open the image chooser
     private void openImageChooser() {
         Intent intent = new Intent();
         intent.setType("image/*");
@@ -133,5 +148,23 @@ public class ProfileCreation extends AppCompatActivity {
                     .transform(new CircleCrop())  // This makes the image circular
                     .into(ProfilePicture);  // Display the image in the ProfilePicture ImageView
         }
+    }
+
+    // Method to mark this step as completed
+    private void markStepAsCompleted() {
+        SharedPreferences sharedPreferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean(STEP1_COMPLETED_KEY, true);  // Mark this step as completed
+        editor.apply();
+    }
+
+    // Method to update the progress in SharedPreferences
+    private void updateProgress(int progressIncrement) {
+        SharedPreferences sharedPreferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        int currentProgress = sharedPreferences.getInt(PROGRESS_KEY, 0);
+
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt(PROGRESS_KEY, currentProgress + progressIncrement);  // Increment progress
+        editor.apply();
     }
 }
