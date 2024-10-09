@@ -4,7 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.view.View;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -26,7 +27,7 @@ import java.util.Map;
 
 public class FitnessDeclaration2 extends AppCompatActivity {
 
-    private TextView Profile_Declaration_2, FD2_Save;
+    private TextView Profile_Declaration_2;
     private Button btnPFDnext2, MaleButton, FemaleButton;
     private String selectedGender;
 
@@ -36,17 +37,9 @@ public class FitnessDeclaration2 extends AppCompatActivity {
     // Constants for progress tracking
     private static final String PREFS_NAME = "UserProgressPrefs";
     private static final String PROGRESS_KEY = "progress";
-    private static final String STEP_COMPLETED_KEY = "fitness_declaration_2_completed";
-    private static final int FITNESS_DECLARATION_2_PROGRESS = 25;  // Each step gives 25% progress
     private static final String FITNESS_DECLARATION_2_COMPLETED = "fitness_declaration_2_completed";
+    private static final int FITNESS_DECLARATION_2_PROGRESS = 25;  // Each step gives 25% progress
 
-    // Update method to mark step as completed
-    private void markStepAsCompleted() {
-        SharedPreferences sharedPreferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putBoolean(FITNESS_DECLARATION_2_COMPLETED, true);  // Mark step as completed
-        editor.apply();
-    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,7 +56,6 @@ public class FitnessDeclaration2 extends AppCompatActivity {
         btnPFDnext2 = findViewById(R.id.btnPFDnext2);
         MaleButton = findViewById(R.id.MaleRadioButton);
         FemaleButton = findViewById(R.id.FemaleRadioButton);
-        FD2_Save = findViewById(R.id.FD2_Skip);
 
         // Initialize EditText fields
         etBodyWeight = findViewById(R.id.et_body_weight);
@@ -79,15 +71,37 @@ public class FitnessDeclaration2 extends AppCompatActivity {
         etLeftCalf = findViewById(R.id.et_left_calf);
         etRightCalf = findViewById(R.id.et_right_calf);
 
-        // Skip button to move to the next step without saving data
-        FD2_Save.setOnClickListener(new View.OnClickListener() {
+        // Disable the next button initially
+        btnPFDnext2.setEnabled(false);
+
+        // Set up TextWatchers to monitor the text fields
+        TextWatcher textWatcher = new TextWatcher() {
             @Override
-            public void onClick(View view) {
-                updateProgress(FITNESS_DECLARATION_2_PROGRESS);
-                Intent intent = new Intent(FitnessDeclaration2.this, FitnessDeclaration3.class);
-                startActivity(intent);
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                // Check if all fields are filled
+                checkFieldsForEmptyValues();
             }
-        });
+
+            @Override
+            public void afterTextChanged(Editable s) {}
+        };
+
+        // Add TextWatcher to all required fields
+        etBodyWeight.addTextChangedListener(textWatcher);
+        etHeight.addTextChangedListener(textWatcher);
+        etChest.addTextChangedListener(textWatcher);
+        etShoulder.addTextChangedListener(textWatcher);
+        etWaist.addTextChangedListener(textWatcher);
+        etHips.addTextChangedListener(textWatcher);
+        etLeftBicep.addTextChangedListener(textWatcher);
+        etRightBicep.addTextChangedListener(textWatcher);
+        etLeftForearm.addTextChangedListener(textWatcher);
+        etRightForearm.addTextChangedListener(textWatcher);
+        etLeftCalf.addTextChangedListener(textWatcher);
+        etRightCalf.addTextChangedListener(textWatcher);
 
         // Set up click listeners for the gender buttons
         MaleButton.setOnClickListener(v -> {
@@ -125,8 +139,10 @@ public class FitnessDeclaration2 extends AppCompatActivity {
                     // Send data to the server and proceed to the next activity
                     sendDataToServer();
 
-                    // Update progress after submission
+                    // Update progress and mark step as completed
                     updateProgress(FITNESS_DECLARATION_2_PROGRESS);
+                    markStepAsCompleted();  // Call this method here
+
                     Intent intent = new Intent(FitnessDeclaration2.this, FitnessDeclaration3.class);
                     intent.putExtra("BMI_VALUE", bmi);  // Passing the BMI
                     startActivity(intent);
@@ -144,6 +160,27 @@ public class FitnessDeclaration2 extends AppCompatActivity {
             Intent intent = new Intent(FitnessDeclaration2.this, FitnessDeclaration.class);
             startActivity(intent);
         });
+    }
+
+    // Method to check if all fields are filled
+    private void checkFieldsForEmptyValues() {
+        String weight = etBodyWeight.getText().toString();
+        String height = etHeight.getText().toString();
+        String chest = etChest.getText().toString();
+        String shoulder = etShoulder.getText().toString();
+        String waist = etWaist.getText().toString();
+        String hips = etHips.getText().toString();
+        String leftBicep = etLeftBicep.getText().toString();
+        String rightBicep = etRightBicep.getText().toString();
+        String leftForearm = etLeftForearm.getText().toString();
+        String rightForearm = etRightForearm.getText().toString();
+        String leftCalf = etLeftCalf.getText().toString();
+        String rightCalf = etRightCalf.getText().toString();
+
+        btnPFDnext2.setEnabled(!weight.isEmpty() && !height.isEmpty() && !chest.isEmpty() && !shoulder.isEmpty()
+                && !waist.isEmpty() && !hips.isEmpty() && !leftBicep.isEmpty() && !rightBicep.isEmpty()
+                && !leftForearm.isEmpty() && !rightForearm.isEmpty() && !leftCalf.isEmpty() && !rightCalf.isEmpty()
+                && selectedGender != null);  // Make sure gender is selected too
     }
 
     // Method to send data to PHP server using Volley
@@ -195,6 +232,14 @@ public class FitnessDeclaration2 extends AppCompatActivity {
 
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putInt(PROGRESS_KEY, currentProgress + progressIncrement);  // Increment progress
+        editor.apply();
+    }
+
+    // Method to mark the step as completed
+    private void markStepAsCompleted() {
+        SharedPreferences sharedPreferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean(FITNESS_DECLARATION_2_COMPLETED, true);  // Mark step as completed
         editor.apply();
     }
 }
