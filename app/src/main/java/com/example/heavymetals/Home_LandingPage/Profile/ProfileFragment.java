@@ -108,7 +108,9 @@ public class ProfileFragment extends Fragment {
     private void updateProgressBar(View view) {
         // Get progress from SharedPreferences
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
-        int progress = sharedPreferences.getInt(PROGRESS_KEY, 0);
+        int progress = sharedPreferences.getInt(PROGRESS_KEY, 0);  // Default to 0 if no progress set
+
+        Log.d("ProfileFragment", "Current progress: " + progress);  // Log the current progress
 
         // Limit the progress to 100%
         if (progress > MAX_PROGRESS) {
@@ -146,8 +148,13 @@ public class ProfileFragment extends Fragment {
                 params.topMargin = 110;  // Adjust this value based on your needs
                 mainLayout.setLayoutParams(params);
             }
+        } else {
+            if (progressSection != null) {
+                progressSection.setVisibility(View.VISIBLE);  // Ensure the progress section is visible if progress < 100
+            }
         }
     }
+
 
 
     // Method to mark a step as completed and update progress

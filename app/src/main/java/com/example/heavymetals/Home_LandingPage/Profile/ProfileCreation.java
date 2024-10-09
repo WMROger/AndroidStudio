@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -62,9 +63,25 @@ public class ProfileCreation extends AppCompatActivity {
             PCLastName.setText(lastName);
         }
         PC_Skip.setOnClickListener(v -> {
+            // Mark this step as completed
+            markStepAsCompleted();
+
+            // Get current progress
+            SharedPreferences sharedPreferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+            int currentProgress = sharedPreferences.getInt(PROGRESS_KEY, 0);
+
+            // Update progress (set to 25% or appropriate value)
+            updateProgress(PROFILE_CREATION_PROGRESS);
+
+            // Log the progress for debugging
+            Log.d("ProfileCreation", "Progress after skipping: " + (currentProgress + PROFILE_CREATION_PROGRESS));
+
+            // Redirect to MainActivity
             Intent intent = new Intent(ProfileCreation.this, MainActivity.class);
             startActivity(intent);
         });
+
+
         // Request storage permission if necessary
         if (checkSelfPermission(android.Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             requestPermissions(new String[]{android.Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
