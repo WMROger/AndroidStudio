@@ -52,7 +52,7 @@ public class ProfileEditActivity extends AppCompatActivity {
         firstNameEditText = findViewById(R.id.edit_firstname);
         lastNameEditText = findViewById(R.id.edit_lastname);
         backButton = findViewById(R.id.back_profile);
-        ViewMeasurements = findViewById(R.id.View_Measurements);
+        ViewMeasurements = findViewById(R.id.view_measurements);
 
         // Fetch user details from SharedPreferences to pre-fill the fields
         SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", Context.MODE_PRIVATE);
