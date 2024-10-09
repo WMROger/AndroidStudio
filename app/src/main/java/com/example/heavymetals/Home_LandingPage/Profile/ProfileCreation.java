@@ -25,7 +25,7 @@ import java.util.Calendar;
 public class ProfileCreation extends AppCompatActivity {
     private Button btnPFDnext;
     private EditText dateEditText;
-    private TextView ProfileAdd_create, PCFirstName, PCLastName;
+    private TextView ProfileAdd_create, PCFirstName, PCLastName, PC_Skip;
     private ImageView ProfilePicture;
     private static final int PICK_IMAGE_REQUEST = 100;
 
@@ -47,6 +47,8 @@ public class ProfileCreation extends AppCompatActivity {
         // Initialize PCFirstName and PCLastName before setting their values
         PCFirstName = findViewById(R.id.PCFirstName);
         PCLastName = findViewById(R.id.PCLastName);
+        PC_Skip = findViewById(R.id.PC_Skip);
+
 
         // Get the first name and last name from the intent
         String firstName = getIntent().getStringExtra("first_name");
@@ -59,7 +61,10 @@ public class ProfileCreation extends AppCompatActivity {
         if (lastName != null) {
             PCLastName.setText(lastName);
         }
-
+        PC_Skip.setOnClickListener(v -> {
+            Intent intent = new Intent(ProfileCreation.this, MainActivity.class);
+            startActivity(intent);
+        });
         // Request storage permission if necessary
         if (checkSelfPermission(android.Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             requestPermissions(new String[]{android.Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
