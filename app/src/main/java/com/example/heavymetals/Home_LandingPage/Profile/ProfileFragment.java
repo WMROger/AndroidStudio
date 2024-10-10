@@ -73,11 +73,12 @@ public class ProfileFragment extends Fragment {
         String userEmail = sharedPreferences.getString("loggedInUser", null);
         if (userEmail != null) {
             // Fetch user details from the database
-            fetchUserDetails(userEmail);
+            fetchUserDetails(userEmail);  // Use the function we're importing from ProfileCreation
         } else {
             Toast.makeText(getActivity(), "No logged-in user found.", Toast.LENGTH_SHORT).show();
         }
-// Handle click for "Continue" button
+
+        // Handle click for "Continue" button
         continue_btn.setOnClickListener(v -> {
             int progress = sharedPreferences.getInt(PROGRESS_KEY, 0);
 
@@ -157,10 +158,23 @@ public class ProfileFragment extends Fragment {
 
             // Optionally, adjust other layouts if needed (moving elements up)
             View mainLayout = view.findViewById(R.id.workout_layout);
+            View trackerLayout = view.findViewById(R.id.Tracker_layout);
+            View belowLayout = view.findViewById(R.id.below_workout_layout);
+
             if (mainLayout != null) {
                 ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) mainLayout.getLayoutParams();
-                params.topMargin = 170;  // Adjust this value based on your layout needs
+                params.topMargin = 50; // Adjust this value based on your layout needs
                 mainLayout.setLayoutParams(params);
+            }
+            if (belowLayout != null) {
+                ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) belowLayout.getLayoutParams();
+                params.topMargin = 50; // Adjust this value based on your layout needs
+                belowLayout.setLayoutParams(params);
+            }
+            if (trackerLayout != null) {
+                ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) trackerLayout.getLayoutParams();
+                params.topMargin = 30;  // Adjust this value as needed for tracker layout
+                trackerLayout.setLayoutParams(params);
             }
         } else {
             if (progressSection != null) {
@@ -169,35 +183,16 @@ public class ProfileFragment extends Fragment {
         }
     }
 
-    // Method to mark a step as completed and update progress
-    private void markStepAsCompleted(String stepKey, int progressIncrement, View view) {
-        SharedPreferences sharedPreferences = getActivity().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-
-        // Check if the step has already been completed
-        boolean isStepCompleted = sharedPreferences.getBoolean(stepKey, false);
-
-        if (!isStepCompleted) {
-            // Increment progress and cap it at 100%
-            int currentProgress = sharedPreferences.getInt(PROGRESS_KEY, 0);
-            int newProgress = Math.min(currentProgress + progressIncrement, MAX_PROGRESS);
-            editor.putInt(PROGRESS_KEY, newProgress);
-
-            // Mark the step as completed
-            editor.putBoolean(stepKey, true);
-            editor.apply();
-
-            // Update the UI with the view
-            updateProgressBar(view);
-        } else {
-            Toast.makeText(getActivity(), "This step has already been completed.", Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    // Fetch user details from the server (asynchronous network request)
+    // Method to fetch user details from the server (adapted from ProfileCreation)
     private void fetchUserDetails(String email) {
         new Thread(() -> {
             try {
+                // Check if email is null or empty
+                if (email == null || email.isEmpty()) {
+                    Log.e("ProfileFragment", "No email provided.");
+                    return;
+                }
+
                 URL url = new URL("https://heavymetals.scarlet2.io/HeavyMetals/get_username.php");
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                 conn.setRequestMethod("POST");
@@ -240,7 +235,8 @@ public class ProfileFragment extends Fragment {
                 }
 
             } catch (Exception e) {
-                e.printStackTrace();
+                Log.e("ProfileFragment", "Error fetching user details", e);
+                getActivity().runOnUiThread(() -> Toast.makeText(getActivity(), "Error fetching user details. Please try again.", Toast.LENGTH_LONG).show());
             }
         }).start();
     }
