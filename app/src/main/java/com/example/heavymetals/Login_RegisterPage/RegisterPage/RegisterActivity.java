@@ -114,7 +114,7 @@ public class RegisterActivity extends AppCompatActivity {
         } else if (!password.matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).+$")) {
             passwordEditText.setError("Password must contain at least one uppercase, one lowercase letter, and a number.");
             isValid = false;
-        } else if (password.length() < 8) {
+        } else if (password.length() < 6) {
             passwordEditText.setError("Password must be at least 6 characters long.");
             isValid = false;
         } else {

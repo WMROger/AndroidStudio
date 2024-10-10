@@ -31,25 +31,30 @@ import java.net.URLEncoder;
 
 public class ProfileFragment extends Fragment {
 
+    // UI elements
     private TextView firstNameTextView, emailTextView, editProfile;
     private Button continue_btn;
     private ProgressBar accountProgress;
     private TextView progressText;
+
+    // SharedPreferences constants
     static final String PREFS_NAME = "UserProgressPrefs";
     static final String PROGRESS_KEY = "progress";
-    private static final String STEP1_COMPLETED_KEY = "profile_creation_completed";
-    private static final String STEP2_COMPLETED_KEY = "fitness_declaration1_completed";
-    private static final String STEP3_COMPLETED_KEY = "fitness_declaration2_completed";
-    private static final String STEP4_COMPLETED_KEY = "fitness_declaration3_completed";
+
+    // Step completion keys for SharedPreferences
+    static final String STEP1_COMPLETED_KEY = "profile_creation_completed";
+    static final String STEP2_COMPLETED_KEY = "fitness_declaration1_completed";
+    static final String STEP3_COMPLETED_KEY = "fitness_declaration2_completed";
+    static final String STEP4_COMPLETED_KEY = "fitness_declaration3_completed";
     private static final int MAX_PROGRESS = 100; // Maximum progress value
 
+    // Fragment lifecycle: create and display UI
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
 
-// Initialize the TextViews and other views
+        // Initialize UI components
         firstNameTextView = view.findViewById(R.id.Menu_User_Firstname);
         emailTextView = view.findViewById(R.id.Menu_User_Email);
         editProfile = view.findViewById(R.id.edit_profile);
@@ -57,13 +62,13 @@ public class ProfileFragment extends Fragment {
         accountProgress = view.findViewById(R.id.account_progress);
         progressText = view.findViewById(R.id.account_progress_text);
 
-// Ensure the views are not null before using them
+        // Ensure the views are not null before using them
         if (accountProgress == null || progressText == null) {
             Log.e("ProfileFragment", "Progress bar or progress text view is missing in the layout");
             return view;  // Return early to prevent further errors
         }
 
-// Fetch user email from SharedPreferences
+        // Fetch user email from SharedPreferences
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences("UserPrefs", Context.MODE_PRIVATE);
         String userEmail = sharedPreferences.getString("loggedInUser", null);
         if (userEmail != null) {
@@ -72,8 +77,7 @@ public class ProfileFragment extends Fragment {
         } else {
             Toast.makeText(getActivity(), "No logged-in user found.", Toast.LENGTH_SHORT).show();
         }
-
-// Set click listeners and other actions
+// Handle click for "Continue" button
         continue_btn.setOnClickListener(v -> {
             int progress = sharedPreferences.getInt(PROGRESS_KEY, 0);
 
@@ -88,31 +92,43 @@ public class ProfileFragment extends Fragment {
             if (progress >= 100) {
                 // Hide the progress section when progress is 100%
                 progressSection.setVisibility(View.GONE);
-            } else {
-                // Your existing logic for handling incomplete progress...
+            } else if (progress == 0) {
+                // Redirect to ProfileCreation if progress is 0
+                Intent intent = new Intent(getActivity(), ProfileCreation.class);
+                startActivity(intent);
+            } else if (progress == 25) {
+                // Redirect to FitnessDeclaration if progress is 25%
+                Intent intent = new Intent(getActivity(), FitnessDeclaration.class);
+                startActivity(intent);
+            } else if (progress == 50) {
+                // Redirect to the next step (e.g., Second FitnessDeclaration)
+                Intent intent = new Intent(getActivity(), FitnessDeclaration2.class);
+                startActivity(intent);
+            } else if (progress == 75) {
+                // Redirect to the final step (e.g., Third FitnessDeclaration)
+                Intent intent = new Intent(getActivity(), FitnessDeclaration3.class);
+                startActivity(intent);
             }
         });
 
-// Set onClickListener to redirect to ProfileEditActivity
+        // Handle profile edit button click
         editProfile.setOnClickListener(v -> {
             Intent intent = new Intent(getActivity(), ProfileEditActivity.class);
             startActivity(intent);
         });
 
-// Update the progress bar based on saved progress
-        updateProgressBar(view);  // Pass the view to updateProgressBar
+        // Update the progress bar based on saved progress
+        updateProgressBar(view);
 
         return view;
     }
 
+    // Method to update the progress bar and UI
     private void updateProgressBar(View view) {
-        // Get progress from SharedPreferences
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
-        int progress = sharedPreferences.getInt(PROGRESS_KEY, 0);  // Default to 0 if no progress set
+        int progress = sharedPreferences.getInt(PROGRESS_KEY, 0);  // Get current progress
 
-        Log.d("ProfileFragment", "Current progress: " + progress);  // Log the current progress
-
-        // Limit the progress to 100%
+        // Ensure that progress never exceeds 100%
         if (progress > MAX_PROGRESS) {
             progress = MAX_PROGRESS;
             SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -124,7 +140,6 @@ public class ProfileFragment extends Fragment {
         TextView progressText = view.findViewById(R.id.account_progress_text);
         View progressSection = view.findViewById(R.id.progress_section);  // Reference to the progress section
 
-        // Ensure the progress bar and text views are not null
         if (accountProgress == null || progressText == null) {
             Log.e("ProfileFragment", "Progress bar or progress text view is missing in the layout");
             return;
@@ -134,28 +149,25 @@ public class ProfileFragment extends Fragment {
         accountProgress.setProgress(progress);
         progressText.setText("Your Account is " + progress + "% complete");
 
-        // Hide the progress section if progress is 100% and adjust layout
+        // Show or hide the progress section based on current progress
         if (progress == MAX_PROGRESS) {
             if (progressSection != null) {
-                progressSection.setVisibility(View.GONE);  // Hide the progress section
+                progressSection.setVisibility(View.GONE);  // Show progress section when 100% is reached
             }
 
-            // Move the other layout to the top by removing margins
-            View mainLayout = view.findViewById(R.id.workout_layout);  // Reference to the layout that should move up
+            // Optionally, adjust other layouts if needed (moving elements up)
+            View mainLayout = view.findViewById(R.id.workout_layout);
             if (mainLayout != null) {
-                // Remove margins programmatically if using LinearLayout or similar layout
                 ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) mainLayout.getLayoutParams();
-                params.topMargin = 110;  // Adjust this value based on your needs
+                params.topMargin = 170;  // Adjust this value based on your layout needs
                 mainLayout.setLayoutParams(params);
             }
         } else {
             if (progressSection != null) {
-                progressSection.setVisibility(View.VISIBLE);  // Ensure the progress section is visible if progress < 100
+                progressSection.setVisibility(View.VISIBLE);  // Ensure the progress section is visible if progress < 100%
             }
         }
     }
-
-
 
     // Method to mark a step as completed and update progress
     private void markStepAsCompleted(String stepKey, int progressIncrement, View view) {
@@ -182,8 +194,7 @@ public class ProfileFragment extends Fragment {
         }
     }
 
-
-    // Fetch the user details from the server (asynchronous network request)
+    // Fetch user details from the server (asynchronous network request)
     private void fetchUserDetails(String email) {
         new Thread(() -> {
             try {
