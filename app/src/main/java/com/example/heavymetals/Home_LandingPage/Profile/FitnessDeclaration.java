@@ -99,11 +99,11 @@ public class FitnessDeclaration extends AppCompatActivity {
             // Only allow selection if less than 3 goals are already selected
             if (selectedGoals.size() < 3) {
                 selectedGoals.add(goal);
-                button.setTextColor(getResources().getColor(R.color.white));
+                button.setTextColor(getResources().getColor(R.color.black));
                 button.setBackgroundTintList(getResources().getColorStateList(R.color.custom_orange)); // Highlight button style
 
                 // Set icon tint to white when selected
-                button.setCompoundDrawableTintList(getResources().getColorStateList(R.color.white));
+                button.setCompoundDrawableTintList(getResources().getColorStateList(R.color.black));
             } else {
                 // If 3 goals are already selected, show a message
                 Toast.makeText(FitnessDeclaration.this, "You can only select up to 3 goals", Toast.LENGTH_SHORT).show();

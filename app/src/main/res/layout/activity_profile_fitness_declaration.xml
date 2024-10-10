@@ -153,7 +153,7 @@
             android:textAlignment="viewStart"
             android:textAllCaps="false"
             app:cornerRadius="10dp"
-            app:icon="@drawable/increase_strength"
+            app:icon="@drawable/ic_increase_strength"
             app:iconTint="#DE612B"
             app:strokeColor="#DE612B"
             app:strokeWidth="1dp" />
