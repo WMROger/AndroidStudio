@@ -97,10 +97,12 @@ public class ProfileCreation extends AppCompatActivity {
         btnPFDnext.setOnClickListener(v -> {
             if (areFieldsFilled() && isAgeValid()) {
                 String profilePicUrl = (selectedImageUri != null) ? selectedImageUri.toString() : "https://heavymetals.scarlet2.io/HeavyMetals/assets/default_profile_pic.png";
-                String dateOfBirth = dateEditText.getText().toString();
 
-                // Save the user profile
-                saveUserProfile(userId, profilePicUrl, dateOfBirth);
+                // Format date for the server
+                String dateOfBirthFormatted = formatDateForServer(dateEditText.getText().toString());
+
+                // Save the user profile with formatted date
+                saveUserProfile(userId, profilePicUrl, dateOfBirthFormatted);
 
                 // Mark step as completed and proceed
                 markStepAsCompleted();
@@ -113,6 +115,7 @@ public class ProfileCreation extends AppCompatActivity {
                 Toast.makeText(ProfileCreation.this, "Please fill all the fields", Toast.LENGTH_SHORT).show();
             }
         });
+
     }
 
     // Method to save the user profile
@@ -129,7 +132,7 @@ public class ProfileCreation extends AppCompatActivity {
                 BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os, "UTF-8"));
                 String postData = "user_id=" + URLEncoder.encode(userId, "UTF-8")
                         + "&profile_pic=" + URLEncoder.encode(profilePicUrl, "UTF-8")
-                        + "&date_of_birth=" + URLEncoder.encode(dateOfBirth, "UTF-8");
+                        + "&date_of_birth=" + URLEncoder.encode(dateOfBirth, "UTF-8");  // Ensure formatted date is sent here
                 writer.write(postData);
                 writer.flush();
                 writer.close();
@@ -153,7 +156,6 @@ public class ProfileCreation extends AppCompatActivity {
                     if (success) {
                         Toast.makeText(ProfileCreation.this, "Profile saved successfully!", Toast.LENGTH_LONG).show();
                     } else {
-                        // Safely handle the "message" retrieval from the JSON
                         String message = jsonResponse.optString("message", "Unknown error occurred");
                         Toast.makeText(ProfileCreation.this, "Error: " + message, Toast.LENGTH_LONG).show();
                     }
