@@ -17,17 +17,16 @@
         android:textSize="24dp"
         app:layout_constraintBottom_toTopOf="@+id/linearLayout9"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.893"
+        app:layout_constraintHorizontal_bias="0.937"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="1.0" />
-
 
     <LinearLayout
         android:id="@+id/linearLayout9"
         android:layout_width="378dp"
         android:layout_height="117dp"
-        android:layout_marginTop="96dp"
+        android:layout_marginTop="66dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -89,11 +88,10 @@
         android:id="@+id/progress_section"
         android:layout_width="390dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
         android:background="@drawable/bg_blackgradient"
         android:gravity="center"
         android:orientation="vertical"
-        app:layout_constraintBottom_toTopOf="@+id/linearLayout10"
+        app:layout_constraintBottom_toTopOf="@+id/workout_layout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/linearLayout9">
@@ -138,7 +136,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="29dp"
-        android:layout_marginTop="130dp"
+        android:layout_marginTop="150dp"
         android:layout_marginEnd="29dp"
         android:background="@drawable/bg_blackgradient"
         android:orientation="vertical"
