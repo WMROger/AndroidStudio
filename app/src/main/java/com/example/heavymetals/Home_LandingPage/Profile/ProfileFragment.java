@@ -157,10 +157,23 @@ public class ProfileFragment extends Fragment {
 
             // Optionally, adjust other layouts if needed (moving elements up)
             View mainLayout = view.findViewById(R.id.workout_layout);
+            View trackerLayout = view.findViewById(R.id.Tracker_layout);
+            View belowLayout = view.findViewById(R.id.below_workout_layout);
+
             if (mainLayout != null) {
                 ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) mainLayout.getLayoutParams();
-                params.topMargin = 170;  // Adjust this value based on your layout needs
+                params.topMargin = 50; // Adjust this value based on your layout needs
                 mainLayout.setLayoutParams(params);
+            }
+            if (belowLayout != null) {
+                ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) belowLayout.getLayoutParams();
+                params.topMargin = 50; // Adjust this value based on your layout needs
+                belowLayout.setLayoutParams(params);
+            }
+            if (trackerLayout != null) {
+                ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) trackerLayout.getLayoutParams();
+                params.topMargin = 30;  // Adjust this value as needed for tracker layout
+                trackerLayout.setLayoutParams(params);
             }
         } else {
             if (progressSection != null) {

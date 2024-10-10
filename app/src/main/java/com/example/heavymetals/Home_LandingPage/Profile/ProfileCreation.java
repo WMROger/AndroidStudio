@@ -1,23 +1,48 @@
 package com.example.heavymetals.Home_LandingPage.Profile;
 
-import android.content.Context;
+import static android.content.Context.MODE_PRIVATE;
+
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.example.heavymetals.Home_LandingPage.MainActivity;
 import com.example.heavymetals.R;
-import android.app.DatePickerDialog;
-import android.widget.EditText;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLEncoder;
 import java.util.Calendar;
+
+// Add these imports if necessary
 
 public class ProfileCreation extends AppCompatActivity {
     private Button btnPFDnext;
@@ -32,10 +57,16 @@ public class ProfileCreation extends AppCompatActivity {
     private static final String STEP1_COMPLETED_KEY = "profile_creation_completed";
     private static final int PROFILE_CREATION_PROGRESS = 25;
 
+    // URL for getting username
+    private static final String GET_USERNAME_URL = "https://heavymetals.scarlet2.io/HeavyMetals/get_username.php";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile_creation);
+        // Fetch the user's email from SharedPreferences
+        SharedPreferences sharedPreferences = getSharedPreferences("UserDetails", MODE_PRIVATE);
+        String email = sharedPreferences.getString("loggedInUser", null); // Replace "loggedInUser" with your actual key
 
         ProfileAdd_create = findViewById(R.id.ProfileAdd_create);
         ProfilePicture = findViewById(R.id.ProfilePicture);
@@ -45,13 +76,8 @@ public class ProfileCreation extends AppCompatActivity {
         PCLastName = findViewById(R.id.PCLastName);
         PC_Skip = findViewById(R.id.PC_Skip);
 
-        // Get the first name and last name from the intent
-        String firstName = getIntent().getStringExtra("first_name");
-        String lastName = getIntent().getStringExtra("last_name");
-
-        // Set the values in the text fields
-        if (firstName != null) PCFirstName.setText(firstName);
-        if (lastName != null) PCLastName.setText(lastName);
+        // Fetch the user's first and last name from the server
+        fetchUserDetails(email); // Pass the email to the method
 
         // Handle Skip button click
         PC_Skip.setOnClickListener(v -> {
@@ -88,6 +114,59 @@ public class ProfileCreation extends AppCompatActivity {
             }
         });
     }
+
+    private void fetchUserDetails(String email) {
+        new Thread(() -> {
+            try {
+                URL url = new URL("https://heavymetals.scarlet2.io/HeavyMetals/get_username.php");
+                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                conn.setRequestMethod("POST");
+                conn.setDoOutput(true);
+
+                // Send the POST data with the actual user email
+                OutputStream os = conn.getOutputStream();
+                BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os, "UTF-8"));
+                String postData = "email=" + URLEncoder.encode(email, "UTF-8");
+                writer.write(postData);
+                writer.flush();
+                writer.close();
+                os.close();
+
+                // Get the response
+                InputStream is = conn.getInputStream();
+                BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+                StringBuilder response = new StringBuilder();
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    response.append(line);
+                }
+                reader.close();
+
+                // Parse the response JSON
+                JSONObject jsonResponse = new JSONObject(response.toString());
+                boolean success = jsonResponse.getBoolean("success");
+                if (success) {
+                    String firstName = jsonResponse.getString("first_name");
+                    String lastName = jsonResponse.getString("last_name");
+
+                    // Update the UI with the user's name on the main thread
+                    runOnUiThread(() -> {
+                        PCFirstName.setText(firstName);
+                        PCLastName.setText(lastName);
+                    });
+                } else {
+                    String message = jsonResponse.getString("message");
+                    runOnUiThread(() -> Toast.makeText(ProfileCreation.this, message, Toast.LENGTH_LONG).show());
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }).start();
+    }
+
+
+
 
     // Reset the progress to 0 when skipping
     private void resetProgress() {
