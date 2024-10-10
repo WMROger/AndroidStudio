@@ -73,7 +73,7 @@ public class ProfileFragment extends Fragment {
             Toast.makeText(getActivity(), "No logged-in user found.", Toast.LENGTH_SHORT).show();
         }
 
-// Set click listeners and other actions
+        // Set click listeners and other actions
         continue_btn.setOnClickListener(v -> {
             int progress = sharedPreferences.getInt(PROGRESS_KEY, 0);
 
@@ -87,7 +87,7 @@ public class ProfileFragment extends Fragment {
 
             if (progress >= 100) {
                 // Hide the progress section when progress is 100%
-                progressSection.setVisibility(View.GONE);
+                progressSection.setVisibility(View.VISIBLE);
             } else {
                 // Your existing logic for handling incomplete progress...
             }
@@ -106,13 +106,10 @@ public class ProfileFragment extends Fragment {
     }
 
     private void updateProgressBar(View view) {
-        // Get progress from SharedPreferences
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
-        int progress = sharedPreferences.getInt(PROGRESS_KEY, 0);  // Default to 0 if no progress set
+        int progress = sharedPreferences.getInt(PROGRESS_KEY, 0);  // Get current progress
 
-        Log.d("ProfileFragment", "Current progress: " + progress);  // Log the current progress
-
-        // Limit the progress to 100%
+        // Ensure that progress never exceeds 100%
         if (progress > MAX_PROGRESS) {
             progress = MAX_PROGRESS;
             SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -124,7 +121,6 @@ public class ProfileFragment extends Fragment {
         TextView progressText = view.findViewById(R.id.account_progress_text);
         View progressSection = view.findViewById(R.id.progress_section);  // Reference to the progress section
 
-        // Ensure the progress bar and text views are not null
         if (accountProgress == null || progressText == null) {
             Log.e("ProfileFragment", "Progress bar or progress text view is missing in the layout");
             return;
@@ -134,26 +130,27 @@ public class ProfileFragment extends Fragment {
         accountProgress.setProgress(progress);
         progressText.setText("Your Account is " + progress + "% complete");
 
-        // Hide the progress section if progress is 100% and adjust layout
+        // Hide the progress section only if progress is exactly 100%
         if (progress == MAX_PROGRESS) {
             if (progressSection != null) {
-                progressSection.setVisibility(View.GONE);  // Hide the progress section
+                progressSection.setVisibility(View.VISIBLE);  // Hide progress section when 100% is reached
             }
 
-            // Move the other layout to the top by removing margins
-            View mainLayout = view.findViewById(R.id.workout_layout);  // Reference to the layout that should move up
+            // Optionally, adjust other layouts if needed (moving elements up)
+            View mainLayout = view.findViewById(R.id.workout_layout);
             if (mainLayout != null) {
-                // Remove margins programmatically if using LinearLayout or similar layout
                 ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) mainLayout.getLayoutParams();
-                params.topMargin = 110;  // Adjust this value based on your needs
+                params.topMargin = 110;  // Adjust this value based on your layout needs
                 mainLayout.setLayoutParams(params);
             }
         } else {
             if (progressSection != null) {
-                progressSection.setVisibility(View.VISIBLE);  // Ensure the progress section is visible if progress < 100
+                progressSection.setVisibility(View.VISIBLE);  // Ensure the progress section is visible if progress < 100%
             }
         }
     }
+
+
 
 
 

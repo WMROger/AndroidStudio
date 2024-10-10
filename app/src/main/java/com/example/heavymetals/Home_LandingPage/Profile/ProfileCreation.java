@@ -63,20 +63,6 @@ public class ProfileCreation extends AppCompatActivity {
             PCLastName.setText(lastName);
         }
         PC_Skip.setOnClickListener(v -> {
-            // Mark this step as completed
-            markStepAsCompleted();
-
-            // Get current progress
-            SharedPreferences sharedPreferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-            int currentProgress = sharedPreferences.getInt(PROGRESS_KEY, 0);
-
-            // Update progress (set to 25% or appropriate value)
-            updateProgress(PROFILE_CREATION_PROGRESS);
-
-            // Log the progress for debugging
-            Log.d("ProfileCreation", "Progress after skipping: " + (currentProgress + PROFILE_CREATION_PROGRESS));
-
-            // Redirect to MainActivity
             Intent intent = new Intent(ProfileCreation.this, MainActivity.class);
             startActivity(intent);
         });

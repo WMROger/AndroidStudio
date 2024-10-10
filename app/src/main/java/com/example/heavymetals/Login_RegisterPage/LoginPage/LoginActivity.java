@@ -37,9 +37,8 @@ public class LoginActivity extends AppCompatActivity {
     private TextView signUp, forgetPassword;
     private ImageView passwordToggle;
     private boolean isPasswordVisible = false;
-    private final String URL_LOGIN = "https://heavymetals.scarlet2.io/HeavyMetals/login_user.php";
+    private final String URL_LOGIN = "https://heavymetals.scarlet2.io/HeavyMetals/login_user.php";  // Removed trailing slash
     private SharedPreferences sharedPreferences;
-    private static final String FIRST_LOGIN_KEY = "first_login";  // Flag to track first login
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,8 +49,10 @@ public class LoginActivity extends AppCompatActivity {
         checkLoggedInUser();  // Check if the user is already logged in
 
         setContentView(R.layout.activity_login);
-
         initializeUI();  // Initialize UI components
+
+        // Set custom font to password field
+        passwordEditText.setTypeface(customTypeface);
 
         loginBtn.setOnClickListener(v -> {
             String emailInput = email.getText().toString().trim();
@@ -67,10 +68,6 @@ public class LoginActivity extends AppCompatActivity {
 
         // Set onClickListener for toggling password visibility
         passwordToggle.setOnClickListener(v -> togglePasswordVisibility());
-
-        // Set the typeface on the EditText or other text components
-        passwordEditText = findViewById(R.id.Password_Usertext);
-        passwordEditText.setTypeface(customTypeface);
     }
 
     // Initialize UI components
@@ -150,9 +147,16 @@ public class LoginActivity extends AppCompatActivity {
                 if (jsonResponse.has("token") && jsonResponse.has("user_id")) {
                     String token = jsonResponse.getString("token");
                     String userId = jsonResponse.getString("user_id");
+                    int firstLogin = jsonResponse.getInt("first_login");  // Get the first_login status from response
 
                     saveUserDetails(email, token, userId);
-                    navigateBasedOnFirstLogin();  // Redirect based on first login status
+
+                    // Check if it's the first login
+                    if (firstLogin == 1) {
+                        navigateToProfileCreation();  // If it's the first login, go to ProfileCreation
+                    } else {
+                        navigateToMainActivity();  // Otherwise, go to MainActivity
+                    }
                 } else {
                     Log.d("LoginActivity", "Token or user_id not found in response");
                     Toast.makeText(this, "Login failed: Missing token or user ID", Toast.LENGTH_SHORT).show();
@@ -184,24 +188,6 @@ public class LoginActivity extends AppCompatActivity {
 
         Toast.makeText(LoginActivity.this, errorMessage, Toast.LENGTH_LONG).show();
         Log.e("LoginActivity", "Volley Error: " + error.getMessage());
-    }
-
-    // Check if it's the first login and navigate accordingly
-    private void navigateBasedOnFirstLogin() {
-        boolean isFirstLogin = sharedPreferences.getBoolean(FIRST_LOGIN_KEY, true);  // Default is true for first login
-
-        if (isFirstLogin) {
-            // If it's the first login, go to ProfileCreation
-            navigateToProfileCreation();
-
-            // Set the first login flag to false so it doesn't redirect next time
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putBoolean(FIRST_LOGIN_KEY, false);  // Mark as not the first login
-            editor.apply();
-        } else {
-            // If it's not the first login, go to MainActivity
-            navigateToMainActivity();
-        }
     }
 
     private void navigateToMainActivity() {
