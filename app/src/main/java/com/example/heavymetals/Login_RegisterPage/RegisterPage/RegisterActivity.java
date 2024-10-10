@@ -76,38 +76,62 @@ public class RegisterActivity extends AppCompatActivity {
         String password = passwordEditText.getText().toString().trim();
         String passwordConfirmation = passwordConfirmationEditText.getText().toString().trim();
 
-        if (firstname.isEmpty() || lastname.isEmpty() || emailInput.isEmpty() || password.isEmpty() || passwordConfirmation.isEmpty()) {
-            showToast("All fields are required.");
-            return false;
+        boolean isValid = true;  // This flag will track the overall validity
+
+        if (firstname.isEmpty()) {
+            firstName.setError("First name is required.");
+            isValid = false;
+        } else if (!firstname.matches("[a-zA-Z ]+")) {
+            firstName.setError("First name can only contain letters.");
+            isValid = false;
+        } else {
+            firstName.setError(null); // Clear error if input is valid
         }
 
-        if (!firstname.matches("[a-zA-Z ]+") || !lastname.matches("[a-zA-Z ]+")) {
-            showToast("Names can only contain letters.");
-            return false;
+        if (lastname.isEmpty()) {
+            lastName.setError("Last name is required.");
+            isValid = false;
+        } else if (!lastname.matches("[a-zA-Z ]+")) {
+            lastName.setError("Last name can only contain letters.");
+            isValid = false;
+        } else {
+            lastName.setError(null); // Clear error if input is valid
         }
 
-        if (!Patterns.EMAIL_ADDRESS.matcher(emailInput).matches()) {
-            showToast("Invalid email address.");
-            return false;
+        if (emailInput.isEmpty()) {
+            email.setError("Email is required.");
+            isValid = false;
+        } else if (!Patterns.EMAIL_ADDRESS.matcher(emailInput).matches()) {
+            email.setError("Invalid email address.");
+            isValid = false;
+        } else {
+            email.setError(null); // Clear error if input is valid
         }
 
-        // Check password for at least one uppercase letter, one lowercase letter, and one digit
-        if (!password.matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).+$")) {
-            showToast("Password must contain at least one uppercase letter, one lowercase letter, and a number.");
-            return false;
+        if (password.isEmpty()) {
+            passwordEditText.setError("Password is required.");
+            isValid = false;
+        } else if (!password.matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).+$")) {
+            passwordEditText.setError("Password must contain at least one uppercase, one lowercase letter, and a number.");
+            isValid = false;
+        } else if (password.length() < 8) {
+            passwordEditText.setError("Password must be at least 6 characters long.");
+            isValid = false;
+        } else {
+            passwordEditText.setError(null); // Clear error if input is valid
         }
 
-        if (password.length() < 6) {
-            showToast("Password must be at least 6 characters long.");
-            return false;
+        if (passwordConfirmation.isEmpty()) {
+            passwordConfirmationEditText.setError("Password confirmation is required.");
+            isValid = false;
+        } else if (!password.equals(passwordConfirmation)) {
+            passwordConfirmationEditText.setError("Passwords do not match.");
+            isValid = false;
+        } else {
+            passwordConfirmationEditText.setError(null); // Clear error if input is valid
         }
 
-        if (!password.equals(passwordConfirmation)) {
-            showToast("Passwords do not match.");
-            return false;
-        }
-
-        return true;
+        return isValid;
     }
 
 

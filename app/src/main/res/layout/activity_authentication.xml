@@ -70,7 +70,7 @@
         android:textAllCaps="false"
         android:textColor="@color/white"
         android:textSize="25sp"
-        app:cornerRadius="25dp"
+        app:cornerRadius="50dp"
         app:layout_constraintBottom_toTopOf="@+id/textView3"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.45"

@@ -50,15 +50,32 @@ public class SettingsFragment extends Fragment {
 
         return view;
     }
-    // Show a confirmation dialog to delete the account
+    // Show a confirmation dialog to delete the account (first step)
     private void confirmAccountDeletion() {
         new AlertDialog.Builder(requireContext())
                 .setTitle("Delete Account")
                 .setMessage("Are you sure you want to delete your account? This action cannot be undone.")
-                .setPositiveButton("Delete", (dialog, which) -> deleteUserAccount()) // Confirm button
-                .setNegativeButton("Cancel", null) // Cancel button
+                .setPositiveButton("Delete", (dialog, which) -> {
+                    // If the user confirms the first dialog, show the second confirmation dialog
+                    showSecondConfirmationDialog();
+                })
+                .setNegativeButton("Cancel", null)
                 .show();
     }
+
+    // Show the second confirmation dialog (second step)
+    private void showSecondConfirmationDialog() {
+        new AlertDialog.Builder(requireContext())
+                .setTitle("Confirm Deletion")
+                .setMessage("Are you really really sure you want to delete your account?")
+                .setPositiveButton("Delete", (dialog, which) -> {
+                    // Proceed with the account deletion after the second confirmation
+                    deleteUserAccount();
+                })
+                .setNegativeButton("Cancel", null)
+                .show();
+    }
+
 
     // Delete the user account from the server
     private void deleteUserAccount() {
