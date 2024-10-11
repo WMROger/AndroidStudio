@@ -6,8 +6,10 @@ import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
@@ -27,6 +29,7 @@ import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
@@ -102,7 +105,7 @@ public class ProfileCreation extends AppCompatActivity {
                 String dateOfBirthFormatted = formatDateForServer(dateEditText.getText().toString());
 
                 // Save the user profile with formatted date
-                saveUserProfile(userId, profilePicUrl, dateOfBirthFormatted);
+                saveUserProfile(userId, Uri.parse(profilePicUrl), dateOfBirthFormatted);
 
                 // Mark step as completed and proceed
                 markStepAsCompleted();
@@ -118,48 +121,49 @@ public class ProfileCreation extends AppCompatActivity {
 
     }
 
-    // Method to save the user profile
-    private void saveUserProfile(String userId, String profilePicUrl, String dateOfBirth) {
+    private void saveUserProfile(String userId, Uri profilePicUri, String dateOfBirth) {
         new Thread(() -> {
             try {
-                URL url = new URL("https://heavymetals.scarlet2.io/HeavyMetals/user_details/save_profile.php");
-                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-                conn.setRequestMethod("POST");
-                conn.setDoOutput(true);
+                File profilePicFile = new File(getRealPathFromURI(profilePicUri)); // Convert Uri to File
 
-                // Prepare POST data
-                OutputStream os = conn.getOutputStream();
-                BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os, "UTF-8"));
-                String postData = "user_id=" + URLEncoder.encode(userId, "UTF-8")
-                        + "&profile_pic=" + URLEncoder.encode(profilePicUrl, "UTF-8")
-                        + "&date_of_birth=" + URLEncoder.encode(dateOfBirth, "UTF-8");  // Ensure formatted date is sent here
-                writer.write(postData);
-                writer.flush();
-                writer.close();
-                os.close();
+                // Create Multipart body
+                okhttp3.MultipartBody.Builder builder = new okhttp3.MultipartBody.Builder()
+                        .setType(okhttp3.MultipartBody.FORM)
+                        .addFormDataPart("user_id", userId)
+                        .addFormDataPart("date_of_birth", dateOfBirth);
 
-                // Get response from the server
-                InputStream is = conn.getInputStream();
-                BufferedReader reader = new BufferedReader(new InputStreamReader(is));
-                StringBuilder response = new StringBuilder();
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    response.append(line);
+                // Add the profile picture if it exists
+                if (profilePicFile != null) {
+                    builder.addFormDataPart("profile_pic", profilePicFile.getName(),
+                            okhttp3.RequestBody.create(profilePicFile, okhttp3.MediaType.parse("image/*")));
                 }
-                reader.close();
 
-                // Parse the response
-                JSONObject jsonResponse = new JSONObject(response.toString());
-                boolean success = jsonResponse.getBoolean("success");
+                okhttp3.RequestBody requestBody = builder.build();
 
-                runOnUiThread(() -> {
-                    if (success) {
-                        Toast.makeText(ProfileCreation.this, "Profile saved successfully!", Toast.LENGTH_LONG).show();
-                    } else {
-                        String message = jsonResponse.optString("message", "Unknown error occurred");
-                        Toast.makeText(ProfileCreation.this, "Error: " + message, Toast.LENGTH_LONG).show();
-                    }
-                });
+                // Create a request
+                okhttp3.Request request = new okhttp3.Request.Builder()
+                        .url("https://heavymetals.scarlet2.io/HeavyMetals/user_details/save_profile.php")
+                        .post(requestBody)
+                        .build();
+
+                // Execute the request
+                okhttp3.OkHttpClient client = new okhttp3.OkHttpClient();
+                okhttp3.Response response = client.newCall(request).execute();
+
+                if (response.isSuccessful()) {
+                    String responseBody = response.body().string();
+                    JSONObject jsonResponse = new JSONObject(responseBody);
+                    boolean success = jsonResponse.getBoolean("success");
+
+                    runOnUiThread(() -> {
+                        if (success) {
+                            Toast.makeText(ProfileCreation.this, "Profile saved successfully!", Toast.LENGTH_LONG).show();
+                        } else {
+                            String message = jsonResponse.optString("message", "Unknown error occurred");
+                            Toast.makeText(ProfileCreation.this, "Error: " + message, Toast.LENGTH_LONG).show();
+                        }
+                    });
+                }
 
             } catch (Exception e) {
                 Log.e("ProfileCreation", "Error saving profile", e);
@@ -167,6 +171,22 @@ public class ProfileCreation extends AppCompatActivity {
             }
         }).start();
     }
+
+    private String getRealPathFromURI(Uri uri) {
+        String result;
+        Cursor cursor = getContentResolver().query(uri, null, null, null, null);
+        if (cursor == null) {
+            result = uri.getPath();
+        } else {
+            cursor.moveToFirst();
+            int idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
+            result = cursor.getString(idx);
+            cursor.close();
+        }
+        return result;
+    }
+
+
 
     private void fetchUserProfile(String userId) {
         new Thread(() -> {
