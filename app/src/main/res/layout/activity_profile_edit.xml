@@ -24,7 +24,7 @@
         app:layout_constraintVertical_bias="0.069" />
 
     <ImageView
-        android:id="@+id/imageView7"
+        android:id="@+id/Profile_Picture"
         android:layout_width="119dp"
         android:layout_height="112dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -32,7 +32,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.182"
-        app:srcCompat="@drawable/baseline_person_24" />
+        app:srcCompat="@drawable/ic_profile" />
 
     <TextView
         android:id="@+id/edit_profile"
@@ -55,7 +55,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.491"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView7"
+        app:layout_constraintTop_toBottomOf="@+id/Profile_Picture"
         app:layout_constraintVertical_bias="0.05">
 
 
@@ -134,7 +134,7 @@
 
 
             <TextView
-                android:id="@+id/editTextText6"
+                android:id="@+id/Date_of_Birth"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_marginBottom="10sp"
@@ -142,11 +142,10 @@
                 android:drawableLeft="@drawable/calendar_icon"
                 android:drawablePadding="10sp"
                 android:ems="10"
+                android:gravity="center_vertical"
                 android:hint="Pick a date"
                 android:inputType="text"
                 android:paddingLeft="20sp"
-                android:paddingTop="5sp"
-                android:paddingBottom="5sp"
                 android:textColor="#FFFFFF"
                 android:textColorHint="#FDFDFD" />
 
@@ -217,7 +216,7 @@
         android:layout_gravity="center"
         android:text="View Measurements"
         android:textAllCaps="false"
-        app:cornerRadius="20sp"
+        app:cornerRadius="25sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.495"
@@ -232,7 +231,7 @@
         android:layout_gravity="center"
         android:text="Save"
         android:textAllCaps="false"
-        app:cornerRadius="20sp"
+        app:cornerRadius="25sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.495"
