@@ -36,6 +36,8 @@ dependencies {
     implementation libs.constraintlayout.v210
 
     implementation libs.glide
+    implementation libs.glide.v4110
+    annotationProcessor libs.compiler.v4110
     annotationProcessor libs.compiler
     // Retrofit for network calls
     implementation libs.retrofit
@@ -45,6 +47,7 @@ dependencies {
     // Volley for networking (optional, if needed)
     implementation libs.volley
     implementation libs.gson
+
 
     implementation libs.okhttp
 
