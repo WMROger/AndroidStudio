@@ -5,7 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Home_LandingPage.MeasurementsActivity"
+    tools:context=".Home_LandingPage.Settings.MeasurementsSettings"
     android:background="@drawable/bg_gradient">
 
     <TextView
@@ -23,7 +23,7 @@
         app:layout_constraintVertical_bias="0.058" />
 
     <TextView
-        android:id="@+id/msrstng"
+        android:id="@+id/msrdtl"
         android:layout_width="350dp"
         android:layout_height="wrap_content"
         android:text="@string/measurement_msg"

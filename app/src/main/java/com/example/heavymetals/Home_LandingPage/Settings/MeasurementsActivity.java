@@ -1,4 +1,4 @@
-package com.example.heavymetals.Home_LandingPage;
+package com.example.heavymetals.Home_LandingPage.Settings;
 
 import android.os.Bundle;
 
