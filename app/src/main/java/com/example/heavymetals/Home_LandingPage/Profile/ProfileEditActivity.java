@@ -11,6 +11,7 @@ import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -45,6 +46,7 @@ public class ProfileEditActivity extends AppCompatActivity {
     private String currentProfilePicUrl;
     private Button savefile;
     private Bitmap newProfilePictureBitmap = null;
+    private Button maleButton, femaleButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +60,11 @@ public class ProfileEditActivity extends AppCompatActivity {
         ProfilePicture = findViewById(R.id.Profile_Picture);
         backButton = findViewById(R.id.back_profile);
         savefile = findViewById(R.id.save_profile);
+        maleButton = findViewById(R.id.Gender_male);
+        femaleButton = findViewById(R.id.Gender_female);
+
+
+
 
         sharedPreferences = getSharedPreferences("UserPrefs", Context.MODE_PRIVATE);
         String userEmail = sharedPreferences.getString("loggedInUser", null);
@@ -113,9 +120,17 @@ public class ProfileEditActivity extends AppCompatActivity {
         String lastName = lastNameEditText.getText().toString();
         String dateOfBirth = dateOfBirthTextView.getText().toString();
 
-        // Ensure all fields are filled
+        // Retrieve user_id from SharedPreferences
+        String userId = sharedPreferences.getString("user_id", null);
+
+        // Ensure all fields are filled, including user_id
         if (firstName.isEmpty() || lastName.isEmpty() || dateOfBirth.isEmpty()) {
             Toast.makeText(this, "Please fill all fields", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (userId == null) {
+            Toast.makeText(this, "User ID not found. Please log in again.", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -128,9 +143,10 @@ public class ProfileEditActivity extends AppCompatActivity {
                 conn.setDoOutput(true);
                 conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
 
-                // Prepare the profile data (first name, last name, date of birth)
+                // Prepare the profile data (user_id, first name, last name, date of birth)
                 StringBuilder postData = new StringBuilder();
-                postData.append("first_name=").append(URLEncoder.encode(firstName, "UTF-8"));
+                postData.append("user_id=").append(URLEncoder.encode(userId, "UTF-8"));  // Add user_id to the POST data
+                postData.append("&first_name=").append(URLEncoder.encode(firstName, "UTF-8"));
                 postData.append("&last_name=").append(URLEncoder.encode(lastName, "UTF-8"));
                 postData.append("&date_of_birth=").append(URLEncoder.encode(dateOfBirth, "UTF-8"));
                 postData.append("&email=").append(URLEncoder.encode(sharedPreferences.getString("loggedInUser", ""), "UTF-8"));
@@ -183,8 +199,16 @@ public class ProfileEditActivity extends AppCompatActivity {
     }
 
 
+
     // Fetch the user details from the server
     private void fetchUserDetails(String email) {
+        String userId = sharedPreferences.getString("user_id", null);
+
+        if (userId == null) {
+            runOnUiThread(() -> Toast.makeText(this, "User ID not found. Please log in again.", Toast.LENGTH_SHORT).show());
+            return;
+        }
+
         new Thread(() -> {
             try {
                 URL url = new URL("https://heavymetals.scarlet2.io/HeavyMetals/user_details/get_profile.php");
@@ -195,7 +219,7 @@ public class ProfileEditActivity extends AppCompatActivity {
                 // Send the POST data
                 OutputStream os = conn.getOutputStream();
                 BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os, "UTF-8"));
-                String postData = "email=" + URLEncoder.encode(email, "UTF-8");
+                String postData = "email=" + URLEncoder.encode(email, "UTF-8") + "&user_id=" + URLEncoder.encode(userId, "UTF-8");
                 writer.write(postData);
                 writer.flush();
                 writer.close();
@@ -225,6 +249,9 @@ public class ProfileEditActivity extends AppCompatActivity {
                     String dateOfBirth = profile.getString("date_of_birth");
                     currentProfilePicUrl = profile.getString("profile_pic");
 
+                    // If gender is also returned from the server
+                    String gender = profile.optString("gender", null);  // You can add this field to your JSON response
+
                     // Update the UI on the main thread
                     runOnUiThread(() -> {
                         firstNameEditText.setText(firstName);
@@ -238,6 +265,9 @@ public class ProfileEditActivity extends AppCompatActivity {
                                 .placeholder(R.drawable.ic_profile) // Placeholder image
                                 .error(R.drawable.ic_profile) // Error image
                                 .into(ProfilePicture);
+
+                        // Highlight the button based on the gender
+                        highlightGenderButton(gender);  // Call the method to highlight the button
                     });
                 } else {
                     // Log an error message if profile data is missing
@@ -254,5 +284,34 @@ public class ProfileEditActivity extends AppCompatActivity {
             }
         }).start();
     }
+
+    // Method to highlight gender buttons based on fetched value
+    private void highlightGenderButton(String gender) {
+        if (gender != null) {
+            if (gender.equalsIgnoreCase("male")) {
+                // Highlight the male button
+                maleButton.setTextColor(getResources().getColor(R.color.white)); // Selected color
+                maleButton.setBackgroundTintList(getResources().getColorStateList(R.color.custom_orange)); // Highlight Male
+
+                // Reset the female button
+                femaleButton.setTextColor(getResources().getColor(R.color.unselected_color)); // Unselected color
+                femaleButton.setBackgroundTintList(getResources().getColorStateList(R.color.black)); // Reset Female
+
+            } else if (gender.equalsIgnoreCase("female")) {
+                // Highlight the female button
+                femaleButton.setTextColor(getResources().getColor(R.color.white)); // Selected color
+                femaleButton.setBackgroundTintList(getResources().getColorStateList(R.color.custom_orange)); // Highlight Female
+
+                // Reset the male button
+                maleButton.setTextColor(getResources().getColor(R.color.unselected_color)); // Unselected color
+                maleButton.setBackgroundTintList(getResources().getColorStateList(R.color.black)); // Reset Male
+            }
+        }
+    }
+
+
+
+
+
 
 }

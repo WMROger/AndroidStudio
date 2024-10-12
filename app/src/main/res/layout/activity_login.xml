@@ -76,6 +76,8 @@
         app:layout_constraintVertical_bias="1.0">
 
         <!-- Email field -->
+
+        <!-- Password field with show/hide icon -->
         <EditText
             android:id="@+id/Login_UserEmail"
             android:layout_width="match_parent"
@@ -85,16 +87,15 @@
             android:layout_marginBottom="10dp"
             android:background="@drawable/button_background"
             android:ems="10"
-            android:textCursorDrawable="@drawable/cursor_color"
             android:hint="Email"
-            android:maxLength="24"
             android:inputType="text|textEmailAddress"
+            android:maxLength="45"
             android:paddingStart="15dp"
             android:paddingEnd="20dp"
             android:textColor="@color/white"
-            android:textColorHint="@color/gray" />
+            android:textColorHint="@color/gray"
+            android:textCursorDrawable="@drawable/cursor_color" />
 
-        <!-- Password field with show/hide icon -->
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="45dp"

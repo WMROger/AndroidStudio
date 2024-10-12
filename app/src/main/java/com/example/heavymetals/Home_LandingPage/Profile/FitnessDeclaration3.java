@@ -7,23 +7,32 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.heavymetals.R;
 
-public class FitnessDeclaration3 extends AppCompatActivity {
-    private TextView Fitness_Declaration_2,BMI;
-    private Button btnPFDnext3;
-    private Button btn33, btn34,btn27,btn28,btn29;  // Declare the YES and NO buttons
-    private String selectedDays; // Declare selectedDays variable here
+import java.util.HashMap;
+import java.util.Map;
 
+public class FitnessDeclaration3 extends AppCompatActivity {
+    private TextView Fitness_Declaration_2, BMI;
+    private Button btnPFDnext3;
+    private Button btn33, btn34, btn27, btn28, btn29;  // Declare the YES and NO buttons
+    private String selectedDays; // Declare selectedDays variable here
+    private String workoutExperience; // Declare workoutExperience (YES/NO)
 
     // Constants for SharedPreferences
     private static final String PREFS_NAME = "UserProgressPrefs";
     private static final String PROGRESS_KEY = "progress";
     private static final String FITNESS_DECLARATION_3_COMPLETED = "fitness_declaration_3_completed";
     private static final int FITNESS_DECLARATION_3_PROGRESS = 25; // 25% for this step
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,7 +48,6 @@ public class FitnessDeclaration3 extends AppCompatActivity {
         btn29 = findViewById(R.id.button29); // 3-4 days button
         Spinner spinnerStrengthExperience = findViewById(R.id.spinner_strength_experience);
         BMI = findViewById(R.id.BMI);  // Initialize the TextView for BMI
-
 
         // Set Listeners for the Days buttons (btn27, btn28, btn29)
         btn27.setOnClickListener(v -> {
@@ -78,23 +86,19 @@ public class FitnessDeclaration3 extends AppCompatActivity {
             btn28.setBackgroundTintList(getResources().getColorStateList(R.color.black)); // Reset 5+
         });
 
-        // Set Listeners for the buttons to behave like a toggle
+        // Set Listeners for YES/NO buttons for workout experience
         btn33.setOnClickListener(v -> {
-            // When YES is clicked, change its text color and reset NO button
+            workoutExperience = "YES";  // Set workoutExperience to YES
             btn33.setTextColor(getResources().getColor(R.color.white)); // Selected color
             btn34.setTextColor(getResources().getColor(R.color.unselected_color)); // Unselected color
-
-            // Optional: You can also change the background or add other visual effects
             btn33.setBackgroundTintList(getResources().getColorStateList(R.color.custom_orange)); // Highlight YES
             btn34.setBackgroundTintList(getResources().getColorStateList(R.color.black)); // Reset NO
         });
 
         btn34.setOnClickListener(v -> {
-            // When NO is clicked, change its text color and reset YES button
+            workoutExperience = "NO";  // Set workoutExperience to NO
             btn34.setTextColor(getResources().getColor(R.color.white)); // Selected color
             btn33.setTextColor(getResources().getColor(R.color.unselected_color)); // Unselected color
-
-            // Optional: You can also change the background or add other visual effects
             btn34.setBackgroundTintList(getResources().getColorStateList(R.color.custom_orange)); // Highlight NO
             btn33.setBackgroundTintList(getResources().getColorStateList(R.color.black)); // Reset YES
         });
@@ -105,30 +109,74 @@ public class FitnessDeclaration3 extends AppCompatActivity {
             startActivity(intent);
         });
 
-        // In your btnPFDnext3 onClickListener, after setting the next intent:
+        // When Next button is clicked
         btnPFDnext3.setOnClickListener(v -> {
             btnPFDnext3.setTextColor(getResources().getColor(R.color.white));
-
-            // Mark this step as completed and update progress
             markStepAsCompleted();
             updateProgress(FITNESS_DECLARATION_3_PROGRESS);
-
-            // Proceed to the next screen (ProfileFinish)
+            sendDataToServer();  // Call sendDataToServer to upload data
             Intent intent = new Intent(FitnessDeclaration3.this, ProfileFinish.class);
             startActivity(intent);
         });
 
-        // Create an ArrayAdapter using the custom spinner layout
+        // Spinner for strength experience
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
                 R.array.strength_experience_array, R.layout.custom_spinner_item);
-
-        // Specify the custom layout to use for the dropdown list
         adapter.setDropDownViewResource(R.layout.custom_spinner_item);
-
-        // Apply the adapter to the spinner
         spinnerStrengthExperience.setAdapter(adapter);
+
         setBmiText();
     }
+
+    // Method to send data to PHP server using Volley
+    // Method to send data to PHP server using Volley
+    private void sendDataToServer() {
+        String url = "https://heavymetals.scarlet2.io/HeavyMetals/user_details/save_fitness_declaration_3.php";  // Replace with your server URL
+        RequestQueue queue = Volley.newRequestQueue(FitnessDeclaration3.this);
+
+        SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
+        String userId = sharedPreferences.getString("user_id", null);  // Get user_id from SharedPreferences
+
+        // Check if user_id is null and handle it
+        if (userId == null || userId.isEmpty()) {
+            Toast.makeText(FitnessDeclaration3.this, "User ID is missing. Please log in again.", Toast.LENGTH_LONG).show();
+            // Optionally redirect to login or take other appropriate action
+            return;  // Don't proceed if user_id is null
+        }
+
+        // Proceed with sending the data if user_id is valid
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
+                response -> {
+                    if (response.contains("success")) {
+                        Toast.makeText(FitnessDeclaration3.this, "Data saved successfully!", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(FitnessDeclaration3.this, "Failed to save data.", Toast.LENGTH_SHORT).show();
+                    }
+                },
+                error -> Toast.makeText(FitnessDeclaration3.this, "Network Error: " + error.getMessage(), Toast.LENGTH_SHORT).show()
+        ) {
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+
+                // Retrieve other values for the POST request
+                String strengthExperience = ((Spinner) findViewById(R.id.spinner_strength_experience)).getSelectedItem().toString();
+                String consistency = btn33.getCurrentTextColor() == getResources().getColor(R.color.white) ? "YES" : "NO";  // Check which button is highlighted
+
+                // Add POST parameters
+                params.put("user_id", userId);  // Make sure user_id is not null
+                params.put("bmi", BMI.getText().toString());
+                params.put("training_days", selectedDays);  // From the selected button
+                params.put("workout_experience", workoutExperience);  // From YES/NO button
+                params.put("strength_experience", strengthExperience);
+                params.put("consistency", consistency);
+
+                return params;
+            }
+        };
+        queue.add(stringRequest);
+    }
+
 
     // Method to mark this step as completed
     private void markStepAsCompleted() {
@@ -149,12 +197,8 @@ public class FitnessDeclaration3 extends AppCompatActivity {
     }
 
     private void setBmiText() {
-        // Retrieve the BMI value from the Intent
         Intent intent = getIntent();
         double bmi = intent.getDoubleExtra("BMI_VALUE", 0.0);  // Default value is 0.0 if not found
-
-        // Display the BMI in the TextView
-        BMI.setText(String.format("%.2f", bmi));
+        BMI.setText(String.format("%.2f", bmi));  // Display BMI
     }
-
 }

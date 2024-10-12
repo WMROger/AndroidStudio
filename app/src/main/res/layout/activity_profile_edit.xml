@@ -143,7 +143,7 @@
                 android:drawablePadding="10sp"
                 android:ems="10"
                 android:gravity="center_vertical"
-                android:hint="Pick a date"
+                android:hint="Empty"
                 android:inputType="text"
                 android:paddingLeft="20sp"
                 android:textColor="#FFFFFF"
@@ -177,32 +177,41 @@
                 app:layout_constraintTop_toBottomOf="@+id/textView23">
 
 
-                <RadioButton
-                    android:id="@+id/radioButton6"
+                <Button
+                    android:id="@+id/Gender_male"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:layout_marginRight="4dp"
                     android:layout_weight="1"
-                    android:background="@drawable/button_background"
+                    android:backgroundTint="@color/custom_bg"
                     android:buttonTint="#1F1F1F"
+                    android:clickable="false"
+                    android:focusable="false"
                     android:paddingRight="30dp"
                     android:text="Male"
                     android:textAlignment="center"
-                    android:textColor="#FFFFFF" />
+                    android:textColor="#FFFFFF"
+                    app:cornerRadius="25dp"
+                    app:strokeColor="#DE612B"
+                    app:strokeWidth="1dp" />
 
 
-                <RadioButton
-                    android:id="@+id/radioButton7"
+                <Button
+                    android:id="@+id/Gender_female"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:layout_marginLeft="4dp"
                     android:layout_weight="1"
-                    android:background="@drawable/button_background"
-                    android:buttonTint="#1F1F1F"
+                    android:backgroundTint="@color/custom_bg"
+                    android:clickable="false"
+                    android:focusable="false"
                     android:paddingRight="30dp"
                     android:text="Female"
                     android:textAlignment="center"
-                    android:textColor="#FFFFFF" />
+                    android:textColor="#FFFFFF"
+                    app:cornerRadius="25dp"
+                    app:strokeColor="#DE612B"
+                    app:strokeWidth="1dp" />
             </LinearLayout>
 
 

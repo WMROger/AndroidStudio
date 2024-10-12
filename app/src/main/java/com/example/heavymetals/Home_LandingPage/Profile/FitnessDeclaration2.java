@@ -185,7 +185,16 @@ public class FitnessDeclaration2 extends AppCompatActivity {
 
     // Method to send data to PHP server using Volley
     private void sendDataToServer() {
-        String url = "http://heavymetals.scarlet2.io/HeavyMetals/profile/save_fitness_declaration.php";  // Replace with your server URL
+        String url = "https://heavymetals.scarlet2.io/HeavyMetals/user_details/save_fitness_declaration.php";  // Replace with your server URL
+
+        // Retrieve user_id from SharedPreferences
+        SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", Context.MODE_PRIVATE);
+        String userId = sharedPreferences.getString("user_id", null);
+
+        if (userId == null) {
+            Toast.makeText(FitnessDeclaration2.this, "User ID not found. Please log in again.", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
         RequestQueue queue = Volley.newRequestQueue(FitnessDeclaration2.this);
 
@@ -202,8 +211,8 @@ public class FitnessDeclaration2 extends AppCompatActivity {
             @Override
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<>();
-                // Assume user_id is passed from previous activity or stored
-                params.put("user_id", "123");  // Replace with actual user_id or retrieve dynamically
+                // Now we use the dynamically retrieved user_id
+                params.put("user_id", userId);  // Use the actual user_id retrieved from SharedPreferences
                 params.put("gender", selectedGender);
                 params.put("body_weight", etBodyWeight.getText().toString());
                 params.put("height", etHeight.getText().toString());
