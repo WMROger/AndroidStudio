@@ -27,7 +27,7 @@ public class FitnessDeclaration extends AppCompatActivity {
     ArrayList<String> selectedGoals = new ArrayList<>();
 
     Button btnLoseWeight, btnIncreaseStrength, btnBuildMuscle, btnMobility, btnWellness, btnFitness;
-    static String userId;  // Ensure userId is passed
+    private String userId;  // Updated to retrieve from SharedPreferences
 
     // Constants for progress tracking
     private static final String PREFS_NAME = "UserProgressPrefs";
@@ -48,7 +48,19 @@ public class FitnessDeclaration extends AppCompatActivity {
         btnWellness = findViewById(R.id.button9);
         btnFitness = findViewById(R.id.button14);
         btnPFDnext = findViewById(R.id.btnPFDnext1);
-        final String[] userId = {getIntent().getStringExtra("user_id")};
+
+        // Retrieve user_id from SharedPreferences
+        SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", Context.MODE_PRIVATE);
+        userId = sharedPreferences.getString("user_id", null);
+
+        // Log and handle missing user_id
+        if (userId == null) {
+            Log.e("FitnessDeclaration", "Error: User ID is null. Please ensure user is logged in.");
+            Toast.makeText(FitnessDeclaration.this, "Error: User ID is missing. Please log in again.", Toast.LENGTH_SHORT).show();
+            return;  // Stop further processing if user_id is missing
+        } else {
+            Log.d("FitnessDeclaration", "User ID being sent: " + userId);  // Log user ID for debugging
+        }
 
         // Set up click listeners for the goal buttons
         btnLoseWeight.setOnClickListener(v -> toggleGoalSelection(btnLoseWeight, "Lose Weight"));
@@ -65,14 +77,8 @@ public class FitnessDeclaration extends AppCompatActivity {
             } else if (selectedGoals.size() > 3) {
                 Toast.makeText(FitnessDeclaration.this, "You can only select up to 3 goals", Toast.LENGTH_SHORT).show();
             } else {
-                // Fetch userId before sending data
-                userId[0] = getIntent().getStringExtra("user_id");
-
-                // Log the userId for debugging purposes
-                Log.d("UserID", "User ID being sent: " + userId[0]);
-
                 // Send data to server
-                new SendDataToServer(FitnessDeclaration.this, selectedGoals, userId[0]).execute();
+                new SendDataToServer(FitnessDeclaration.this, selectedGoals, userId).execute();
 
                 // Update progress after data submission
                 markStepAsCompleted();  // Mark this step as completed
@@ -134,7 +140,7 @@ public class FitnessDeclaration extends AppCompatActivity {
         private WeakReference<FitnessDeclaration> activityReference;
         private ArrayList<String> selectedGoals;
         private String userId;
-        private String urlString = "https://heavymetals.scarlet2.io/HeavyMetals/profile/handle_user_goals.php";
+        private String urlString = "https://heavymetals.scarlet2.io/HeavyMetals/user_details/handle_user_goals.php";
 
         // Constructor
         SendDataToServer(FitnessDeclaration context, ArrayList<String> goals, String userId) {
@@ -155,6 +161,7 @@ public class FitnessDeclaration extends AppCompatActivity {
                 conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
                 conn.setDoOutput(true);
 
+                // Build the post data for the goals
                 String postData = "user_id=" + userId
                         + "&lose_weight=" + (selectedGoals.contains("Lose Weight") ? 1 : 0)
                         + "&increase_strength=" + (selectedGoals.contains("Increase Strength") ? 1 : 0)
@@ -163,6 +170,7 @@ public class FitnessDeclaration extends AppCompatActivity {
                         + "&wellness_reduce_stress=" + (selectedGoals.contains("Wellness and Reduce Stress") ? 1 : 0)
                         + "&fitness=" + (selectedGoals.contains("Fitness") ? 1 : 0);
 
+                // Send the request
                 OutputStream os = conn.getOutputStream();
                 os.write(postData.getBytes());
                 os.flush();

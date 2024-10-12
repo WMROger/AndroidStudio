@@ -158,6 +158,16 @@ public class ProfileCreation extends AppCompatActivity {
                     runOnUiThread(() -> {
                         if (success) {
                             Toast.makeText(ProfileCreation.this, "Profile saved successfully!", Toast.LENGTH_LONG).show();
+
+                            // Intent to move to the next activity upon successful profile save
+                            markStepAsCompleted();
+                            updateProgress(PROFILE_CREATION_PROGRESS);
+
+                            // Move to FitnessDeclaration activity
+                            Intent intent = new Intent(ProfileCreation.this, FitnessDeclaration.class);
+                            startActivity(intent);
+                            finish();  // Optional: Finish current activity so it cannot be returned to
+
                         } else {
                             String message = jsonResponse.optString("message", "Unknown error occurred");
                             Toast.makeText(ProfileCreation.this, "Error: " + message, Toast.LENGTH_LONG).show();
