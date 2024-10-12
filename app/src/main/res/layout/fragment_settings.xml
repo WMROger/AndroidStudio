@@ -5,14 +5,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/bg_gradient"
-    tools:context=".Home_LandingPage.SettingsFragment"
+    tools:context=".Home_LandingPage.Settings.SettingsFragment"
     tools:ignore="HardcodedText">
 
     <!-- TODO: Update blank fragment layout -->
 
 
     <TextView
-        android:id="@+id/textView35"
+        android:id="@+id/bugtxt"
         android:layout_width="92dp"
         android:layout_height="19dp"
         android:layout_marginBottom="20dp"
@@ -35,7 +35,7 @@
         android:text="Log out"
         android:textAllCaps="false"
         app:cornerRadius="20dp"
-        app:layout_constraintBottom_toTopOf="@+id/textView35"
+        app:layout_constraintBottom_toTopOf="@+id/bugtxt"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -44,7 +44,7 @@
     <Button
         android:id="@+id/Delete_account"
         android:layout_width="357dp"
-        android:layout_height="wrap_content"
+        android:layout_height="49dp"
         android:backgroundTint="#000000"
         android:text="Delete Account"
         android:textAlignment="textStart"
@@ -71,7 +71,7 @@
         app:layout_constraintVertical_bias="0.919">
 
         <TextView
-            android:id="@+id/textView35"
+            android:id="@+id/textapp"
             android:layout_width="92dp"
             android:layout_height="19dp"
             android:layout_marginStart="15dp"
@@ -81,9 +81,9 @@
             android:textSize="14sp" />
 
         <Button
-            android:id="@+id/button33"
+            android:id="@+id/Settings_Advanced"
             android:layout_width="357dp"
-            android:layout_height="wrap_content"
+            android:layout_height="49dp"
             android:layout_marginBottom="-10dp"
             android:backgroundTint="#000000"
             android:drawableEnd="@drawable/right_arrow_icon"
@@ -95,9 +95,9 @@
             app:strokeWidth="1dp" />
 
         <Button
-            android:id="@+id/PCFirstName"
+            android:id="@+id/Settings_Licenses"
             android:layout_width="357dp"
-            android:layout_height="wrap_content"
+            android:layout_height="49dp"
             android:layout_marginBottom="-10dp"
             android:backgroundTint="#000000"
             android:drawableEnd="@drawable/right_arrow_icon"
@@ -109,9 +109,9 @@
             app:strokeWidth="1dp" />
 
         <Button
-            android:id="@+id/PCFirstName"
+            android:id="@+id/Settings_Notifications"
             android:layout_width="357dp"
-            android:layout_height="wrap_content"
+            android:layout_height="49dp"
             android:backgroundTint="#000000"
             android:drawableEnd="@drawable/right_arrow_icon"
             android:text="Notification"
@@ -144,9 +144,9 @@
             android:textSize="14sp" />
 
         <Button
-            android:id="@+id/button33"
+            android:id="@+id/Settings_FAQ"
             android:layout_width="357dp"
-            android:layout_height="wrap_content"
+            android:layout_height="49dp"
             android:layout_marginBottom="-10dp"
             android:backgroundTint="#000000"
             android:drawableEnd="@drawable/right_arrow_icon"
@@ -158,9 +158,9 @@
             app:strokeWidth="1dp" />
 
         <Button
-            android:id="@+id/PCFirstName"
+            android:id="@+id/Settings_Preference"
             android:layout_width="357dp"
-            android:layout_height="wrap_content"
+            android:layout_height="49dp"
             android:layout_marginBottom="-10dp"
             android:backgroundTint="#000000"
             android:drawableEnd="@drawable/right_arrow_icon"
@@ -200,7 +200,7 @@
         app:layout_constraintVertical_bias="0.78">
 
         <TextView
-            android:id="@+id/textView35"
+            android:id="@+id/accountxt"
             android:layout_width="92dp"
             android:layout_height="19dp"
             android:layout_marginStart="15dp"
@@ -210,9 +210,9 @@
             android:textSize="14sp" />
 
         <Button
-            android:id="@+id/button33"
+            android:id="@+id/Settings_Profile"
             android:layout_width="357dp"
-            android:layout_height="wrap_content"
+            android:layout_height="49dp"
             android:layout_marginBottom="-10dp"
             android:backgroundTint="#000000"
             android:drawableEnd="@drawable/right_arrow_icon"
@@ -224,9 +224,9 @@
             app:strokeWidth="1dp" />
 
         <Button
-            android:id="@+id/PCFirstName"
+            android:id="@+id/Settings_Goals"
             android:layout_width="357dp"
-            android:layout_height="wrap_content"
+            android:layout_height="49dp"
             android:layout_marginBottom="-10dp"
             android:backgroundTint="#000000"
             android:drawableEnd="@drawable/right_arrow_icon"
@@ -238,9 +238,9 @@
             app:strokeWidth="1dp" />
 
         <Button
-            android:id="@+id/PCFirstName"
+            android:id="@+id/Settings_Measurements"
             android:layout_width="357dp"
-            android:layout_height="wrap_content"
+            android:layout_height="49dp"
             android:backgroundTint="#000000"
             android:drawableEnd="@drawable/right_arrow_icon"
             android:text="Measurement"

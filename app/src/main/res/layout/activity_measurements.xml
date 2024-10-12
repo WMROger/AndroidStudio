@@ -5,8 +5,8 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Home_LandingPage.MeasurementsActivity"
-    android:background="@drawable/bg_gradient">
+    android:background="@drawable/bg_gradient"
+    tools:context=".Home_LandingPage.Settings.MeasurementsActivity">
 
     <TextView
         android:id="@+id/msrstng"
@@ -23,7 +23,7 @@
         app:layout_constraintVertical_bias="0.058" />
 
     <TextView
-        android:id="@+id/msrstng"
+        android:id="@+id/msrdtl"
         android:layout_width="350dp"
         android:layout_height="wrap_content"
         android:text="@string/measurement_msg"
@@ -31,9 +31,10 @@
         android:textSize="12sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.508"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.142"
+        app:layout_constraintVertical_bias="0.115"
         app:lineHeight="10dp" />
 
     <TextView
@@ -50,34 +51,38 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.058" />
 
+
     <Button
-        android:id="@+id/save_profile"
+        android:id="@+id/Edit_Measurements"
         android:layout_width="250dp"
         android:layout_height="wrap_content"
-        android:text="Save"
+        android:text="Edit Measurement"
         android:textAllCaps="false"
-
         android:textColor="@color/white"
-        android:textSize="20sp"
+        android:textSize="15sp"
         app:cornerRadius="25sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.515"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.883" />
+        app:layout_constraintVertical_bias="0.934" />
 
     <ScrollView
         android:id="@+id/scrollView4"
-        android:layout_width="wrap_content"
-        android:layout_height="530dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_width="380dp"
+        android:layout_height="600dp"
+        android:layout_marginBottom="50dp"
+        app:layout_constraintBottom_toTopOf="@+id/Edit_Measurements"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.483"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@+id/msrdtl"
+        app:layout_constraintVertical_bias="0.0">
 
 
         <LinearLayout
-            android:layout_width="350dp"
+            android:layout_width="380dp"
             android:layout_height="wrap_content"
             android:isScrollContainer="true"
             android:orientation="vertical"
@@ -88,20 +93,33 @@
             app:layout_constraintStart_toStartOf="parent"
             tools:layout_editor_absoluteY="276dp">
 
-
             <TextView
+                android:id="@+id/View_BMI"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/button_background"
+                android:hint="BMI: "
+                android:paddingLeft="15dp"
+                android:paddingTop="10dp"
+                android:textColor="@color/white"
+                android:textColorHint="@color/white" />
+
+            <EditText
+                android:id="@+id/View_BodyWeight"
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
                 android:layout_marginTop="10dp"
                 android:background="@drawable/button_background"
                 android:hint="Body Weight (kg)"
                 android:paddingLeft="15dp"
-                android:paddingTop="10dp"
-                android:textColor="#FFFFFF"
-                android:textColorHint="#F2F2F2" />
+                android:textColor="@color/white"
+                android:textColorHint="@color/white"
+                android:textSize="16sp" />
 
 
-            <TextView
+            <EditText
+                android:id="@+id/View_Height"
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
                 android:layout_marginTop="10dp"
@@ -109,12 +127,13 @@
                 android:background="@drawable/button_background"
                 android:hint="Height (cm)"
                 android:paddingLeft="15dp"
-                android:paddingTop="10dp"
-                android:textColor="#FFFFFF"
-                android:textColorHint="#F2F2F2" />
+                android:textColor="@color/white"
+                android:textColorHint="@color/white"
+                android:textSize="16sp" />
 
 
-            <TextView
+            <EditText
+                android:id="@+id/View_Chest"
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
                 android:layout_marginTop="10dp"
@@ -122,12 +141,13 @@
                 android:background="@drawable/button_background"
                 android:hint="Chest (cm)"
                 android:paddingLeft="15dp"
-                android:paddingTop="10dp"
-                android:textColor="#FFFFFF"
-                android:textColorHint="#FFFFFF" />
+                android:textColor="@color/white"
+                android:textColorHint="@color/white"
+                android:textSize="16sp" />
 
 
-            <TextView
+            <EditText
+                android:id="@+id/View_Shoulder"
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
                 android:layout_marginTop="10dp"
@@ -135,14 +155,13 @@
                 android:background="@drawable/button_background"
                 android:hint="Shoulder (cm)"
                 android:paddingLeft="15dp"
-                android:paddingTop="10dp"
+                android:textColor="@color/white"
+                android:textColorHint="@color/white"
+                android:textSize="16sp" />
 
 
-                android:textColor="#FFFFFF"
-                android:textColorHint="#FFFFFF" />
-
-
-            <TextView
+            <EditText
+                android:id="@+id/View_Waist"
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
                 android:layout_marginTop="10dp"
@@ -150,12 +169,13 @@
                 android:background="@drawable/button_background"
                 android:hint="Waist (cm)"
                 android:paddingLeft="15dp"
-                android:paddingTop="10dp"
-                android:textColor="#FFFFFF"
-                android:textColorHint="#FFFFFF" />
+                android:textColor="@color/white"
+                android:textColorHint="@color/white"
+                android:textSize="16sp" />
 
 
-            <TextView
+            <EditText
+                android:id="@+id/View_Hips"
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
                 android:layout_marginTop="10dp"
@@ -163,9 +183,9 @@
                 android:background="@drawable/button_background"
                 android:hint="Hips (cm)"
                 android:paddingLeft="15dp"
-                android:paddingTop="10dp"
-                android:textColor="#FFFFFF"
-                android:textColorHint="#FFFFFF" />
+                android:textColor="@color/white"
+                android:textColorHint="@color/white"
+                android:textSize="16sp" />
 
 
             <GridLayout
@@ -175,8 +195,9 @@
                 android:rowCount="3">
 
 
-                <TextView
-                    android:layout_width="wrap_content"
+                <EditText
+                    android:id="@+id/View_LBicep"
+                    android:layout_width="140dp"
                     android:layout_height="48dp"
                     android:layout_row="0"
                     android:layout_column="0"
@@ -187,14 +208,15 @@
                     android:background="@drawable/button_background"
                     android:hint="Left Bicep (cm)"
                     android:paddingLeft="15dp"
-                    android:paddingTop="10dp"
                     android:textAlignment="textStart"
-                    android:textColor="#FFFFFF"
-                    android:textColorHint="#E4E4E4" />
+                    android:textColor="@color/white"
+                    android:textColorHint="@color/white"
+                    android:textSize="12sp" />
 
 
-                <TextView
-                    android:layout_width="wrap_content"
+                <EditText
+                    android:id="@+id/View_RBicep"
+                    android:layout_width="140dp"
                     android:layout_height="48dp"
                     android:layout_columnWeight="1"
                     android:layout_marginTop="10dp"
@@ -202,14 +224,15 @@
                     android:background="@drawable/button_background"
                     android:hint="Right Bicep (cm)"
                     android:paddingLeft="15dp"
-                    android:paddingTop="10dp"
                     android:textAlignment="textStart"
-                    android:textColor="#FFFFFF"
-                    android:textColorHint="#FFFFFF" />
+                    android:textColor="@color/white"
+                    android:textColorHint="@color/white"
+                    android:textSize="12sp" />
 
 
-                <TextView
-                    android:layout_width="wrap_content"
+                <EditText
+                    android:id="@+id/View_LForearm"
+                    android:layout_width="140dp"
                     android:layout_height="48dp"
                     android:layout_columnWeight="1"
                     android:layout_marginTop="10dp"
@@ -218,16 +241,15 @@
                     android:background="@drawable/button_background"
                     android:hint="Left Forearm (cm)"
                     android:paddingLeft="15dp"
-                    android:paddingTop="10dp"
-
-
                     android:textAlignment="textStart"
-                    android:textColor="#FFFFFF"
-                    android:textColorHint="#E4E4E4" />
+                    android:textColor="@color/white"
+                    android:textColorHint="@color/white"
+                    android:textSize="12sp" />
 
 
-                <TextView
-                    android:layout_width="wrap_content"
+                <EditText
+                    android:id="@+id/View_RForearm"
+                    android:layout_width="140dp"
                     android:layout_height="48dp"
                     android:layout_columnWeight="1"
                     android:layout_marginTop="10dp"
@@ -235,14 +257,15 @@
                     android:background="@drawable/button_background"
                     android:hint="Right Forearm (cm)"
                     android:paddingLeft="15dp"
-                    android:paddingTop="10dp"
                     android:textAlignment="textStart"
-                    android:textColor="#FFFFFF"
-                    android:textColorHint="#FFFFFF" />
+                    android:textColor="@color/white"
+                    android:textColorHint="@color/white"
+                    android:textSize="12sp" />
 
 
-                <TextView
-                    android:layout_width="wrap_content"
+                <EditText
+                    android:id="@+id/View_LCalf"
+                    android:layout_width="140dp"
                     android:layout_height="48dp"
                     android:layout_columnWeight="1"
                     android:layout_marginTop="10dp"
@@ -251,14 +274,15 @@
                     android:background="@drawable/button_background"
                     android:hint="Left Calf (cm)"
                     android:paddingLeft="15dp"
-                    android:paddingTop="10dp"
                     android:textAlignment="textStart"
-                    android:textColor="#FFFFFF"
-                    android:textColorHint="#E4E4E4" />
+                    android:textColor="@color/white"
+                    android:textColorHint="@color/white"
+                    android:textSize="12sp" />
 
 
-                <TextView
-                    android:layout_width="wrap_content"
+                <EditText
+                    android:id="@+id/View_RCalf"
+                    android:layout_width="140dp"
                     android:layout_height="48dp"
                     android:layout_columnWeight="1"
                     android:layout_marginTop="10dp"
@@ -266,10 +290,10 @@
                     android:background="@drawable/button_background"
                     android:hint="Right Calf (cm)"
                     android:paddingLeft="15dp"
-                    android:paddingTop="10dp"
                     android:textAlignment="textStart"
-                    android:textColor="#FFFFFF"
-                    android:textColorHint="#FFFFFF" />
+                    android:textColor="@color/white"
+                    android:textColorHint="@color/white"
+                    android:textSize="12sp" />
             </GridLayout>
 
 

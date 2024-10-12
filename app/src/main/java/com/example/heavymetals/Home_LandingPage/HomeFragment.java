@@ -18,6 +18,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.heavymetals.Home_LandingPage.Profile.ProfileFragment;
+import com.example.heavymetals.Home_LandingPage.Settings.SettingsFragment;
 import com.example.heavymetals.Home_LandingPage.Workouts.Exercises_All;
 import com.example.heavymetals.Home_LandingPage.Workouts.WorkoutModule1;
 import com.example.heavymetals.Home_LandingPage.Workouts.WorkoutModule4;

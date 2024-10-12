@@ -1,4 +1,4 @@
-package com.example.heavymetals.Home_LandingPage;
+package com.example.heavymetals.Home_LandingPage.Settings;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 
+import com.example.heavymetals.Home_LandingPage.Profile.ProfileEditActivity;
 import com.example.heavymetals.Login_RegisterPage.AuthenticationActivity;
 import com.example.heavymetals.R;
 
@@ -28,11 +29,13 @@ import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
-import android.content.SharedPreferences;
 
 
 public class SettingsFragment extends Fragment {
-    Button Settings_LogoutButton,delete_account_btn;
+    private Button Settings_LogoutButton,delete_account_btn;
+    private Button Settings_Profile, Settings_Goals,Settings_Measurements;
+    private Button Settings_FAQ, Settings_Preference;
+    private Button Settings_Advanced, Settings_Licenses,Settings_Notifications;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -44,10 +47,60 @@ public class SettingsFragment extends Fragment {
         Settings_LogoutButton = view.findViewById(R.id.Settings_LogoutButton);
         delete_account_btn = view.findViewById(R.id.Delete_account); // Assuming this is in your layout
 
+        Settings_Profile = view.findViewById(R.id.Settings_Profile);
+        Settings_Goals = view.findViewById(R.id.Settings_Goals);
+        Settings_Measurements = view.findViewById(R.id.Settings_Measurements);
+        Settings_FAQ = view.findViewById(R.id.Settings_FAQ);
+        Settings_Preference = view.findViewById(R.id.Settings_Preference);
+
+        Settings_Advanced = view.findViewById(R.id.Settings_Advanced);
+        Settings_Licenses = view.findViewById(R.id.Settings_Licenses);
+        Settings_Notifications = view.findViewById(R.id.Settings_Notifications);
+
+
         // Set the click listener for the logout button
         Settings_LogoutButton.setOnClickListener(v -> logoutUser());
         delete_account_btn.setOnClickListener(v -> confirmAccountDeletion());
+        Settings_Profile.setOnClickListener(view1 -> {
+            Intent intent = new Intent(requireActivity(), ProfileEditActivity.class);
+            startActivity(intent);
+        });
 
+
+        Settings_Goals.setOnClickListener(view1 -> {
+            Intent intent = new Intent(requireActivity(), ProfileEditActivity.class);
+            startActivity(intent);
+        });
+
+
+        Settings_Measurements.setOnClickListener(view1 -> {
+            Intent intent = new Intent(requireActivity(), MeasurementsActivity.class);
+            startActivity(intent);
+        });
+
+
+        Settings_FAQ.setOnClickListener(view1 -> {
+            Intent intent = new Intent(requireActivity(), ProfileEditActivity.class);
+            startActivity(intent);
+        });
+        Settings_Preference.setOnClickListener(view1 -> {
+            Intent intent = new Intent(requireActivity(), ProfileEditActivity.class);
+            startActivity(intent);
+        });
+        Settings_Advanced.setOnClickListener(view1 -> {
+            Intent intent = new Intent(requireActivity(), ProfileEditActivity.class);
+            startActivity(intent);
+        });
+        Settings_Licenses.setOnClickListener(view1 -> {
+            Intent intent = new Intent(requireActivity(), ProfileEditActivity.class);
+            startActivity(intent);
+        });
+        Settings_Notifications.setOnClickListener(view1 -> {
+            Intent intent = new Intent(requireActivity(), ProfileEditActivity.class);
+            startActivity(intent);
+        });
+
+        // Return the inflated view
         return view;
     }
     // Show a confirmation dialog to delete the account (first step)
@@ -151,8 +204,6 @@ public class SettingsFragment extends Fragment {
         }
     }
 
-
-
     // Clear session data and redirect to login page after account deletion
     private void clearSessionAndRedirectToLogin() {
         SharedPreferences sharedPreferences = requireActivity().getSharedPreferences("UserPrefs", MODE_PRIVATE);
@@ -163,8 +214,6 @@ public class SettingsFragment extends Fragment {
         // Redirect to login activity
         redirectToLogin();
     }
-
-
 
     // Log out the user and clear their session
     private void logoutUser() {
