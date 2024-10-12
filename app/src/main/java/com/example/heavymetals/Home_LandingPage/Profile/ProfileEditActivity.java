@@ -121,10 +121,12 @@ public class ProfileEditActivity extends AppCompatActivity {
 
         new Thread(() -> {
             try {
-                URL url = new URL("https://heavymetals.scarlet2.io/HeavyMetals/user_details/update_profile.php"); // Update this URL to your actual API
+                // Prepare the connection to the server
+                URL url = new URL("https://heavymetals.scarlet2.io/HeavyMetals/user_details/save_profile.php");
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                 conn.setRequestMethod("POST");
                 conn.setDoOutput(true);
+                conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
 
                 // Prepare the profile data (first name, last name, date of birth)
                 StringBuilder postData = new StringBuilder();
@@ -133,7 +135,7 @@ public class ProfileEditActivity extends AppCompatActivity {
                 postData.append("&date_of_birth=").append(URLEncoder.encode(dateOfBirth, "UTF-8"));
                 postData.append("&email=").append(URLEncoder.encode(sharedPreferences.getString("loggedInUser", ""), "UTF-8"));
 
-                // If the user has selected a new profile picture, upload it
+                // If the user has selected a new profile picture, encode it in Base64 and include it in the POST data
                 if (newProfilePictureBitmap != null) {
                     ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
                     newProfilePictureBitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
@@ -150,7 +152,7 @@ public class ProfileEditActivity extends AppCompatActivity {
                 writer.close();
                 os.close();
 
-                // Get the response
+                // Get the response from the server
                 InputStream is = conn.getInputStream();
                 BufferedReader reader = new BufferedReader(new InputStreamReader(is));
                 StringBuilder response = new StringBuilder();
@@ -160,10 +162,11 @@ public class ProfileEditActivity extends AppCompatActivity {
                 }
                 reader.close();
 
-                // Parse the response JSON
+                // Parse the server response JSON
                 JSONObject jsonResponse = new JSONObject(response.toString());
                 boolean success = jsonResponse.getBoolean("success");
 
+                // Handle the result on the UI thread
                 runOnUiThread(() -> {
                     if (success) {
                         Toast.makeText(ProfileEditActivity.this, "Profile updated successfully", Toast.LENGTH_SHORT).show();
@@ -178,6 +181,7 @@ public class ProfileEditActivity extends AppCompatActivity {
             }
         }).start();
     }
+
 
     // Fetch the user details from the server
     private void fetchUserDetails(String email) {
@@ -250,4 +254,5 @@ public class ProfileEditActivity extends AppCompatActivity {
             }
         }).start();
     }
+
 }

@@ -90,9 +90,13 @@ public class ProfileFragment extends Fragment {
             Toast.makeText(getActivity(), "No user ID found in SharedPreferences.", Toast.LENGTH_SHORT).show();
         }
 
-        if (userEmail != null) {
+        if (userEmail != null && !userEmail.isEmpty()) {
             emailTextView.setText(userEmail);
+        } else {
+            Toast.makeText(getActivity(), "Email not found. Please log in again.", Toast.LENGTH_SHORT).show();
+            // You can redirect the user to the login page if needed
         }
+
 
         // Handle click for "Continue" button
         continue_btn.setOnClickListener(v -> {
