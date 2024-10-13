@@ -65,18 +65,16 @@ public class SettingsFragment extends Fragment {
             Intent intent = new Intent(requireActivity(), ProfileEditActivity.class);
             startActivity(intent);
         });
-
-
         Settings_Goals.setOnClickListener(view1 -> {
-            Intent intent = new Intent(requireActivity(), ProfileEditActivity.class);
+            Intent intent = new Intent(requireActivity(), GoalsShowActivity.class);
             startActivity(intent);
         });
-
-
         Settings_Measurements.setOnClickListener(view1 -> {
             Intent intent = new Intent(requireActivity(), MeasurementsActivity.class);
             startActivity(intent);
         });
+
+
 
 
         Settings_FAQ.setOnClickListener(view1 -> {
