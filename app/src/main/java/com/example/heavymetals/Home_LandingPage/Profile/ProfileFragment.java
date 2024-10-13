@@ -11,8 +11,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,6 +26,10 @@ import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.bumptech.glide.request.target.Target;
+import com.example.heavymetals.Home_LandingPage.Settings.MeasurementsActivity;
+import com.example.heavymetals.Home_LandingPage.Tracker.ProgressFragment;
+import com.example.heavymetals.Home_LandingPage.Workouts.Exercises_All;
+import com.example.heavymetals.Home_LandingPage.Workouts.WorkoutModule4;
 import com.example.heavymetals.R;
 
 import org.json.JSONObject;
@@ -40,11 +47,13 @@ import java.net.URLEncoder;
 public class ProfileFragment extends Fragment {
 
     // UI elements
-    private TextView firstNameTextView, emailTextView, editProfile;
+    private TextView progressText,firstNameTextView, emailTextView, editProfile;
     private Button continue_btn;
     private ProgressBar accountProgress;
-    private TextView progressText;
+    private LinearLayout your_workouts,add_workouts, measurements;
+    private ImageButton Tracker;
     private ImageView ic_profile;
+
     // SharedPreferences constants
     static final String PREFS_NAME = "UserProgressPrefs";
     static final String PROGRESS_KEY = "progress";
@@ -70,6 +79,10 @@ public class ProfileFragment extends Fragment {
         accountProgress = view.findViewById(R.id.account_progress);
         progressText = view.findViewById(R.id.account_progress_text);
         ic_profile = view.findViewById(R.id.ic_profile);
+        your_workouts = view.findViewById(R.id.Profile_Your_Workouts);
+        add_workouts = view.findViewById(R.id.Profile_Add_Workout);
+        measurements = view.findViewById(R.id.Profile_Measurements);
+        Tracker = view.findViewById(R.id.Tracker_btn);
 
 
         // Ensure the views are not null before using them
@@ -136,6 +149,26 @@ public class ProfileFragment extends Fragment {
         editProfile.setOnClickListener(v -> {
             Intent intent = new Intent(getActivity(), ProfileEditActivity.class);
             startActivity(intent);
+        });
+        your_workouts.setOnClickListener(view1 -> {
+            Intent intent = new Intent(getActivity(), WorkoutModule4.class);
+            startActivity(intent);
+        });
+        add_workouts.setOnClickListener(view1 -> {
+            Intent intent = new Intent(getActivity(), Exercises_All.class);
+            startActivity(intent);
+        });
+        measurements.setOnClickListener(view1 -> {
+            Intent intent = new Intent(getActivity(), MeasurementsActivity.class);
+            startActivity(intent);
+        });
+        Tracker.setOnClickListener(view1 -> {
+            // Replace the current fragment with the ProgressFragment
+            getActivity().getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.fragment_container, new ProgressFragment())  // Assuming fragment_container is the FrameLayout in the parent activity layout
+                    .addToBackStack(null)  // Optional: Add to back stack so the user can navigate back
+                    .commit();
         });
 
         // Update the progress bar based on saved progress

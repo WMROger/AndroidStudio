@@ -19,6 +19,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.example.heavymetals.Home_LandingPage.Profile.ProfileFragment;
 import com.example.heavymetals.Home_LandingPage.Settings.SettingsFragment;
+import com.example.heavymetals.Home_LandingPage.Tracker.ProgressFragment;
 import com.example.heavymetals.Home_LandingPage.Workouts.Exercises_All;
 import com.example.heavymetals.Home_LandingPage.Workouts.WorkoutModule1;
 import com.example.heavymetals.Home_LandingPage.Workouts.WorkoutModule4;
@@ -42,7 +43,7 @@ public class HomeFragment extends Fragment {
     private API apiService;
     private final Handler handler = new Handler();
     private Runnable runnable;
-
+    private ImageButton tracker;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -54,7 +55,7 @@ public class HomeFragment extends Fragment {
         textViewCurrentTime = view.findViewById(R.id.textDate);
         CreateWorkoutShortcut_btn = view.findViewById(R.id.CreateWorkoutShortcut_btn);
         RecommendationsShortcut_btn = view.findViewById(R.id.RecommendationsShortcut_btn);
-
+        tracker = view.findViewById(R.id.Tracker_btn);
         // Fix for finding RelativeLayouts
         ImageButton settingsHome = view.findViewById(R.id.Settings_home);
         ImageButton profileHome = view.findViewById(R.id.Profile_home);
@@ -92,7 +93,14 @@ public class HomeFragment extends Fragment {
                     .addToBackStack(null)
                     .commit();
         });
-
+        tracker.setOnClickListener(view1 -> {
+            // Replace the current fragment with the ProgressFragment
+            getActivity().getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.fragment_container, new ProgressFragment())  // Assuming fragment_container is the FrameLayout in the parent activity layout
+                    .addToBackStack(null)  // Optional: Add to back stack so the user can navigate back
+                    .commit();
+        });
         yourWorkoutBtn.setOnClickListener(v -> {
             Intent intent = new Intent(requireActivity(), WorkoutModule4.class);
             startActivity(intent);

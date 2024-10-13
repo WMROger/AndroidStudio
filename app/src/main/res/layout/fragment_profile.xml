@@ -163,6 +163,7 @@
 
 
             <LinearLayout
+                android:id="@+id/Profile_Your_Workouts"
                 android:layout_width="wrap_content"
                 android:layout_height="100dp"
                 android:layout_marginTop="10dp"
@@ -193,6 +194,7 @@
 
 
             <LinearLayout
+                android:id="@+id/Profile_Add_Workout"
                 android:layout_width="wrap_content"
                 android:layout_height="100dp"
                 android:layout_marginTop="10dp"
@@ -268,6 +270,7 @@
 
 
         <LinearLayout
+            android:id="@+id/Profile_Measurements"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -306,7 +309,7 @@
         app:layout_constraintVertical_bias="0.529">
 
         <ImageButton
-            android:id="@+id/imageView4"
+            android:id="@+id/Tracker_btn"
             android:layout_width="386dp"
             android:layout_height="match_parent"
             android:layout_centerInParent="true"
