@@ -20,6 +20,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
+import com.example.heavymetals.Home_LandingPage.Settings.MeasurementsActivity;
 import com.example.heavymetals.R;
 
 import org.json.JSONException;
@@ -28,6 +29,7 @@ import org.json.JSONObject;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.ByteArrayOutputStream;
+import java.io.DataOutputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
@@ -44,7 +46,7 @@ public class ProfileEditActivity extends AppCompatActivity {
     private ImageView ProfilePicture;
     private SharedPreferences sharedPreferences;
     private String currentProfilePicUrl;
-    private Button savefile;
+    private Button savefile, view_measurements;
     private Bitmap newProfilePictureBitmap = null;
     private Button maleButton, femaleButton;
 
@@ -59,6 +61,7 @@ public class ProfileEditActivity extends AppCompatActivity {
         dateOfBirthTextView = findViewById(R.id.Date_of_Birth);
         ProfilePicture = findViewById(R.id.Profile_Picture);
         backButton = findViewById(R.id.back_profile);
+        view_measurements = findViewById(R.id.view_measurements);
         savefile = findViewById(R.id.save_profile);
         maleButton = findViewById(R.id.Gender_male);
         femaleButton = findViewById(R.id.Gender_female);
@@ -82,6 +85,10 @@ public class ProfileEditActivity extends AppCompatActivity {
 
         // Save the updated profile when the save button is clicked
         savefile.setOnClickListener(v -> saveProfile());
+        view_measurements.setOnClickListener(view -> {
+            Intent intent = new Intent (ProfileEditActivity.this, MeasurementsActivity.class);
+            startActivity(intent);
+        });
     }
 
     // Method to open the image picker
@@ -114,63 +121,81 @@ public class ProfileEditActivity extends AppCompatActivity {
         }
     }
 
-    // Save the updated profile to the server
     private void saveProfile() {
         String firstName = firstNameEditText.getText().toString();
         String lastName = lastNameEditText.getText().toString();
-        String dateOfBirth = dateOfBirthTextView.getText().toString();
 
         // Retrieve user_id from SharedPreferences
         String userId = sharedPreferences.getString("user_id", null);
 
-        // Ensure all fields are filled, including user_id
-        if (firstName.isEmpty() || lastName.isEmpty() || dateOfBirth.isEmpty()) {
-            Toast.makeText(this, "Please fill all fields", Toast.LENGTH_SHORT).show();
-            return;
-        }
+        // Log the values being sent for debugging
+        Log.d("ProfileEditActivity", "User ID: " + userId);
+        Log.d("ProfileEditActivity", "First Name: " + firstName);
+        Log.d("ProfileEditActivity", "Last Name: " + lastName);
 
-        if (userId == null) {
-            Toast.makeText(this, "User ID not found. Please log in again.", Toast.LENGTH_SHORT).show();
+        if (userId == null || firstName.isEmpty() || lastName.isEmpty()) {
+            Toast.makeText(this, "User ID, First Name, and Last Name are required.", Toast.LENGTH_SHORT).show();
             return;
         }
 
         new Thread(() -> {
+            HttpURLConnection conn = null;
+            DataOutputStream os = null;
+            BufferedReader reader = null;
+
             try {
-                // Prepare the connection to the server
                 URL url = new URL("https://heavymetals.scarlet2.io/HeavyMetals/user_details/save_profile.php");
-                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                conn = (HttpURLConnection) url.openConnection();
                 conn.setRequestMethod("POST");
                 conn.setDoOutput(true);
-                conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+                conn.setRequestProperty("Connection", "Keep-Alive");
+                conn.setRequestProperty("Content-Type", "multipart/form-data;boundary=*****");
 
-                // Prepare the profile data (user_id, first name, last name, date of birth)
-                StringBuilder postData = new StringBuilder();
-                postData.append("user_id=").append(URLEncoder.encode(userId, "UTF-8"));  // Add user_id to the POST data
-                postData.append("&first_name=").append(URLEncoder.encode(firstName, "UTF-8"));
-                postData.append("&last_name=").append(URLEncoder.encode(lastName, "UTF-8"));
-                postData.append("&date_of_birth=").append(URLEncoder.encode(dateOfBirth, "UTF-8"));
-                postData.append("&email=").append(URLEncoder.encode(sharedPreferences.getString("loggedInUser", ""), "UTF-8"));
+                os = new DataOutputStream(conn.getOutputStream());
 
-                // If the user has selected a new profile picture, encode it in Base64 and include it in the POST data
+                String boundary = "*****";
+                String lineEnd = "\r\n";
+                String twoHyphens = "--";
+
+                // Send user_id
+                os.writeBytes(twoHyphens + boundary + lineEnd);
+                os.writeBytes("Content-Disposition: form-data; name=\"user_id\"" + lineEnd);
+                os.writeBytes(lineEnd + userId + lineEnd);
+                os.writeBytes(twoHyphens + boundary + lineEnd);
+
+                // Send first name
+                os.writeBytes("Content-Disposition: form-data; name=\"first_name\"" + lineEnd);
+                os.writeBytes(lineEnd + firstName + lineEnd);
+                os.writeBytes(twoHyphens + boundary + lineEnd);
+
+                // Send last name
+                os.writeBytes("Content-Disposition: form-data; name=\"last_name\"" + lineEnd);
+                os.writeBytes(lineEnd + lastName + lineEnd);
+                os.writeBytes(twoHyphens + boundary + lineEnd);
+
+                // If a new profile picture is selected, add it to the multipart request
                 if (newProfilePictureBitmap != null) {
                     ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
                     newProfilePictureBitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
                     byte[] byteArray = byteArrayOutputStream.toByteArray();
-                    String encodedImage = android.util.Base64.encodeToString(byteArray, android.util.Base64.DEFAULT);
-                    postData.append("&profile_pic=").append(URLEncoder.encode(encodedImage, "UTF-8"));
+
+                    os.writeBytes("Content-Disposition: form-data; name=\"profile_pic\"; filename=\"profile.jpg\"" + lineEnd);
+                    os.writeBytes("Content-Type: image/jpeg" + lineEnd);
+                    os.writeBytes(lineEnd);
+                    os.write(byteArray);  // Write the image bytes
+                    os.writeBytes(lineEnd);
+                    os.writeBytes(twoHyphens + boundary + twoHyphens + lineEnd); // End of multipart data
                 }
 
-                // Send the POST data
-                OutputStream os = conn.getOutputStream();
-                BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os, "UTF-8"));
-                writer.write(postData.toString());
-                writer.flush();
-                writer.close();
+                os.flush();
                 os.close();
 
                 // Get the response from the server
+                int responseCode = conn.getResponseCode();
+                Log.d("ProfileEditActivity", "Response Code: " + responseCode);
+
                 InputStream is = conn.getInputStream();
-                BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+                reader = new BufferedReader(new InputStreamReader(is));
                 StringBuilder response = new StringBuilder();
                 String line;
                 while ((line = reader.readLine()) != null) {
@@ -178,25 +203,45 @@ public class ProfileEditActivity extends AppCompatActivity {
                 }
                 reader.close();
 
-                // Parse the server response JSON
+                // Log the raw server response for debugging
+                Log.d("ProfileEditActivity", "Server Response: " + response.toString());
+
+                // Parse the server response
                 JSONObject jsonResponse = new JSONObject(response.toString());
                 boolean success = jsonResponse.getBoolean("success");
 
-                // Handle the result on the UI thread
                 runOnUiThread(() -> {
                     if (success) {
                         Toast.makeText(ProfileEditActivity.this, "Profile updated successfully", Toast.LENGTH_SHORT).show();
                     } else {
-                        Toast.makeText(ProfileEditActivity.this, "Failed to update profile", Toast.LENGTH_SHORT).show();
+                        // Log error details and show a toast message
+                        String errorMessage = jsonResponse.optString("message", "Unknown error occurred");
+                        Log.e("ProfileEditActivity", "Profile update failed: " + errorMessage);
+                        Toast.makeText(ProfileEditActivity.this, "Failed to update profile: " + errorMessage, Toast.LENGTH_SHORT).show();
                     }
                 });
 
             } catch (Exception e) {
-                e.printStackTrace();
-                runOnUiThread(() -> Toast.makeText(ProfileEditActivity.this, "Error saving profile", Toast.LENGTH_LONG).show());
+                // Log the error and show a detailed toast
+                Log.e("ProfileEditActivity", "Error saving profile", e);
+                runOnUiThread(() -> Toast.makeText(ProfileEditActivity.this, "Error saving profile: " + e.getMessage(), Toast.LENGTH_LONG).show());
+            } finally {
+                try {
+                    if (os != null) os.close();
+                    if (reader != null) reader.close();
+                    if (conn != null) conn.disconnect();
+                } catch (Exception ignored) {
+                }
             }
         }).start();
     }
+
+
+
+
+
+
+
 
 
 
