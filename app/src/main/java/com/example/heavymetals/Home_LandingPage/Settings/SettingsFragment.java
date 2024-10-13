@@ -34,8 +34,7 @@ import java.net.URLEncoder;
 public class SettingsFragment extends Fragment {
     private Button Settings_LogoutButton,delete_account_btn;
     private Button Settings_Profile, Settings_Goals,Settings_Measurements;
-    private Button Settings_FAQ, Settings_Preference;
-    private Button Settings_Advanced, Settings_Licenses,Settings_Notifications;
+    private Button Settings_Help_Center, Settings_Licenses,Settings_Notifications;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -50,10 +49,8 @@ public class SettingsFragment extends Fragment {
         Settings_Profile = view.findViewById(R.id.Settings_Profile);
         Settings_Goals = view.findViewById(R.id.Settings_Goals);
         Settings_Measurements = view.findViewById(R.id.Settings_Measurements);
-        Settings_FAQ = view.findViewById(R.id.Settings_FAQ);
-        Settings_Preference = view.findViewById(R.id.Settings_Preference);
+        Settings_Help_Center = view.findViewById(R.id.Settings_Help_Center);
 
-        Settings_Advanced = view.findViewById(R.id.Settings_Advanced);
         Settings_Licenses = view.findViewById(R.id.Settings_Licenses);
         Settings_Notifications = view.findViewById(R.id.Settings_Notifications);
 
@@ -75,17 +72,7 @@ public class SettingsFragment extends Fragment {
         });
 
 
-
-
-        Settings_FAQ.setOnClickListener(view1 -> {
-            Intent intent = new Intent(requireActivity(), ProfileEditActivity.class);
-            startActivity(intent);
-        });
-        Settings_Preference.setOnClickListener(view1 -> {
-            Intent intent = new Intent(requireActivity(), ProfileEditActivity.class);
-            startActivity(intent);
-        });
-        Settings_Advanced.setOnClickListener(view1 -> {
+        Settings_Help_Center.setOnClickListener(view1 -> {
             Intent intent = new Intent(requireActivity(), ProfileEditActivity.class);
             startActivity(intent);
         });
