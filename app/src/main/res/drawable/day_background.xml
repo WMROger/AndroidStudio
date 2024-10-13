@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <shape xmlns:android="http://schemas.android.com/apk/res/android">
-    <solid android:color="@color/custom_orange" />
+    <!-- Black background color -->
+    <solid android:color="@android:color/black" />
+
+    <!-- Orange border (stroke) -->
+    <stroke android:width="2dp" android:color="@color/custom_orange" />
+
+    <!-- Rounded corners if needed -->
     <corners android:radius="15dp" />
-    <padding android:left="4dp" android:right="4dp" />
 </shape>

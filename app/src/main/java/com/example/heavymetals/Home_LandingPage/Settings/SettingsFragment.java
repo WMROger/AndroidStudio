@@ -5,6 +5,7 @@ import static android.content.Context.MODE_PRIVATE;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -81,7 +82,16 @@ public class SettingsFragment extends Fragment {
             startActivity(intent);
         });
         Settings_Notifications.setOnClickListener(view1 -> {
-            Intent intent = new Intent(requireActivity(), ProfileEditActivity.class);
+            Intent intent = new Intent();
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                // For Android 8.0 (API level 26) and above, direct to app-specific notification settings
+                intent.setAction(android.provider.Settings.ACTION_APP_NOTIFICATION_SETTINGS);
+                intent.putExtra(android.provider.Settings.EXTRA_APP_PACKAGE, requireActivity().getPackageName());
+            } else {
+                // For older Android versions, open the general app settings page
+                intent.setAction(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                intent.setData(Uri.parse("package:" + requireActivity().getPackageName()));
+            }
             startActivity(intent);
         });
 

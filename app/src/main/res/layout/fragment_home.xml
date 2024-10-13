@@ -24,7 +24,7 @@
         app:layout_constraintTop_toBottomOf="@+id/relativeLayout">
 
         <ImageButton
-            android:id="@+id/imageView4"
+            android:id="@+id/hmn_sat"
             android:layout_width="186dp"
             android:layout_height="81dp"
             android:background="@drawable/bg_blackgradient"
@@ -32,7 +32,7 @@
             android:scaleType="fitCenter" />
 
         <TextView
-            android:id="@+id/textView5"
+            android:id="@+id/hmn_sat2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
@@ -57,7 +57,7 @@
         app:layout_constraintVertical_bias="0.227">
 
         <ImageButton
-            android:id="@+id/imageView4"
+            android:id="@+id/cal_sat"
             android:layout_width="186dp"
             android:layout_height="81dp"
             android:background="@drawable/bg_blackgradient"
@@ -65,7 +65,7 @@
             android:scaleType="fitCenter" />
 
         <TextView
-            android:id="@+id/textView5"
+            android:id="@+id/cal_sat2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
@@ -98,7 +98,7 @@
             android:scaleType="fitCenter" />
 
         <TextView
-            android:id="@+id/textView5"
+            android:id="@+id/profile"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
@@ -132,7 +132,7 @@
             android:scaleType="fitCenter" />
 
         <TextView
-            android:id="@+id/textView5"
+            android:id="@+id/Settings"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
@@ -218,7 +218,7 @@
             android:src="@drawable/progress_tracker" />
 
         <TextView
-            android:id="@+id/textView5"
+            android:id="@+id/trk"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
@@ -235,14 +235,14 @@
             android:src="@drawable/tracker_icon" />
 
         <TextView
-            android:id="@+id/textView10"
+            android:id="@+id/data"
             android:layout_width="wrap_content"
             android:layout_height="20dp"
             android:layout_below="@+id/tracker_icon"
-            android:layout_alignStart="@+id/imageView4"
-            android:layout_alignEnd="@+id/imageView4"
+            android:layout_alignStart="@+id/Tracker_btn"
+            android:layout_alignEnd="@+id/Tracker_btn"
             android:layout_alignParentBottom="true"
-            android:layout_marginStart="165dp"
+            android:layout_marginStart="125dp"
             android:layout_marginTop="-2dp"
             android:layout_marginEnd="120dp"
             android:layout_marginBottom="45dp"
@@ -294,7 +294,7 @@
             app:cornerRadius="20dp" />
 
         <TextView
-            android:id="@+id/textView5"
+            android:id="@+id/workouts"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
@@ -304,7 +304,7 @@
             android:textSize="21sp" />
 
         <TextView
-            android:id="@+id/textView10"
+            android:id="@+id/qstart"
             android:layout_width="wrap_content"
             android:layout_height="20dp"
             android:layout_alignStart="@+id/imageView4"

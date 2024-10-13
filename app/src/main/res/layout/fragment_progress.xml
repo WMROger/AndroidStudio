@@ -56,16 +56,16 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tracker_title" />
 
+
     <ImageView
         android:id="@+id/iv_empty_schedule_icon"
         android:layout_width="80dp"
         android:layout_height="80dp"
+        android:layout_marginTop="52dp"
         android:src="@drawable/ic_schedule"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btn_add_schedule" />
-
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/schedule_container"
@@ -73,14 +73,31 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="456dp"
         android:background="@drawable/bg_blackgradient"
+        android:elevation="10dp"
         android:padding="16dp"
         android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btn_add_schedule">
+
+        <!-- Circular ProgressBar -->
 
         <!-- Set the Days Text -->
+        <ProgressBar
+            android:id="@+id/progress_circle"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:indeterminate="false"
+            android:progressDrawable="@drawable/custom_progress_drawable"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_goals" />
+
         <TextView
             android:id="@+id/tv_set_days"
             android:layout_width="wrap_content"
@@ -114,112 +131,120 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_set_days">
 
-            <!-- Example day: Monday -->
-
-            <!-- Tuesday -->
-
-            <!-- Wednesday -->
-            <TextView
+            <!-- Sunday -->
+            <Button
                 android:id="@+id/tv_sunday"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:background="@drawable/day_background"
+                android:fontFamily="@font/konkhmer_sleokchher"
                 android:gravity="center"
+                android:includeFontPadding="false"
+                android:padding="0dp"
                 android:text="S"
                 android:textColor="@color/black"
                 app:layout_constraintEnd_toStartOf="@+id/tv_monday"
-                app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintWidth_percent="0.14"
-                tools:layout_editor_absoluteY="0dp" />
+                app:layout_constraintWidth_percent="0.14" />
 
-            <TextView
+            <!-- Monday -->
+            <Button
                 android:id="@+id/tv_monday"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:background="@drawable/day_background"
-                android:backgroundTint="@color/custom_orange"
+                android:fontFamily="@font/konkhmer_sleokchher"
                 android:gravity="center"
+                android:includeFontPadding="false"
+                android:padding="0dp"
                 android:text="M"
                 android:textColor="@color/black"
                 app:layout_constraintEnd_toStartOf="@+id/tv_tuesday"
-                app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@+id/tv_sunday"
-                app:layout_constraintWidth_percent="0.14"
-                tools:layout_editor_absoluteY="0dp" />
+                app:layout_constraintWidth_percent="0.14" />
 
-            <TextView
+            <!-- Tuesday -->
+            <Button
                 android:id="@+id/tv_tuesday"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:background="@drawable/day_background"
+                android:fontFamily="@font/konkhmer_sleokchher"
                 android:gravity="center"
+                android:includeFontPadding="false"
+                android:padding="0dp"
                 android:text="T"
                 android:textColor="@color/black"
                 app:layout_constraintEnd_toStartOf="@+id/tv_wednesday"
-                app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@+id/tv_monday"
-                app:layout_constraintWidth_percent="0.14"
-                tools:layout_editor_absoluteY="0dp" />
+                app:layout_constraintWidth_percent="0.14" />
 
-            <TextView
+            <!-- Wednesday -->
+            <Button
                 android:id="@+id/tv_wednesday"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:background="@drawable/day_background"
+                android:fontFamily="@font/konkhmer_sleokchher"
                 android:gravity="center"
+                android:includeFontPadding="false"
+                android:padding="0dp"
                 android:text="W"
                 android:textColor="@color/black"
                 app:layout_constraintEnd_toStartOf="@+id/tv_thursday"
-                app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@+id/tv_tuesday"
                 app:layout_constraintWidth_percent="0.14" />
 
-            <TextView
+            <!-- Thursday -->
+            <Button
                 android:id="@+id/tv_thursday"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:background="@drawable/day_background"
+                android:fontFamily="@font/konkhmer_sleokchher"
                 android:gravity="center"
-                android:text="Th"
+                android:includeFontPadding="false"
+                android:padding="0dp"
+                android:text="T"
                 android:textColor="@color/black"
                 app:layout_constraintEnd_toStartOf="@+id/tv_friday"
-                app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@+id/tv_wednesday"
-                app:layout_constraintWidth_percent="0.14"
-                tools:layout_editor_absoluteY="0dp" />
+                app:layout_constraintWidth_percent="0.14" />
 
-            <TextView
+            <!-- Friday -->
+            <Button
                 android:id="@+id/tv_friday"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:background="@drawable/day_background"
+                android:fontFamily="@font/konkhmer_sleokchher"
                 android:gravity="center"
+                android:includeFontPadding="false"
+                android:padding="0dp"
                 android:text="F"
                 android:textColor="@color/black"
                 app:layout_constraintEnd_toStartOf="@+id/tv_saturday"
-                app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@+id/tv_thursday"
-                app:layout_constraintWidth_percent="0.14"
-                tools:layout_editor_absoluteY="0dp" />
+                app:layout_constraintWidth_percent="0.14" />
 
-
-            <TextView
+            <!-- Saturday -->
+            <Button
                 android:id="@+id/tv_saturday"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:background="@drawable/day_background"
+                android:fontFamily="@font/konkhmer_sleokchher"
                 android:gravity="center"
+                android:includeFontPadding="false"
+                android:padding="0dp"
                 android:text="S"
                 android:textColor="@color/black"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@+id/tv_friday"
-                app:layout_constraintWidth_percent="0.14"
-                tools:layout_editor_absoluteY="0dp" />
+                app:layout_constraintWidth_percent="0.14" />
 
-            <!-- Other Days: Thursday, Friday, Saturday, Sunday - Follow the same structure as above -->
         </androidx.constraintlayout.widget.ConstraintLayout>
+
 
         <!-- Goals Label -->
         <TextView
@@ -235,111 +260,71 @@
             app:layout_constraintTop_toBottomOf="@id/cl_days" />
 
         <!-- Goal 1 -->
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/goal_1_container"
+        <LinearLayout
+            android:id="@+id/goal_container"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
+            android:orientation="vertical"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_goals">
 
-            <TextView
-                android:id="@+id/goals1"
-                android:layout_width="20dp"
-                android:layout_height="wrap_content"
-                android:text="1"
-                android:textColor="@color/white"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-            <!-- Delete Button for Goal 1 -->
 
-            <EditText
-                android:id="@+id/et_goal_1"
-                android:layout_width="280dp"
-                android:layout_height="30dp"
-                android:layout_marginEnd="8dp"
-                android:gravity="center"
-                android:hint="Add goal here"
-                android:padding="0dp"
-                android:textColor="@color/white"
-                android:textColorHint="@color/gray"
-                android:textCursorDrawable="@drawable/cursor_color"
-                android:textSize="16sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/tv_delete_goal_1"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toEndOf="@+id/goals1"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.0"
-                app:layout_constraintWidth_percent="0.85" />
+        </LinearLayout>
 
-            <TextView
-                android:id="@+id/tv_delete_goal_1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Delete"
-                android:textColor="@color/custom_orange"
-                android:textStyle="bold"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@id/et_goal_1" />
+        <!--        &lt;!&ndash; Goal 2 &ndash;&gt;-->
+        <!--        <androidx.constraintlayout.widget.ConstraintLayout-->
+        <!--            android:id="@+id/goal_container_2"-->
+        <!--            android:layout_width="0dp"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:layout_marginTop="8dp"-->
+        <!--            app:layout_constraintEnd_toEndOf="parent"-->
+        <!--            app:layout_constraintStart_toStartOf="parent"-->
+        <!--            app:layout_constraintTop_toBottomOf="@id/goal_1_container">-->
 
+        <!--            &lt;!&ndash; Delete Button for Goal 2 &ndash;&gt;-->
+        <!--            <TextView-->
+        <!--                android:id="@+id/goals2"-->
+        <!--                android:layout_width="20dp"-->
+        <!--                android:layout_height="wrap_content"-->
+        <!--                android:text="2"-->
+        <!--                android:textColor="@color/white"-->
+        <!--                app:layout_constraintBottom_toBottomOf="parent"-->
+        <!--                app:layout_constraintStart_toStartOf="parent"-->
+        <!--                app:layout_constraintTop_toTopOf="parent" />-->
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+        <!--            <EditText-->
+        <!--                android:id="@+id/et_goal_2"-->
+        <!--                android:layout_width="280dp"-->
+        <!--                android:layout_height="30dp"-->
+        <!--                android:layout_marginEnd="8dp"-->
+        <!--                android:gravity="center"-->
+        <!--                android:hint="Add goal here"-->
+        <!--                android:padding="0dp"-->
+        <!--                android:textColor="@color/white"-->
+        <!--                android:textColorHint="@color/gray"-->
+        <!--                android:textCursorDrawable="@drawable/cursor_color"-->
+        <!--                android:textSize="16sp"-->
+        <!--                app:layout_constraintBottom_toBottomOf="parent"-->
+        <!--                app:layout_constraintEnd_toStartOf="@id/tv_delete_goal_2"-->
+        <!--                app:layout_constraintHorizontal_bias="0.0"-->
+        <!--                app:layout_constraintStart_toEndOf="@+id/goals2"-->
+        <!--                app:layout_constraintTop_toTopOf="parent"-->
+        <!--                app:layout_constraintVertical_bias="0.0"-->
+        <!--                app:layout_constraintWidth_percent="0.85" />-->
 
-        <!-- Goal 2 -->
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/goal_2_container"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/goal_1_container">
+        <!--            <TextView-->
+        <!--                android:id="@+id/tv_delete_goal_2"-->
+        <!--                android:layout_width="wrap_content"-->
+        <!--                android:layout_height="wrap_content"-->
+        <!--                android:text="Delete"-->
+        <!--                android:textColor="@color/custom_orange"-->
+        <!--                android:textStyle="bold"-->
+        <!--                app:layout_constraintEnd_toEndOf="parent"-->
+        <!--                app:layout_constraintTop_toTopOf="@id/et_goal_2" />-->
 
-            <!-- Delete Button for Goal 2 -->
-            <TextView
-                android:id="@+id/goals2"
-                android:layout_width="20dp"
-                android:layout_height="wrap_content"
-                android:text="2"
-                android:textColor="@color/white"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <EditText
-                android:id="@+id/et_goal_2"
-                android:layout_width="280dp"
-                android:layout_height="30dp"
-                android:layout_marginEnd="8dp"
-                android:gravity="center"
-                android:hint="Add goal here"
-                android:padding="0dp"
-                android:textColor="@color/white"
-                android:textColorHint="@color/gray"
-                android:textCursorDrawable="@drawable/cursor_color"
-                android:textSize="16sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/tv_delete_goal_2"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toEndOf="@+id/goals2"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.0"
-                app:layout_constraintWidth_percent="0.85" />
-
-            <TextView
-                android:id="@+id/tv_delete_goal_2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Delete"
-                android:textColor="@color/custom_orange"
-                android:textStyle="bold"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@id/et_goal_2" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
+        <!--        </androidx.constraintlayout.widget.ConstraintLayout>-->
 
         <!-- Add Button -->
         <Button
@@ -354,7 +339,7 @@
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/goal_2_container" />
+            app:layout_constraintTop_toBottomOf="@id/goal_container" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -362,10 +347,12 @@
         android:id="@+id/tv_empty_schedule"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
         android:text="You need to set your Schedule this week"
         android:textColor="@color/white"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.508"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/iv_empty_schedule_icon" />
 
@@ -436,6 +423,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:background="@drawable/day_background"
+                android:backgroundTint="@color/custom_orange"
                 android:gravity="center"
                 android:padding="8dp"
                 android:text="T"
@@ -463,6 +451,7 @@
             app:layout_constraintTop_toBottomOf="@id/week_days_row" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
