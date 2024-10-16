@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/coders"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/bg_gradient"
@@ -40,11 +41,12 @@
     <!-- Schedule Container (Initially Hidden) -->
     <!-- History Card Example -->
 
+
     <Button
         android:id="@+id/btn_add_schedule"
         android:layout_width="350dp"
         android:layout_height="65dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="48dp"
         android:backgroundTint="@color/custom_orange"
         android:text="+ Add Schedule"
         android:textColor="@color/black"
@@ -55,7 +57,6 @@
         app:layout_constraintHorizontal_bias="0.482"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tracker_title" />
-
 
     <ImageView
         android:id="@+id/iv_empty_schedule_icon"
@@ -71,32 +72,34 @@
         android:id="@+id/schedule_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="456dp"
+        android:layout_marginTop="44dp"
         android:background="@drawable/bg_blackgradient"
         android:elevation="10dp"
         android:padding="16dp"
-        android:visibility="gone"
+        android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btn_add_schedule">
+        app:layout_constraintTop_toBottomOf="@+id/tracker_title">
 
         <!-- Circular ProgressBar -->
 
         <!-- Set the Days Text -->
-        <ProgressBar
-            android:id="@+id/progress_circle"
-            style="?android:attr/progressBarStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
+        <me.zhanghai.android.materialprogressbar.MaterialProgressBar
+            android:id="@+id/circular_progress_bar"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
             android:indeterminate="false"
-            android:progressDrawable="@drawable/custom_progress_drawable"
-            android:visibility="gone"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
+            android:max="100"
+            android:progress="0"
+            app:layout_constraintEnd_toStartOf="@+id/goal_container"
+            app:layout_constraintHorizontal_bias="0.18"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_goals" />
+            app:layout_constraintTop_toBottomOf="@+id/tv_goals"
+            app:mpb_progressStyle="circular"
+            app:mpb_progressTint="@color/custom_orange" />
+
 
         <TextView
             android:id="@+id/tv_set_days"
@@ -356,102 +359,99 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/iv_empty_schedule_icon" />
 
+
+    <!-- ScrollView wrapping the History Section -->
+
+    <ScrollView
+        android:id="@+id/scrollView6"
+        android:layout_width="0dp"
+        android:layout_height="210dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_history_label"
+        app:layout_constraintVertical_bias="0.0">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <!-- History Card -->
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/history_card_last_week"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/bg_blackgradient"
+                android:padding="12dp">
+
+                <TextView
+                    android:id="@+id/tv_last_week"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Last Week"
+                    android:textColor="@color/white"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/week_days_row"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_last_week">
+
+                    <!-- Example of week days -->
+                    <TextView
+                        android:id="@+id/his_monday"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/day_background"
+                        android:backgroundTint="@color/custom_orange"
+                        android:gravity="center"
+                        android:padding="8dp"
+                        android:text="M"
+                        android:textColor="@color/black"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintWidth_percent="0.14" />
+
+                    <!-- Add other days similarly -->
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <!-- Completion Status -->
+                <TextView
+                    android:id="@+id/tv_goal_status"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="You completed your goal this week"
+                    android:textColor="@color/white"
+                    android:textSize="16sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/week_days_row" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </LinearLayout>
+    </ScrollView>
+
     <TextView
         android:id="@+id/tv_history_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="384dp"
         android:text="History"
         android:textColor="@color/white"
-        android:textSize="20sp"
+        android:textSize="30sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.042"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/history_card_last_week"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:background="@drawable/bg_blackgradient"
-        android:padding="12dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_history_label">
-
-        <!-- Week Title -->
-        <TextView
-            android:id="@+id/tv_last_week"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Last Week"
-            android:textColor="@color/white"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <!-- Week Days Row -->
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/week_days_row"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_last_week">
-
-            <!-- Example of week days -->
-            <TextView
-                android:id="@+id/his_monday"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:background="@drawable/day_background"
-                android:backgroundTint="@color/custom_orange"
-                android:gravity="center"
-                android:padding="8dp"
-                android:text="M"
-                android:textColor="@color/black"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintWidth_percent="0.14" />
-
-            <TextView
-                android:id="@+id/his_tuesday"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:background="@drawable/day_background"
-                android:backgroundTint="@color/custom_orange"
-                android:gravity="center"
-                android:padding="8dp"
-                android:text="T"
-                android:textColor="@color/black"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toEndOf="@+id/his_monday"
-                app:layout_constraintWidth_percent="0.14"
-                tools:layout_editor_absoluteY="0dp" />
-
-            <!-- Add other days similarly: W, Th, F, Sat, Sun -->
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <!-- Completion Status -->
-        <TextView
-            android:id="@+id/tv_goal_status"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:text="You completed your goal this week"
-            android:textColor="@color/white"
-            android:textSize="16sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/week_days_row" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
+        app:layout_constraintTop_toBottomOf="@+id/schedule_container"
+        app:layout_constraintVertical_bias="0.073" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
