@@ -69,6 +69,20 @@ public class WorkoutModule4 extends AppCompatActivity {
         setContentView(R.layout.activity_workout_module4);
 
 
+        // Get the intent to check where the user is coming from
+        boolean fromTracker = getIntent().getBooleanExtra("fromTracker", false);
+
+        // Initialize UI elements
+        Button viewWorkoutButton = findViewById(R.id.btnAddWorkout); // Assuming this is the button in your XML
+
+        // Change the button text based on where the user is coming from
+        if (fromTracker) {
+            viewWorkoutButton.setText("Add to Tracker");
+        } else {
+            viewWorkoutButton.setText("View Workout");
+        }
+
+
 
         ScheduleDailyNotification notificationScheduler = new ScheduleDailyNotification();
         notificationScheduler.scheduleDailyNotification(this);  // `this` refers to the context (in this case, the activity context)

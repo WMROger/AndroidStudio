@@ -1,5 +1,6 @@
 package com.example.heavymetals.Home_LandingPage.Tracker;
 
+import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Paint;
 import android.os.Bundle;
@@ -21,6 +22,7 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import com.example.heavymetals.Home_LandingPage.HomeFragment;
+import com.example.heavymetals.Home_LandingPage.Workouts.WorkoutModule4;
 import com.example.heavymetals.R;
 
 import android.content.Context;
@@ -30,7 +32,7 @@ import me.zhanghai.android.materialprogressbar.MaterialProgressBar;
 
 public class ProgressFragment extends Fragment {
 
-    private Button addScheduleButton, sun, mon, tue, wed, thu, fri, sat, AddGoal;
+    private Button addScheduleButton,addWorkout, sun, mon, tue, wed, thu, fri, sat, AddGoal;
     private View scheduleContainer;
     private TextView emptyScheduleText, trackerBack, SaveGoals;
     private LinearLayout goalContainer;
@@ -61,6 +63,7 @@ public class ProgressFragment extends Fragment {
 
         // Initialize views
         addScheduleButton = view.findViewById(R.id.btn_add_schedule);
+        addWorkout = view.findViewById(R.id.btn_add_workout);
         scheduleContainer = view.findViewById(R.id.schedule_container);
         emptyScheduleText = view.findViewById(R.id.tv_empty_schedule);
         emptyScheduleIcon = view.findViewById(R.id.iv_empty_schedule_icon);
@@ -118,7 +121,13 @@ public class ProgressFragment extends Fragment {
             scheduleContainer.setVisibility(View.VISIBLE);
         });
 
+        addWorkout.setOnClickListener(view1 -> {
+            // In ProgressFragment, when navigating to WorkoutModule4
+            Intent intent = new Intent(getActivity(), WorkoutModule4.class);
+            intent.putExtra("fromTracker", true);  // Pass 'true' when coming from the tracker
+            startActivity(intent);
 
+        });
         // Clear previous goals at the start
         goalContainer.removeAllViews();
         goalCount = 0;
