@@ -144,28 +144,17 @@ public class WorkoutDetailActivity extends AppCompatActivity {
 
         exercisesContainer.addView(exerciseTextView);
 
-        CheckBox doneCheckbox = new CheckBox(this);
-        doneCheckbox.setChecked(adaptersExercise.isDone());
-        doneCheckbox.setText("Completed");
-        doneCheckbox.setButtonTintList(getResources().getColorStateList(R.color.white));
-        doneCheckbox.setTextColor(getResources().getColor(R.color.white));
+
 
         LinearLayout.LayoutParams checkboxParams = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         checkboxParams.setMargins(0, 8, 0, 55); // Adding margins below the checkbox
-        doneCheckbox.setLayoutParams(checkboxParams);
 
-        doneCheckbox.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            adaptersExercise.setDone(isChecked);  // Update the exercise "isDone" status
-        });
-
-        exercisesContainer.addView(doneCheckbox);
     }
 
     private String formatExerciseDetails(AdaptersExercise exercise) {
         return "Exercise: " + exercise.getName() +
                 "\nSets: " + exercise.getSets() +
-                "\nReps: " + exercise.getReps() +
-                "\nDone: " + (exercise.isDone() ? "Yes" : "No");
+                "\nReps: " + exercise.getReps();
     }
 }

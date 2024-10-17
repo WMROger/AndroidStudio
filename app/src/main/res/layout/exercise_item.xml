@@ -118,16 +118,6 @@
 
             <!-- Done Label -->
 
-            <TextView
-                android:id="@+id/done_label"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="DONE"
-                android:textColor="@color/white"
-                android:textSize="16sp" />
-
         </LinearLayout>
 
         <!-- Container for Dynamic Set Rows -->
