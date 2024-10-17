@@ -1,5 +1,7 @@
 package com.example.heavymetals.Home_LandingPage.Workouts;
 
+import static android.app.PendingIntent.getActivity;
+
 import android.app.AlarmManager;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -110,10 +112,21 @@ public class WorkoutModule4 extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         workoutList = new ArrayList<>(); // Ensure workoutList is initialized
 
+
+
         // Add new workout button listener
         addWorkout.setOnClickListener(v -> {
-            Intent intent = new Intent(WorkoutModule4.this, Exercises_All.class);
-            startActivity(intent);
+            if (fromTracker) {
+                if (!workoutList.isEmpty()) {
+                    addToTracker(workoutList);  // Call method to add to the tracker's progress
+                    Toast.makeText(WorkoutModule4.this, "Workout added to tracker!", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(WorkoutModule4.this, "No workout to add.", Toast.LENGTH_SHORT).show();
+                }
+            } else {
+                Intent intent = new Intent(WorkoutModule4.this, Exercises_All.class);
+                startActivity(intent);
+            }
         });
 
         // Navigate back to the main activity
@@ -129,6 +142,59 @@ public class WorkoutModule4 extends AppCompatActivity {
             }
         });
     }
+
+    private void addToTracker(List<Workout> workoutList) {
+        String userEmail = getLoggedInUserEmail();
+        if (userEmail == null) {
+            Toast.makeText(this, "No logged-in user found. Cannot add to tracker.", Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        // Retrieve existing tracker data from SharedPreferences
+        SharedPreferences sharedPreferences = getSharedPreferences("TrackerData", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        Gson gson = new Gson();
+
+        // Get previously tracked workouts, or create a new empty list if none exists
+        String trackerJson = sharedPreferences.getString("tracker_" + userEmail, "");
+        List<Workout> trackerWorkouts;
+        if (!trackerJson.isEmpty()) {
+            Type workoutListType = new TypeToken<ArrayList<Workout>>() {}.getType();
+            trackerWorkouts = gson.fromJson(trackerJson, workoutListType);
+        } else {
+            trackerWorkouts = new ArrayList<>();
+        }
+
+        // Add new workouts to the tracker list
+        trackerWorkouts.addAll(workoutList);
+
+        // Save the updated tracker list back to SharedPreferences
+        String updatedTrackerJson = gson.toJson(trackerWorkouts);
+        editor.putString("tracker_" + userEmail, updatedTrackerJson);
+        editor.apply();
+
+        Toast.makeText(this, "Workout added to your tracker progress!", Toast.LENGTH_SHORT).show();
+    }
+
+
+    private void loadTrackedWorkouts() {
+        String userEmail = getLoggedInUserEmail();
+        SharedPreferences sharedPreferences = this.getSharedPreferences("TrackerData", Context.MODE_PRIVATE);
+        String trackerJson = sharedPreferences.getString("tracker_" + userEmail, "");
+
+        if (!trackerJson.isEmpty()) {
+            Gson gson = new Gson();
+            Type workoutListType = new TypeToken<ArrayList<Workout>>() {}.getType();
+            List<Workout> trackedWorkouts = gson.fromJson(trackerJson, workoutListType);
+
+            // Update your RecyclerView or UI with the tracked workouts
+            workoutAdapter.updateWorkouts(trackedWorkouts);
+        } else {
+            Toast.makeText(this, "No workouts tracked yet!", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+
 
     private void fetchWorkoutsFromServer() {
         String sessionToken = getSessionToken();
@@ -182,13 +248,14 @@ public class WorkoutModule4 extends AppCompatActivity {
                     // Call the server to delete the workout
                     deleteWorkoutFromServer(workout);
                 }
-            }, fromTracker);  // Pass the 'fromTracker' flag here
+            }, fromTracker, this, getLoggedInUserEmail());  // Pass 'this' as context and 'getLoggedInUserEmail()'
 
             recyclerView.setAdapter(workoutAdapter);
         } else {
             workoutAdapter.notifyDataSetChanged();
         }
     }
+
 
     private void updateRecyclerView() {
         if (workoutAdapter == null) {
@@ -210,13 +277,14 @@ public class WorkoutModule4 extends AppCompatActivity {
                     // Call the server to delete the workout
                     deleteWorkoutFromServer(workout);
                 }
-            }, fromTracker);  // Pass the 'fromTracker' flag here
+            }, fromTracker, this, getLoggedInUserEmail());  // Pass 'this' as context and 'getLoggedInUserEmail()'
 
             recyclerView.setAdapter(workoutAdapter);
         } else {
             workoutAdapter.notifyDataSetChanged();
         }
     }
+
 
     private void onWorkoutViewClicked(Workout workout) {
         Log.d("WorkoutModule4", "Workout clicked with ID: " + workout.getWorkoutId());

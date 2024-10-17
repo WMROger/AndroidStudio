@@ -306,6 +306,15 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/btn_add_goal" />
 
+        <LinearLayout
+            android:id="@+id/workoutList"
+            android:layout_width="279dp"
+            android:layout_height="14dp"
+            android:orientation="vertical"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btn_add_goal">
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <TextView
