@@ -36,10 +36,12 @@ public class WorkoutAdapter extends RecyclerView.Adapter<WorkoutAdapter.WorkoutV
 
     private List<Workout> workoutList;
     private OnWorkoutClickListener listener;
+    private boolean fromTracker;  // Add a flag to check if it's from the tracker
 
-    public WorkoutAdapter(List<Workout> workoutList, OnWorkoutClickListener listener) {
+    public WorkoutAdapter(List<Workout> workoutList, OnWorkoutClickListener listener, boolean fromTracker) {
         this.workoutList = workoutList;
         this.listener = listener;
+        this.fromTracker = fromTracker;  // Initialize the flag in the constructor
     }
 
     @NonNull
@@ -59,6 +61,13 @@ public class WorkoutAdapter extends RecyclerView.Adapter<WorkoutAdapter.WorkoutV
 
         // Fetch exercises for this workout
         fetchExerciseCountForWorkout(workout, holder);
+
+        // Set the button text dynamically based on the flag
+        if (fromTracker) {
+            holder.viewWorkoutButton.setText("Add to Tracker");  // If from tracker, show 'Add to Tracker'
+        } else {
+            holder.viewWorkoutButton.setText("View Workout");  // Otherwise, show 'View Workout'
+        }
 
         // Set up the view and delete button click listeners
         holder.viewWorkoutButton.setOnClickListener(v -> listener.onViewWorkoutClick(workout));
@@ -81,9 +90,7 @@ public class WorkoutAdapter extends RecyclerView.Adapter<WorkoutAdapter.WorkoutV
         });
     }
 
-
     private void fetchExerciseCountForWorkout(Workout workout, WorkoutViewHolder holder) {
-        // Fetch the session token from SharedPreferences or wherever you store it
         SharedPreferences sharedPreferences = holder.itemView.getContext().getSharedPreferences("UserPrefs", Context.MODE_PRIVATE);
         String sessionToken = sharedPreferences.getString("auth_token", null);
 
@@ -117,9 +124,6 @@ public class WorkoutAdapter extends RecyclerView.Adapter<WorkoutAdapter.WorkoutV
         });
     }
 
-
-
-
     @Override
     public int getItemCount() {
         return workoutList.size();
@@ -135,7 +139,6 @@ public class WorkoutAdapter extends RecyclerView.Adapter<WorkoutAdapter.WorkoutV
             viewWorkoutButton = itemView.findViewById(R.id.viewWorkoutButton);
             deleteWorkoutButton = itemView.findViewById(R.id.Delete_txt_view);
             exerciseCount = itemView.findViewById(R.id.exerciseCount);  // Initialize this
-
         }
     }
 

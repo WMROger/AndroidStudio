@@ -50,7 +50,7 @@
     <ScrollView
         android:id="@+id/scrollView5"
         android:layout_width="wrap_content"
-        android:layout_height="350dp"
+        android:layout_height="450dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.491"
@@ -97,7 +97,7 @@
                 android:paddingTop="5sp"
                 android:paddingBottom="5sp"
                 android:textColor="@color/white"
-                android:textColorHint="#FDFDFD" />
+                android:textColorHint="@color/gray" />
 
             <TextView
                 android:id="@+id/textView28"
@@ -121,8 +121,31 @@
                 android:paddingTop="5sp"
                 android:paddingBottom="5sp"
                 android:textColor="@color/white"
-                android:textColorHint="#FDFDFD" />
+                android:textColorHint="@color/gray" />
+            <TextView
+                android:id="@+id/textView29"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Phone Number"
+                android:textColor="#FFFFFF"
+                android:textSize="12sp" />
 
+
+            <EditText
+                android:id="@+id/edit_phonenumber"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginBottom="10sp"
+                android:background="@drawable/button_background"
+                android:ems="10"
+                android:hint="+63"
+                android:inputType="text"
+                android:paddingLeft="20sp"
+                android:paddingEnd="20sp"
+                android:paddingBottom="0sp"
+                android:paddingTop="0sp"
+                android:textColor="@color/white"
+                android:textColorHint="@color/gray" />
 
             <TextView
                 android:id="@+id/textView38"
@@ -143,11 +166,11 @@
                 android:drawablePadding="10sp"
                 android:ems="10"
                 android:gravity="center_vertical"
-                android:hint="Empty"
+                android:hint="Finish onboarding"
                 android:inputType="text"
                 android:paddingLeft="20sp"
-                android:textColor="#FFFFFF"
-                android:textColorHint="#FDFDFD" />
+                android:textColor="@color/white"
+                android:textColorHint="@color/gray" />
 
 
             <TextView
@@ -246,6 +269,6 @@
         app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/scrollView5"
-        app:layout_constraintVertical_bias="0.46" />
+        app:layout_constraintVertical_bias="0.91" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

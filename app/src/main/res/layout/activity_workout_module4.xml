@@ -55,7 +55,7 @@
     <Button
         android:id="@+id/btnAddWorkout"
         android:layout_width="300dp"
-        android:layout_height="65dp"
+        android:layout_height="55dp"
         android:backgroundTint="#000000"
         android:includeFontPadding="false"
         android:text="Add Workout"

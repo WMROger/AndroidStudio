@@ -11,7 +11,6 @@ import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -41,7 +40,9 @@ import java.net.URLEncoder;
 public class ProfileEditActivity extends AppCompatActivity {
 
     private static final int PICK_IMAGE_REQUEST = 1;
-    private EditText firstNameEditText, lastNameEditText;
+    private static final String PHILIPPINE_PHONE_REGEX = "^(\\+63|0)9\\d{9}$";  // Regex for Philippine mobile numbers
+
+    private EditText firstNameEditText, lastNameEditText, numberEditText;
     private TextView dateOfBirthTextView, backButton;
     private ImageView ProfilePicture;
     private SharedPreferences sharedPreferences;
@@ -58,6 +59,7 @@ public class ProfileEditActivity extends AppCompatActivity {
         // Initialize UI components
         firstNameEditText = findViewById(R.id.edit_firstname);
         lastNameEditText = findViewById(R.id.edit_lastname);
+        numberEditText = findViewById(R.id.edit_phonenumber);  // EditText for phone number
         dateOfBirthTextView = findViewById(R.id.Date_of_Birth);
         ProfilePicture = findViewById(R.id.Profile_Picture);
         backButton = findViewById(R.id.back_profile);
@@ -66,14 +68,11 @@ public class ProfileEditActivity extends AppCompatActivity {
         maleButton = findViewById(R.id.Gender_male);
         femaleButton = findViewById(R.id.Gender_female);
 
-
-
-
         sharedPreferences = getSharedPreferences("UserPrefs", Context.MODE_PRIVATE);
         String userEmail = sharedPreferences.getString("loggedInUser", null);
 
         if (userEmail != null) {
-            fetchUserDetails(userEmail);
+            fetchUserDetails(userEmail);  // Fetch the user details
         } else {
             Toast.makeText(this, "No logged-in user found.", Toast.LENGTH_SHORT).show();
         }
@@ -86,7 +85,7 @@ public class ProfileEditActivity extends AppCompatActivity {
         // Save the updated profile when the save button is clicked
         savefile.setOnClickListener(v -> saveProfile());
         view_measurements.setOnClickListener(view -> {
-            Intent intent = new Intent (ProfileEditActivity.this, MeasurementsActivity.class);
+            Intent intent = new Intent(ProfileEditActivity.this, MeasurementsActivity.class);
             startActivity(intent);
         });
     }
@@ -124,6 +123,13 @@ public class ProfileEditActivity extends AppCompatActivity {
     private void saveProfile() {
         String firstName = firstNameEditText.getText().toString();
         String lastName = lastNameEditText.getText().toString();
+        String phoneNumber = numberEditText.getText().toString();  // Get phone number input
+
+        // Validate the phone number for Philippine format
+        if (!isValidPhilippineNumber(phoneNumber)) {
+            numberEditText.setError("Invalid Philippine phone number. Must start with +639 or 09 and contain 10 digits.");
+            return;  // Stop saving if the phone number is invalid
+        }
 
         // Retrieve user_id from SharedPreferences
         String userId = sharedPreferences.getString("user_id", null);
@@ -132,9 +138,10 @@ public class ProfileEditActivity extends AppCompatActivity {
         Log.d("ProfileEditActivity", "User ID: " + userId);
         Log.d("ProfileEditActivity", "First Name: " + firstName);
         Log.d("ProfileEditActivity", "Last Name: " + lastName);
+        Log.d("ProfileEditActivity", "Phone Number: " + phoneNumber);  // Log the phone number
 
-        if (userId == null || firstName.isEmpty() || lastName.isEmpty()) {
-            Toast.makeText(this, "User ID, First Name, and Last Name are required.", Toast.LENGTH_SHORT).show();
+        if (userId == null || firstName.isEmpty() || lastName.isEmpty() || phoneNumber.isEmpty()) {
+            Toast.makeText(this, "User ID, First Name, Last Name, and Phone Number are required.", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -171,6 +178,11 @@ public class ProfileEditActivity extends AppCompatActivity {
                 // Send last name
                 os.writeBytes("Content-Disposition: form-data; name=\"last_name\"" + lineEnd);
                 os.writeBytes(lineEnd + lastName + lineEnd);
+                os.writeBytes(twoHyphens + boundary + lineEnd);
+
+                // Send phone number
+                os.writeBytes("Content-Disposition: form-data; name=\"phone_number\"" + lineEnd);
+                os.writeBytes(lineEnd + phoneNumber + lineEnd);
                 os.writeBytes(twoHyphens + boundary + lineEnd);
 
                 // If a new profile picture is selected, add it to the multipart request
@@ -236,14 +248,10 @@ public class ProfileEditActivity extends AppCompatActivity {
         }).start();
     }
 
-
-
-
-
-
-
-
-
+    // Validate phone number based on Philippine format
+    private boolean isValidPhilippineNumber(String phoneNumber) {
+        return phoneNumber.matches(PHILIPPINE_PHONE_REGEX);
+    }
 
     // Fetch the user details from the server
     private void fetchUserDetails(String email) {
@@ -291,6 +299,7 @@ public class ProfileEditActivity extends AppCompatActivity {
                     JSONObject profile = jsonResponse.getJSONObject("profile");
                     String firstName = profile.getString("first_name");
                     String lastName = profile.getString("last_name");
+                    String phoneNumber = profile.getString("phone_number");  // Fetch phone number from the server
                     String dateOfBirth = profile.getString("date_of_birth");
                     currentProfilePicUrl = profile.getString("profile_pic");
 
@@ -301,6 +310,7 @@ public class ProfileEditActivity extends AppCompatActivity {
                     runOnUiThread(() -> {
                         firstNameEditText.setText(firstName);
                         lastNameEditText.setText(lastName);
+                        numberEditText.setText(phoneNumber);  // Set phone number
                         dateOfBirthTextView.setText(dateOfBirth);
 
                         // Load profile picture using Glide with CircleCrop transformation
@@ -353,10 +363,4 @@ public class ProfileEditActivity extends AppCompatActivity {
             }
         }
     }
-
-
-
-
-
-
 }

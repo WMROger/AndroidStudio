@@ -49,7 +49,6 @@ import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 
-
 public class WorkoutModule4 extends AppCompatActivity {
 
     private Button addWorkout, wm4_Save_btn;
@@ -61,74 +60,24 @@ public class WorkoutModule4 extends AppCompatActivity {
     private static final int NOTIFICATION_ID = 100;  // Unique ID for notifications
     private Handler handler = new Handler(Looper.getMainLooper()); // Use Handler to schedule the task
     private Runnable refreshRunnable;  // Define the runnable task
-
+    private boolean fromTracker; // Flag to indicate if the user is coming from the tracker
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_workout_module4);
 
-
         // Get the intent to check where the user is coming from
-        boolean fromTracker = getIntent().getBooleanExtra("fromTracker", false);
+        fromTracker = getIntent().getBooleanExtra("fromTracker", false);
 
-        // Initialize UI elements
-        Button viewWorkoutButton = findViewById(R.id.btnAddWorkout); // Assuming this is the button in your XML
-
-        // Change the button text based on where the user is coming from
-        if (fromTracker) {
-            viewWorkoutButton.setText("Add to Tracker");
-        } else {
-            viewWorkoutButton.setText("View Workout");
-        }
-
-
-
-        ScheduleDailyNotification notificationScheduler = new ScheduleDailyNotification();
-        notificationScheduler.scheduleDailyNotification(this);  // `this` refers to the context (in this case, the activity context)
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-            if (!alarmManager.canScheduleExactAlarms()) {
-                // Show a dialog to guide the user to grant the permission
-                Intent intent = new Intent(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM,
-                        Uri.parse("package:" + getPackageName()));
-                startActivity(intent);
-            }
-        }
         // Initialize UI elements
         initializeUI();
-        createNotificationChannel();  // Create notification channel
-
-        ScheduleDailyNotification scheduleNotification = new ScheduleDailyNotification();
-        scheduleNotification.scheduleDailyNotification(this);
-
-        // Check if the user is logged in
-        checkLoginStatus();
 
         // Initialize the workoutList to avoid NullPointerException
         workoutList = new ArrayList<>();
 
         // Load saved workouts from SharedPreferences before fetching from server
-
         fetchWorkoutsFromServer();
-
-        // Load workout data passed from another activity (if any)
-        Workout workout = (Workout) getIntent().getSerializableExtra("workout");
-        if (workout != null) {
-            addNewWorkout(workout);
-        }
-
-        // Trigger the notification after the workout list is initialized
-        int workoutCount = (workoutList != null) ? workoutList.size() : 0;
-        if (workoutCount > 0) {
-            sendWorkoutNotification(workoutCount);
-        }
-
-
-
-
-
 
         // Define the periodic refresh task
         refreshRunnable = new Runnable() {
@@ -152,8 +101,34 @@ public class WorkoutModule4 extends AppCompatActivity {
         }
     }
 
+    private void initializeUI() {
+        addWorkout = findViewById(R.id.btnAddWorkout);
+        wm4_Back_txt = findViewById(R.id.wm4_Back_txt);
+        wm4_Save_btn = findViewById(R.id.wm4_save_btn);
+        recyclerView = findViewById(R.id.recyclerViewWorkouts);
 
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        workoutList = new ArrayList<>(); // Ensure workoutList is initialized
 
+        // Add new workout button listener
+        addWorkout.setOnClickListener(v -> {
+            Intent intent = new Intent(WorkoutModule4.this, Exercises_All.class);
+            startActivity(intent);
+        });
+
+        // Navigate back to the main activity
+        wm4_Back_txt.setOnClickListener(v -> navigateToMainActivity());
+
+        // Save workouts button listener
+        wm4_Save_btn.setOnClickListener(v -> {
+            if (!workoutList.isEmpty()) {
+                saveWorkoutsForUser(workoutList);
+                Toast.makeText(WorkoutModule4.this, "Workout saved successfully!", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(WorkoutModule4.this, "No workout to save.", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
 
     private void fetchWorkoutsFromServer() {
         String sessionToken = getSessionToken();
@@ -185,67 +160,6 @@ public class WorkoutModule4 extends AppCompatActivity {
         });
     }
 
-
-
-
-    // Create the Notification Channel for Android O and above
-    private void createNotificationChannel() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            CharSequence name = "Workout Reminder";
-            String description = "Reminds the user of pending workouts";
-            int importance = NotificationManager.IMPORTANCE_DEFAULT;
-            NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
-            channel.setDescription(description);
-
-            // Register the channel with the system
-            NotificationManager notificationManager = getSystemService(NotificationManager.class);
-            notificationManager.createNotificationChannel(channel);
-        }
-    }
-
-    // Trigger the notification to remind the user about workouts
-    private void sendWorkoutNotification(int workoutCount) {
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
-                .setSmallIcon(R.drawable.human_icon)  // Set your notification icon
-                .setContentTitle("Workout Reminder")
-                .setContentText("You have " + workoutCount + " workouts to complete. Let's get to work!")
-                .setPriority(NotificationCompat.PRIORITY_DEFAULT);
-
-        // Trigger the notification
-        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
-        notificationManager.notify(NOTIFICATION_ID, builder.build());
-    }
-
-    private void initializeUI() {
-        addWorkout = findViewById(R.id.btnAddWorkout);
-        wm4_Back_txt = findViewById(R.id.wm4_Back_txt);
-        wm4_Save_btn = findViewById(R.id.wm4_save_btn);
-        recyclerView = findViewById(R.id.recyclerViewWorkouts);
-
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        workoutList = new ArrayList<>(); // Ensure workoutList is initialized
-
-        // Add new workout button listener
-        addWorkout.setOnClickListener(v -> {
-            Intent intent = new Intent(WorkoutModule4.this, Exercises_All.class);
-            startActivity(intent);
-        });
-
-        // Navigate back to the main activity
-        wm4_Back_txt.setOnClickListener(v -> navigateToMainActivity());
-
-        // Save workouts button listener
-        wm4_Save_btn.setOnClickListener(v -> {
-            if (!workoutList.isEmpty()) {
-                saveWorkoutsForUser(workoutList);
-                Toast.makeText(WorkoutModule4.this, "Workout saved successfully!", Toast.LENGTH_SHORT).show();
-            } else {
-                Toast.makeText(WorkoutModule4.this, "No workout to save.", Toast.LENGTH_SHORT).show();
-            }
-        });
-
-    }
-
     private void addNewWorkout(Workout workout) {
         workoutList.add(workout);
 
@@ -267,9 +181,8 @@ public class WorkoutModule4 extends AppCompatActivity {
 
                     // Call the server to delete the workout
                     deleteWorkoutFromServer(workout);
-
                 }
-            });
+            }, fromTracker);  // Pass the 'fromTracker' flag here
 
             recyclerView.setAdapter(workoutAdapter);
         } else {
@@ -277,79 +190,6 @@ public class WorkoutModule4 extends AppCompatActivity {
         }
     }
 
-
-
-    /**
-     * Checks if the user is logged in by validating session.
-     */
-    private void checkLoginStatus() {
-        SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
-        String loggedInUser = sharedPreferences.getString("loggedInUser", null);
-
-        if (loggedInUser == null) {
-            Toast.makeText(this, "User not logged in. Please log in first.", Toast.LENGTH_SHORT).show();
-            Intent intent = new Intent(WorkoutModule4.this, LoginActivity.class);
-            startActivity(intent);
-            finish();
-        }
-    }
-
-    /**
-     * Loads saved workouts from SharedPreferences.
-     */
-
-
-
-
-
-    /**
-     * Saves the updated workout list to SharedPreferences.
-     */
-    private void saveWorkoutsForUser(List<Workout> workouts) {
-        String userEmail = getLoggedInUserEmail();
-        if (userEmail == null) {
-            Toast.makeText(this, "No logged-in user found. Cannot save workouts.", Toast.LENGTH_LONG).show();
-            return;
-        }
-
-        // Filter out workouts with invalid IDs
-        List<Workout> validWorkouts = new ArrayList<>();
-        for (Workout workout : workouts) {
-            if (workout.getWorkoutId() > 0) {
-                validWorkouts.add(workout);
-            } else {
-                Log.e("WorkoutModule4", "Skipping invalid workout with ID: " + workout.getWorkoutId());
-            }
-        }
-
-        saveWorkoutsToLocalStorage(userEmail, validWorkouts);
-    }
-
-
-    /**
-     * Saves the workouts to SharedPreferences.
-     */
-    private void saveWorkoutsToLocalStorage(String userEmail, List<Workout> workouts) {
-        SharedPreferences sharedPreferences = getSharedPreferences("WorkoutData", MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        Gson gson = new Gson();
-        String workoutJson = gson.toJson(workouts);
-        editor.putString("workout_" + userEmail, workoutJson);
-        editor.apply();
-    }
-
-    /**
-     * Retrieves the logged-in user's email.
-     */
-    private String getLoggedInUserEmail() {
-        SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
-        return sharedPreferences.getString("loggedInUser", null);
-    }
-
-
-    /**
-     * Updates the RecyclerView with the workout list.
-     */
     private void updateRecyclerView() {
         if (workoutAdapter == null) {
             workoutAdapter = new WorkoutAdapter(workoutList, new WorkoutAdapter.OnWorkoutClickListener() {
@@ -369,20 +209,37 @@ public class WorkoutModule4 extends AppCompatActivity {
 
                     // Call the server to delete the workout
                     deleteWorkoutFromServer(workout);
-
                 }
-            });
+            }, fromTracker);  // Pass the 'fromTracker' flag here
 
             recyclerView.setAdapter(workoutAdapter);
         } else {
             workoutAdapter.notifyDataSetChanged();
         }
-
     }
 
+    private void onWorkoutViewClicked(Workout workout) {
+        Log.d("WorkoutModule4", "Workout clicked with ID: " + workout.getWorkoutId());
 
+        if (workout.getWorkoutId() == 0) {
+            Log.e("WorkoutModule4", "Invalid workout ID, cannot view details.");
+            Toast.makeText(this, "Unable to open workout details. Invalid workout ID.", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
+        SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
+        String sessionToken = sharedPreferences.getString("auth_token", null);
 
+        if (sessionToken != null && workout != null) {
+            Intent intent = new Intent(this, WorkoutDetailActivity.class);
+            intent.putExtra("workout_id", workout.getWorkoutId());
+            intent.putExtra("session_token", sessionToken);
+            startActivity(intent);
+        } else {
+            Log.e("WorkoutModule4", "Workout ID is invalid or session token is null.");
+            Toast.makeText(this, "Unable to open workout details. Please try again.", Toast.LENGTH_SHORT).show();
+        }
+    }
 
     private void deleteWorkoutFromServer(Workout workout) {
         String sessionToken = getSessionToken();
@@ -405,8 +262,6 @@ public class WorkoutModule4 extends AppCompatActivity {
                     runOnUiThread(() -> {
                         workoutList.remove(workout);
                         workoutAdapter.notifyDataSetChanged();
-
-                        // Save the updated list locally
                         saveWorkoutsForUser(workoutList);
 
                         Toast.makeText(WorkoutModule4.this, "Workout deleted successfully", Toast.LENGTH_SHORT).show();
@@ -426,42 +281,50 @@ public class WorkoutModule4 extends AppCompatActivity {
         });
     }
 
-
-
-
-    private void onWorkoutViewClicked(Workout workout) {
-        Log.d("WorkoutModule4", "Workout clicked with ID: " + workout.getWorkoutId());
-
-        if (workout.getWorkoutId() == 0) {
-            Log.e("WorkoutModule4", "Invalid workout ID, cannot view details.");
-            Toast.makeText(this, "Unable to open workout details. Invalid workout ID.", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
-        String sessionToken = sharedPreferences.getString("auth_token", null);
-
-        if (sessionToken != null && workout != null) {
-            Intent intent = new Intent(this, WorkoutDetailActivity.class);
-            intent.putExtra("workout_id", workout.getWorkoutId());  // Pass the workout ID
-            intent.putExtra("session_token", sessionToken);         // Pass the session token
-            startActivity(intent);
-        } else {
-            Log.e("WorkoutModule4", "Workout ID is invalid or session token is null.");
-            Toast.makeText(this, "Unable to open workout details. Please try again.", Toast.LENGTH_SHORT).show();
-        }
-    }
-
-
-
-
-
-
     private void navigateToMainActivity() {
         Intent intent = new Intent(WorkoutModule4.this, MainActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
         startActivity(intent);
         finish();
+    }
+
+    private void saveWorkoutsForUser(List<Workout> workouts) {
+        String userEmail = getLoggedInUserEmail();
+        if (userEmail == null) {
+            Toast.makeText(this, "No logged-in user found. Cannot save workouts.", Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        // Filter out workouts with invalid IDs
+        List<Workout> validWorkouts = new ArrayList<>();
+        for (Workout workout : workouts) {
+            if (workout.getWorkoutId() > 0) {
+                validWorkouts.add(workout);
+            } else {
+                Log.e("WorkoutModule4", "Skipping invalid workout with ID: " + workout.getWorkoutId());
+            }
+        }
+
+        saveWorkoutsToLocalStorage(userEmail, validWorkouts);
+    }
+
+    private void saveWorkoutsToLocalStorage(String userEmail, List<Workout> workouts) {
+        SharedPreferences sharedPreferences = getSharedPreferences("WorkoutData", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        Gson gson = new Gson();
+        String workoutJson = gson.toJson(workouts);
+        editor.putString("workout_" + userEmail, workoutJson);
+        editor.apply();
+    }
+
+    private String getLoggedInUserEmail() {
+        SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
+        return sharedPreferences.getString("loggedInUser", null);
+    }
+
+    private String getSessionToken() {
+        SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
+        return sharedPreferences.getString("auth_token", null);
     }
 
     // ------------ Server Integration Methods ------------
@@ -477,13 +340,7 @@ public class WorkoutModule4 extends AppCompatActivity {
             public void onResponse(Call<ExerciseResponse> call, Response<ExerciseResponse> response) {
                 if (response.isSuccessful() && response.body() != null && response.body().isSuccess()) {
                     List<AdaptersExercise> exercises = response.body().getExercises();
-
-                    // Handle the fetched exercises
-                    if (exercises != null) {
-                        Log.d("WorkoutModule4", "Fetched exercises for workout ID: " + workoutId);
-                        // Display exercises, update UI or handle them as required
-                        displayExercises(exercises);
-                    }
+                    displayExercises(exercises);
                 } else {
                     Log.e("WorkoutModule4", "Failed to fetch exercises for workout ID: " + workoutId);
                 }
@@ -497,20 +354,9 @@ public class WorkoutModule4 extends AppCompatActivity {
     }
 
     private void displayExercises(List<AdaptersExercise> exercises) {
-        // Assuming you have a RecyclerView for displaying exercises
         RecyclerView exercisesRecyclerView = findViewById(R.id.recyclerViewWorkouts);
-
-        // Create an adapter and pass the list of exercises to it
         ExercisesAdapter exercisesAdapter = new ExercisesAdapter(exercises);
-
-        // Set up the RecyclerView with the adapter
         exercisesRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         exercisesRecyclerView.setAdapter(exercisesAdapter);
-    }
-
-
-    private String getSessionToken() {
-        SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
-        return sharedPreferences.getString("auth_token", null);
     }
 }
