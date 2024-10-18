@@ -107,40 +107,56 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // Fetch user details from the server
         fetchUserDetails(userEmail);
 
-        // Check if the intent includes the "showProgressFragment" flag
+        // Log when the activity is created
+        Log.d("MainActivity", "MainActivity onCreate called");
+
+        // Handle the intent with showProgressFragment flag
         if (getIntent().getBooleanExtra("showProgressFragment", false)) {
             String workoutTitle = getIntent().getStringExtra("workout_title");
             int exerciseCount = getIntent().getIntExtra("exercise_count", 0);
 
-            // Log the workout data received
-            Log.d("MainActivity", "Received Workout Title: " + workoutTitle + ", Exercise Count: " + exerciseCount);
+            // Log the received data
+            Log.d("MainActivity", "Received intent to show ProgressFragment. Workout Title: " + workoutTitle + ", Exercise Count: " + exerciseCount);
 
-            // Pass the workout details to ProgressFragment
+            // Pass data to ProgressFragment
             ProgressFragment progressFragment = new ProgressFragment();
             Bundle bundle = new Bundle();
             bundle.putString("workout_title", workoutTitle);
             bundle.putInt("exercise_count", exerciseCount);
             progressFragment.setArguments(bundle);
 
-            // Replace the current fragment with ProgressFragment
+            // Replace the fragment container with ProgressFragment
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_container, progressFragment)
+                    .commit();
+        }
+
+
+    }
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+
+        // Handle the new intent here
+        if (intent.getBooleanExtra("showProgressFragment", false)) {
+            String workoutTitle = intent.getStringExtra("workout_title");
+            int exerciseCount = intent.getIntExtra("exercise_count", 0);
+
+            // Log to ensure intent was received
+            Log.d("MainActivity", "onNewIntent: Showing ProgressFragment with Workout Title: " + workoutTitle + ", Exercise Count: " + exerciseCount);
+
+            ProgressFragment progressFragment = new ProgressFragment();
+            Bundle bundle = new Bundle();
+            bundle.putString("workout_title", workoutTitle);
+            bundle.putInt("exercise_count", exerciseCount);
+            progressFragment.setArguments(bundle);
+
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.fragment_container, progressFragment)
                     .commit();
         }
     }
-    // Optionally, handle new intents in case the activity is reused
-    @Override
-    protected void onNewIntent(Intent intent) {
-        super.onNewIntent(intent);
 
-        if (intent.getBooleanExtra("showProgressFragment", false)) {
-            // Load ProgressFragment
-            getSupportFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.fragment_container, new ProgressFragment())  // Replace with your actual fragment container ID
-                    .commit();
-        }
-    }
     // Fetch the user details from the server (asynchronous network request)
     private void fetchUserDetails(String email) {
         new Thread(() -> {

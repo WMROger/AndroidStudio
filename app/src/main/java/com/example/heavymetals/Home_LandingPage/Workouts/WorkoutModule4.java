@@ -200,22 +200,22 @@ public class WorkoutModule4 extends AppCompatActivity {
             return;
         }
 
-        // Assuming the user selects the first workout in the list
         Workout selectedWorkout = workoutList.get(0);
 
-        // Save the selected workout details to SharedPreferences
+        // Log the selected workout
+        Log.d("WorkoutModule4", "Adding to tracker: Workout Title: " + selectedWorkout.getTitle() + ", Exercises: " + selectedWorkout.getExercises().size());
+
         SharedPreferences sharedPreferences = getSharedPreferences("SelectedWorkout", MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString("workout_title", selectedWorkout.getTitle());
-        editor.putInt("exercise_count", selectedWorkout.getExercises().size());  // Assuming getExercises() returns a list
+        editor.putInt("exercise_count", selectedWorkout.getExercises().size());
         editor.apply();
 
-        // Notify the user
         Toast.makeText(this, "Workout added to tracker!", Toast.LENGTH_SHORT).show();
 
-        // Redirect to MainActivity and pass workout data to ProgressFragment
         redirectToProgressFragment(selectedWorkout.getTitle(), selectedWorkout.getExercises().size());
     }
+
 
     private void redirectToProgressFragment(String workoutTitle, int exerciseCount) {
         // Log the workout title and exercise count

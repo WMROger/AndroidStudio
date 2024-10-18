@@ -143,7 +143,7 @@ public class ProgressFragment extends Fragment {
             Log.d("ProgressFragment", "Workout Title: " + workoutTitle + ", Exercise Count: " + exerciseCount);
 
             if (workoutTitle != null && exerciseCount > 0) {
-                displayWorkout(workoutTitle, exerciseCount);  // Show the workout in the UI
+                displayWorkout(workoutTitle, exerciseCount);
             }
         }
         return view;
