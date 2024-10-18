@@ -307,13 +307,39 @@
             app:layout_constraintTop_toBottomOf="@id/btn_add_goal" />
 
         <LinearLayout
-            android:id="@+id/workoutList"
+            android:id="@+id/workout_container"
             android:layout_width="279dp"
-            android:layout_height="14dp"
+            android:layout_height="wrap_content"
             android:orientation="vertical"
+            android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/btn_add_goal">
+            <!-- Workout Title -->
+            <TextView
+                android:id="@+id/tv_workout_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="Workout Title"
+                android:textColor="@color/white"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:visibility="gone" /> <!-- Hide by default -->
+
+            <!-- Exercise Count -->
+            <TextView
+                android:id="@+id/tv_exercise_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="Number of Exercises: 0"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                android:visibility="gone" /> <!-- Hide by default -->
+
+        </LinearLayout>
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

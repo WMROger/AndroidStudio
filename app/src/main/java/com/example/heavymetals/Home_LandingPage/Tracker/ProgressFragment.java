@@ -1,10 +1,11 @@
 package com.example.heavymetals.Home_LandingPage.Tracker;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.graphics.Paint;
 import android.os.Bundle;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,36 +13,35 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import com.example.heavymetals.Home_LandingPage.HomeFragment;
 import com.example.heavymetals.Home_LandingPage.Workouts.WorkoutModule4;
+import com.example.heavymetals.Models.Adapters.Workout;
 import com.example.heavymetals.R;
-
-import android.content.Context;
-import android.content.SharedPreferences;
 
 import me.zhanghai.android.materialprogressbar.MaterialProgressBar;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class ProgressFragment extends Fragment {
 
-    private Button addScheduleButton,addWorkout, sun, mon, tue, wed, thu, fri, sat, AddGoal;
+    private Button addScheduleButton, addWorkout, sun, mon, tue, wed, thu, fri, sat, AddGoal;
     private View scheduleContainer;
-    private TextView emptyScheduleText, trackerBack, SaveGoals;
-    private LinearLayout goalContainer;
+    private TextView emptyScheduleText, trackerBack, SaveGoals, tvWorkoutTitle, tvExerciseCount;
+    private LinearLayout goalContainer, workoutContainer;
     private ImageView emptyScheduleIcon;
     private int goalCount = 0;
     private int doneCount = 0; // Track how many goals are marked as done
     private final int MAX_GOALS = 5;
     private MaterialProgressBar progressCircle;
-
+    private boolean isWorkoutSelected = false;  // Track if a workout has been added
 
     private SharedPreferences sharedPreferences;
 
@@ -63,7 +63,11 @@ public class ProgressFragment extends Fragment {
 
         // Initialize views
         addScheduleButton = view.findViewById(R.id.btn_add_schedule);
-        addWorkout = view.findViewById(R.id.btn_add_workout);
+        addWorkout = view.findViewById(R.id.btn_add_workout);  // We'll use this button to toggle
+        workoutContainer = view.findViewById(R.id.workout_container);  // For workout tracking UI
+        tvWorkoutTitle = view.findViewById(R.id.tv_workout_title);
+        tvExerciseCount = view.findViewById(R.id.tv_exercise_count);
+
         scheduleContainer = view.findViewById(R.id.schedule_container);
         emptyScheduleText = view.findViewById(R.id.tv_empty_schedule);
         emptyScheduleIcon = view.findViewById(R.id.iv_empty_schedule_icon);
@@ -84,35 +88,30 @@ public class ProgressFragment extends Fragment {
 
         // Initially, hide the schedule container and progress circle
         scheduleContainer.setVisibility(View.INVISIBLE);
+        workoutContainer.setVisibility(View.GONE); // Hide workout container initially
         progressCircle.setVisibility(View.GONE);
 
         // Load previously saved goals
         loadGoals();
 
-        // Set up toggle listeners for each day button
-        sun.setOnClickListener(v -> toggleDay(sun, "Sun"));
-        mon.setOnClickListener(v -> toggleDay(mon, "Mon"));
-        tue.setOnClickListener(v -> toggleDay(tue, "Tue"));
-        wed.setOnClickListener(v -> toggleDay(wed, "Wed"));
-        thu.setOnClickListener(v -> toggleDay(thu, "Thu"));
-        fri.setOnClickListener(v -> toggleDay(fri, "Fri"));
-        sat.setOnClickListener(v -> toggleDay(sat, "Sat"));
+        // Handle "Add Workout" button click
+        addWorkout.setOnClickListener(v -> {
+            if (!isWorkoutSelected) {
+                // If no workout is selected, open the workout module to add a workout
+                Intent intent = new Intent(getActivity(), WorkoutModule4.class);
+                intent.putExtra("fromTracker", true);  // Pass 'true' when coming from the tracker
+                startActivity(intent);
 
-        // Handle "Add Goal" button click to add a new goal dynamically
-        AddGoal.setOnClickListener(v -> addNewGoal());
-
-        // Handle "Save" button click to save goals
-        SaveGoals.setOnClickListener(v -> {
-            saveGoals();
-            displayProgressCircle(); // Show the progress circle when saving
+                // Simulate a workout being successfully added and update the UI
+                displayWorkout();
+            } else {
+                // If a workout is already selected, allow the user to choose another one
+                chooseAnotherWorkout();
+            }
         });
-        trackerBack.setOnClickListener(v -> handleBackAction());
-
-
-
         // Handle "Add Schedule" button click
         addScheduleButton.setOnClickListener(v -> {
-            // Hide the "Add Schedule" button and other placeholders
+            // Hide the "Add Schedule" button and empty schedule placeholders
             addScheduleButton.setVisibility(View.GONE);
             emptyScheduleText.setVisibility(View.GONE);
             emptyScheduleIcon.setVisibility(View.GONE);
@@ -120,21 +119,34 @@ public class ProgressFragment extends Fragment {
             // Show the schedule container
             scheduleContainer.setVisibility(View.VISIBLE);
         });
-
-        addWorkout.setOnClickListener(view1 -> {
-            // In ProgressFragment, when navigating to WorkoutModule4
-            Intent intent = new Intent(getActivity(), WorkoutModule4.class);
-            intent.putExtra("fromTracker", true);  // Pass 'true' when coming from the tracker
-            startActivity(intent);
-
-        });
-        // Clear previous goals at the start
-        goalContainer.removeAllViews();
-        goalCount = 0;
-        doneCount = 0;
-
         return view;
     }
+
+    // Method to simulate displaying a workout and change the button text
+    private void displayWorkout() {
+        isWorkoutSelected = true;  // Mark that a workout is now selected
+
+        // Simulate showing the workout UI
+        workoutContainer.setVisibility(View.VISIBLE);
+        tvWorkoutTitle.setText("Selected Workout Title");
+        tvExerciseCount.setText("Number of Exercises: 5");
+
+        // Change button text to "Select New Workout"
+        addWorkout.setText("Select New Workout");
+    }
+
+    private void chooseAnotherWorkout() {
+        // Logic to choose another workout plan
+        workoutContainer.setVisibility(View.GONE);  // Hide current workout details
+
+        // Reset the workout selection state
+        isWorkoutSelected = false;
+        addWorkout.setText("Add Workout");  // Change button back to "Add Workout"
+
+        Toast.makeText(getContext(), "Choose a different workout plan.", Toast.LENGTH_SHORT).show();
+    }
+
+
 
     // Method to toggle the state of a day button
     private void toggleDay(Button dayButton, String day) {
@@ -192,7 +204,6 @@ public class ProgressFragment extends Fragment {
             return;
         }
 
-        // Increment goalCount properly for each added goal
         goalCount = goalContainer.getChildCount() + 1; // Ensure it starts from 1
 
         // Create a new LinearLayout for the goal row
@@ -202,12 +213,9 @@ public class ProgressFragment extends Fragment {
 
         // Create a TextView for the goal number
         TextView goalNumber = new TextView(requireContext());
-        goalNumber.setText(String.valueOf(goalCount));  // Set the goal number correctly based on total children
+        goalNumber.setText(String.valueOf(goalCount));
         goalNumber.setTextSize(12);
         goalNumber.setTextColor(ContextCompat.getColor(requireContext(), R.color.white));
-        goalNumber.setLayoutParams(new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.WRAP_CONTENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT));
 
         // Create an EditText for goal input
         EditText goalInput = new EditText(requireContext());
@@ -215,19 +223,12 @@ public class ProgressFragment extends Fragment {
         goalInput.setTextSize(12);
         goalInput.setTextColor(ContextCompat.getColor(requireContext(), R.color.white));
         goalInput.setHintTextColor(ContextCompat.getColor(requireContext(), R.color.gray));
-        goalInput.setLayoutParams(new LinearLayout.LayoutParams(
-                0,
-                LinearLayout.LayoutParams.WRAP_CONTENT,
-                1f));
 
-        // Create a Delete button (which will later turn to Done after saving)
+        // Create a Delete button
         TextView deleteButton = new TextView(requireContext());
         deleteButton.setText("Delete");
         deleteButton.setTextSize(12);
         deleteButton.setTextColor(ContextCompat.getColor(requireContext(), R.color.custom_orange));
-        deleteButton.setLayoutParams(new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.WRAP_CONTENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT));
 
         // Handle deleting the specific goal row
         deleteButton.setOnClickListener(v -> {
@@ -252,18 +253,17 @@ public class ProgressFragment extends Fragment {
         for (int i = 0; i < MAX_GOALS; i++) {
             String goalText = sharedPreferences.getString("goal_" + i, null);
             if (goalText != null) {
-                addNewGoal();  // Adds new goal and correctly updates goal count and numbering
+                addNewGoal();
                 View goalRow = goalContainer.getChildAt(goalContainer.getChildCount() - 1);  // Get the added row
                 if (goalRow instanceof LinearLayout) {
                     EditText goalInput = (EditText) ((LinearLayout) goalRow).getChildAt(1);
-                    goalInput.setText(goalText);  // Set the saved goal text
+                    goalInput.setText(goalText);
                 }
             }
         }
 
-        // Ensure goalCount is updated based on actual loaded goals
         goalCount = goalContainer.getChildCount();
-        updateGoalNumbers();  // Ensure goals are renumbered after loading
+        updateGoalNumbers();
     }
 
     // Method to update goal numbers after a change
@@ -272,7 +272,7 @@ public class ProgressFragment extends Fragment {
             View goalRow = goalContainer.getChildAt(i);
             if (goalRow instanceof LinearLayout) {
                 TextView goalNumber = (TextView) ((LinearLayout) goalRow).getChildAt(0);
-                goalNumber.setText(String.valueOf(i + 1));  // Reassign the number sequentially starting from 1
+                goalNumber.setText(String.valueOf(i + 1));
             }
         }
         goalCount = goalContainer.getChildCount(); // Ensure goalCount reflects the actual number of goals
@@ -285,68 +285,49 @@ public class ProgressFragment extends Fragment {
 
         boolean hasValidGoal = false; // Track if there's at least one valid goal
 
-        // Loop through the goals in the goal container
         for (int i = 0; i < goalContainer.getChildCount(); i++) {
             View goalRow = goalContainer.getChildAt(i);
             if (goalRow instanceof LinearLayout) {
-                EditText goalInput = (EditText) ((LinearLayout) goalRow).getChildAt(1); // EditText is the second child
-                TextView deleteButton = (TextView) ((LinearLayout) goalRow).getChildAt(2); // Delete button is the third child
+                EditText goalInput = (EditText) ((LinearLayout) goalRow).getChildAt(1);
+                TextView deleteButton = (TextView) ((LinearLayout) goalRow).getChildAt(2);
 
-                String goalText = goalInput.getText().toString().trim(); // Get the goal text and trim whitespace
+                String goalText = goalInput.getText().toString().trim();
 
                 if (!goalText.isEmpty()) {
-                    // Save the goal text if it's not empty
                     editor.putString("goal_" + i, goalText);
-                    hasValidGoal = true; // There's at least one valid goal
+                    hasValidGoal = true;
 
                     // Make EditText uneditable
                     goalInput.setEnabled(false);
-                    goalInput.setTextColor(ContextCompat.getColor(requireContext(), R.color.white)); // Set text color to white
+                    goalInput.setTextColor(ContextCompat.getColor(requireContext(), R.color.white));
 
-                    // Change Delete button to Done
                     deleteButton.setText("Done");
                     deleteButton.setTextColor(ContextCompat.getColor(requireContext(), R.color.white));
 
-                    // Add click listener for Done (mark goal as complete)
                     deleteButton.setOnClickListener(v -> {
-                        // Apply strikethrough and change the text color to orange
-                        goalInput.setPaintFlags(goalInput.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG); // Add strikethrough
-                        goalInput.setTextColor(ContextCompat.getColor(requireContext(), R.color.custom_orange)); // Set the text color to custom orange
+                        goalInput.setPaintFlags(goalInput.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                        goalInput.setTextColor(ContextCompat.getColor(requireContext(), R.color.custom_orange));
 
-                        doneCount++;  // Increment done count
-                        updateProgress();  // Update progress bar
-                        deleteButton.setEnabled(false); // Disable "Done" button after clicking
+                        doneCount++;
+                        updateProgress();
+                        deleteButton.setEnabled(false);
                     });
                 } else {
-                    // If the goal input is empty, remove the row
                     goalContainer.removeView(goalRow);
-                    i--; // Adjust the index since we just removed a row
+                    i--;
                 }
             }
         }
 
-        // Apply changes to SharedPreferences only if there's at least one valid goal
         if (hasValidGoal) {
             editor.apply();
             Toast.makeText(requireContext(), "Goals saved!", Toast.LENGTH_SHORT).show();
-
-            // Disable all the day toggle buttons after saving
             disableDayButtons();
-
-            // Update goal numbering after empty rows have been removed
             updateGoalNumbers();
-
-            // Hide the Add and Save buttons after successful saving
             AddGoal.setVisibility(View.GONE);
             SaveGoals.setVisibility(View.GONE);
-
         } else {
-            // If no valid goals are present, show an error message
             Toast.makeText(requireContext(), "Please add at least one goal before saving.", Toast.LENGTH_SHORT).show();
-
-            // Keep the Add and Save buttons visible so the user can continue adding goals
-            AddGoal.setVisibility(View.VISIBLE);
-            SaveGoals.setVisibility(View.VISIBLE);
         }
     }
 
@@ -361,45 +342,30 @@ public class ProgressFragment extends Fragment {
         disableButton(sat);
     }
 
-    // Helper method to disable a button but retain its color
     private void disableButton(Button dayButton) {
-        dayButton.setClickable(false); // Disable the click functionality
-        dayButton.setFocusable(false); // Disable focusable, to make sure no interaction can happen
-        dayButton.setAlpha(1.0f); // Retain the original opacity (no grayed-out effect)
+        dayButton.setClickable(false);
+        dayButton.setFocusable(false);
+        dayButton.setAlpha(1.0f);
     }
 
     // Method to show the progress bar and move the goals when it appears
     private void displayProgressCircle() {
-        progressCircle.setVisibility(View.VISIBLE);  // Show the progress circle
+        progressCircle.setVisibility(View.VISIBLE);
 
-        // Move the goals and other views to the right when the progress bar is visible
+        // Move the goals to the right
         ConstraintLayout.LayoutParams params = (ConstraintLayout.LayoutParams) goalContainer.getLayoutParams();
-        params.setMarginStart(350);  // Adjust margin to create space (100dp or adjust as needed)
-        goalContainer.setLayoutParams(params);  // Apply the new layout parameters
+        params.setMarginStart(350);
+        goalContainer.setLayoutParams(params);
 
-
-        // Update progress value as well
         updateProgress();
     }
 
-    // Method to hide the progress bar and reset the layout
-    private void hideProgressCircle() {
-        progressCircle.setVisibility(View.GONE);  // Hide the progress circle
-
-        // Reset the layout margins when the progress bar is hidden
-        ConstraintLayout.LayoutParams params = (ConstraintLayout.LayoutParams) goalContainer.getLayoutParams();
-        params.setMarginStart(0);  // Reset margin to its original position
-        goalContainer.setLayoutParams(params);
-
-    }
-
-    // Method to update the progress value
     private void updateProgress() {
         if (goalContainer.getChildCount() > 0) {
-            int progress = (int) ((doneCount / (float) goalContainer.getChildCount()) * 100);  // Calculate progress percentage
-            progressCircle.setProgress(progress);  // Update circular progress bar
+            int progress = (int) ((doneCount / (float) goalContainer.getChildCount()) * 100);
+            progressCircle.setProgress(progress);
         } else {
-            progressCircle.setVisibility(View.GONE);  // Hide if no goals exist
+            progressCircle.setVisibility(View.GONE);
         }
     }
 
@@ -418,5 +384,6 @@ public class ProgressFragment extends Fragment {
         }
     }
 
+    // Method to simulate displaying a workout and change the button text
 
 }
