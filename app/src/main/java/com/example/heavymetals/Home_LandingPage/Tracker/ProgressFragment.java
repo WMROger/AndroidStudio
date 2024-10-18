@@ -407,6 +407,13 @@ public class ProgressFragment extends Fragment {
         }
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        // Load the selected workout when the fragment resumes
+        loadSelectedWorkout();
+    }
+
     private void loadSelectedWorkout() {
         SharedPreferences sharedPreferences = requireContext().getSharedPreferences("SelectedWorkout", Context.MODE_PRIVATE);
         String workoutTitle = sharedPreferences.getString("workout_title", null);
@@ -417,6 +424,7 @@ public class ProgressFragment extends Fragment {
             displayWorkout(workoutTitle, exerciseCount);
         }
     }
+
 
     private void displayWorkout(String title, int exerciseCount) {
         // Inflate the workout_item.xml layout
@@ -439,12 +447,6 @@ public class ProgressFragment extends Fragment {
         workoutContainer.addView(workoutItemView);
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        // Load the selected workout when the fragment resumes
-        loadSelectedWorkout();
-    }
 
 
     private void addWorkoutItem(String workoutTitle, int exerciseCount) {

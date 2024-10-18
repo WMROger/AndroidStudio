@@ -106,12 +106,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // Fetch user details from the server
         fetchUserDetails(userEmail);
 
-        // Check if the intent contains the flag to show ProgressFragment
+        // Check if the intent has the flag to open ProgressFragment
         if (getIntent().getBooleanExtra("showProgressFragment", false)) {
-            // Load ProgressFragment
-            getSupportFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.fragment_container, new ProgressFragment())  // Replace with your actual fragment container ID
+            // Navigate to the ProgressFragment
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_container, new ProgressFragment())
+                    .commit();
+        } else {
+            // Load the default fragment (HomeFragment, etc.)
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_container, new HomeFragment())
                     .commit();
         }
     }
