@@ -129,39 +129,46 @@ public class WorkoutDetailActivity extends AppCompatActivity {
         }
     }
 
-    // Existing method to add an exercise to the container
+    // Method to add an exercise to the container
     private void addExerciseToContainer(AdaptersExercise adaptersExercise) {
+        // Create a TextView for exercise details
         TextView exerciseTextView = new TextView(this);
         exerciseTextView.setText(formatExerciseDetails(adaptersExercise));
         exerciseTextView.setTextColor(getResources().getColor(R.color.white));
         exerciseTextView.setTextSize(18);
         exerciseTextView.setPadding(32, 8, 32, 8);
 
+        // Set layout parameters for the exercise TextView
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         layoutParams.setMargins(0, 16, 0, 16); // Adding vertical margins between exercises
         exerciseTextView.setLayoutParams(layoutParams);
 
+        // Add the TextView to the container
         exercisesContainer.addView(exerciseTextView);
 
+        // Create a CheckBox for marking the exercise as done
         CheckBox doneCheckbox = new CheckBox(this);
-        doneCheckbox.setChecked(adaptersExercise.isDone());
+        doneCheckbox.setChecked(adaptersExercise.isDone());  // Set the checkbox based on isDone status
         doneCheckbox.setText("Completed");
-        doneCheckbox.setButtonTintList(getResources().getColorStateList(R.color.white));
+        doneCheckbox.setButtonTintList(getResources().getColorStateList(R.color.white));  // Set checkbox color
         doneCheckbox.setTextColor(getResources().getColor(R.color.white));
 
+        // Set layout parameters for the CheckBox
         LinearLayout.LayoutParams checkboxParams = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         checkboxParams.setMargins(0, 8, 0, 55); // Adding margins below the checkbox
         doneCheckbox.setLayoutParams(checkboxParams);
 
+        // Add the CheckBox to the container
+        exercisesContainer.addView(doneCheckbox);
+
+        // Update the "isDone" status when the checkbox is checked/unchecked
         doneCheckbox.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            adaptersExercise.setDone(isChecked);  // Update the exercise "isDone" status
+            adaptersExercise.setDone(isChecked);  // Update the exercise "isDone" status in the model
         });
-
-
-
     }
+
 
     private String formatExerciseDetails(AdaptersExercise exercise) {
         return "Exercise: " + exercise.getName() +

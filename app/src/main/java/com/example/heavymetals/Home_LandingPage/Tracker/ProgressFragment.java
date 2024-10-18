@@ -21,6 +21,7 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import com.example.heavymetals.Home_LandingPage.HomeFragment;
+import com.example.heavymetals.Home_LandingPage.Workouts.WorkoutDetailActivity;
 import com.example.heavymetals.Home_LandingPage.Workouts.WorkoutModule4;
 import com.example.heavymetals.R;
 
@@ -137,21 +138,19 @@ public class ProgressFragment extends Fragment {
         return view;
     }
 
-    // Method to simulate displaying a workout and change the button text
     private void displayWorkout() {
         isWorkoutSelected = true;  // Mark that a workout is now selected
 
         // Simulate showing the workout UI
         workoutContainer.setVisibility(View.VISIBLE);
-        TextView tvWorkoutTitle = getView().findViewById(R.id.tv_workout_title);
-        TextView tvExerciseCount = getView().findViewById(R.id.tv_exercise_count);
 
-        tvWorkoutTitle.setText("Selected Workout Title");
-        tvExerciseCount.setText("Number of Exercises: 5");
+        // Add workout item to the container
+        addWorkoutItem("Selected Workout Title", 5);  // Passing the title and exercise count as an example
 
         // Change button text to "Select New Workout"
         addWorkout.setText("Select New Workout");
     }
+
 
     private void chooseAnotherWorkout() {
         // Logic to choose another workout plan
@@ -282,7 +281,6 @@ public class ProgressFragment extends Fragment {
         // Add the newly created row to the goal container
         goalContainer.addView(goalRow);
     }
-
 
     // Method to load the saved goals from SharedPreferences
     private void loadGoals() {
@@ -422,4 +420,37 @@ public class ProgressFragment extends Fragment {
                     .commit();
         }
     }
+
+    private void addWorkoutItem(String workoutTitle, int exerciseCount) {
+        // Inflate the workout_item.xml layout
+        LayoutInflater inflater = LayoutInflater.from(getContext());
+        View workoutItemView = inflater.inflate(R.layout.workout_item, workoutContainer, false);
+
+        // Find the workout title and exercise count TextViews
+        TextView workoutTitleView = workoutItemView.findViewById(R.id.workoutTitle);
+        TextView exerciseCountView = workoutItemView.findViewById(R.id.exerciseCount);
+
+        // Set the title and exercise count
+        workoutTitleView.setText(workoutTitle);
+        exerciseCountView.setText("Exercises: " + exerciseCount);
+
+        // Add workout item to the container
+        workoutContainer.addView(workoutItemView);
+    }
+
+
+    private void loadSelectedWorkout() {
+        SharedPreferences sharedPreferences = requireContext().getSharedPreferences("SelectedWorkout", Context.MODE_PRIVATE);
+        String workoutTitle = sharedPreferences.getString("workout_title", null);
+        int exerciseCount = sharedPreferences.getInt("exercise_count", 0);
+
+        if (workoutTitle != null) {
+            // Workout has been selected, display it
+            isWorkoutSelected = true;
+            workoutContainer.setVisibility(View.VISIBLE);
+            addWorkoutItem(workoutTitle, exerciseCount);
+            addWorkout.setText("Select New Workout");
+        }
+    }
+
 }
