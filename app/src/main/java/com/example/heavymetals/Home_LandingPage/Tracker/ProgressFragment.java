@@ -30,7 +30,8 @@ import me.zhanghai.android.materialprogressbar.MaterialProgressBar;
 
 public class ProgressFragment extends Fragment {
 
-    private Button addScheduleButton, addWorkout, sun, mon, tue, wed, thu, fri, sat, AddGoal;
+    private TextView workoutTitleTextView, exerciseCountTextView;
+    private Button addScheduleButton, viewWorkoutButton, addWorkout, sun, mon, tue, wed, thu, fri, sat, AddGoal;
     private View scheduleContainer;
     private TextView emptyScheduleText, trackerBack, SaveGoals;
     private LinearLayout goalContainer, workoutContainer;
@@ -40,7 +41,6 @@ public class ProgressFragment extends Fragment {
     private final int MAX_GOALS = 5;
     private MaterialProgressBar progressCircle;
     private boolean isWorkoutSelected = false;  // Track if a workout has been added
-
     private SharedPreferences sharedPreferences;
 
     // State to track if the buttons are toggled
@@ -60,16 +60,19 @@ public class ProgressFragment extends Fragment {
         sharedPreferences = requireContext().getSharedPreferences("Goals", Context.MODE_PRIVATE);
 
         // Initialize views
+        workoutContainer = view.findViewById(R.id.workout_container);
+        workoutTitleTextView = view.findViewById(R.id.workoutTitle);
+        exerciseCountTextView = view.findViewById(R.id.exerciseCount);
+        viewWorkoutButton = view.findViewById(R.id.btn_view_workout);
         addScheduleButton = view.findViewById(R.id.btn_add_schedule);
         addWorkout = view.findViewById(R.id.btn_add_workout);
-        workoutContainer = view.findViewById(R.id.workout_container);  // For workout tracking UI
         scheduleContainer = view.findViewById(R.id.schedule_container);
         emptyScheduleText = view.findViewById(R.id.tv_empty_schedule);
         emptyScheduleIcon = view.findViewById(R.id.iv_empty_schedule_icon);
         trackerBack = view.findViewById(R.id.tracker_back);
         goalContainer = view.findViewById(R.id.goal_container);
         AddGoal = view.findViewById(R.id.btn_add_goal);
-        SaveGoals = view.findViewById(R.id.tv_save); // Save button
+        SaveGoals = view.findViewById(R.id.tv_save);
         progressCircle = view.findViewById(R.id.circular_progress_bar);
         progressCircle.setMax(100); // Max value for progress
 
@@ -102,6 +105,19 @@ public class ProgressFragment extends Fragment {
             }
         });
 
+        // Handle "View Workout" button click
+        viewWorkoutButton.setOnClickListener(v -> {
+            SharedPreferences sharedPreferences = getContext().getSharedPreferences("SelectedWorkout", Context.MODE_PRIVATE);
+            String workoutTitle = sharedPreferences.getString("workout_title", "No workout selected");
+            int workoutId = sharedPreferences.getInt("workout_id", -1);  // Get workout ID
+            if (workoutId > 0) {
+                Intent intent = new Intent(getActivity(), WorkoutDetailActivity.class);
+                intent.putExtra("workout_id", workoutId);  // Pass workout ID
+                startActivity(intent);
+            } else {
+                Toast.makeText(getContext(), "No workout selected.", Toast.LENGTH_SHORT).show();
+            }
+        });
         // Handle "Add Schedule" button click
         addScheduleButton.setOnClickListener(v -> {
             // Hide the "Add Schedule" button and other placeholders
@@ -112,35 +128,11 @@ public class ProgressFragment extends Fragment {
             // Show the schedule container
             scheduleContainer.setVisibility(View.VISIBLE);
         });
-
-        // Handle "Add Goal" button click to add a new goal dynamically
-        AddGoal.setOnClickListener(v -> addNewGoal());
-
-        // Handle "Save" button click to save goals
-        SaveGoals.setOnClickListener(v -> {
-            saveGoals();
-            displayProgressCircle(); // Show the progress circle when saving
-        });
-
-        // Set up toggle listeners for each day button
-        sun.setOnClickListener(v -> toggleDay(sun, "Sun"));
-        mon.setOnClickListener(v -> toggleDay(mon, "Mon"));
-        tue.setOnClickListener(v -> toggleDay(tue, "Tue"));
-        wed.setOnClickListener(v -> toggleDay(wed, "Wed"));
-        thu.setOnClickListener(v -> toggleDay(thu, "Thu"));
-        fri.setOnClickListener(v -> toggleDay(fri, "Fri"));
-        sat.setOnClickListener(v -> toggleDay(sat, "Sat"));
-
-        trackerBack.setOnClickListener(v -> handleBackAction());
-
         // Retrieve workout data from arguments
         Bundle args = getArguments();
         if (args != null) {
             String workoutTitle = args.getString("workout_title");
             int exerciseCount = args.getInt("exercise_count");
-
-            // Log the workout details received by ProgressFragment
-            Log.d("ProgressFragment", "Workout Title: " + workoutTitle + ", Exercise Count: " + exerciseCount);
 
             if (workoutTitle != null && exerciseCount > 0) {
                 displayWorkout(workoutTitle, exerciseCount);
@@ -149,18 +141,19 @@ public class ProgressFragment extends Fragment {
         return view;
     }
 
-
-
-
     private void chooseAnotherWorkout() {
-        // Logic to choose another workout plan
-        workoutContainer.setVisibility(View.GONE);  // Hide current workout details
-
-        // Reset the workout selection state
+        workoutContainer.setVisibility(View.GONE);
         isWorkoutSelected = false;
-        addWorkout.setText("Add Workout");  // Change button back to "Add Workout"
-
+        addWorkout.setText("Add Workout");
         Toast.makeText(getContext(), "Choose a different workout plan.", Toast.LENGTH_SHORT).show();
+    }
+
+    private void displayWorkout(String workoutTitle, int exerciseCount) {
+        workoutTitleTextView.setVisibility(View.VISIBLE);
+        exerciseCountTextView.setVisibility(View.VISIBLE);
+        workoutTitleTextView.setText("Workout Title: " + workoutTitle);
+        exerciseCountTextView.setText("Number of Exercises: " + exerciseCount);
+        workoutContainer.setVisibility(View.VISIBLE);
     }
 
     // Method to toggle the state of a day button
@@ -424,59 +417,46 @@ public class ProgressFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        loadSelectedWorkout(); // Assuming this method loads workout details
+        loadSelectedWorkout(workoutTitleTextView, exerciseCountTextView, workoutContainer);
     }
 
-    private void loadSelectedWorkout() {
+    private void loadSelectedWorkout(TextView workoutTitleTextView, TextView exerciseCountTextView, LinearLayout workoutContainer) {
         SharedPreferences sharedPreferences = getContext().getSharedPreferences("SelectedWorkout", Context.MODE_PRIVATE);
         String workoutTitle = sharedPreferences.getString("workout_title", "No workout selected");
         int exerciseCount = sharedPreferences.getInt("exercise_count", 0);
+        int workoutId = sharedPreferences.getInt("workout_id", -1); // Retrieve workout_id
 
-        // Find the workout container and TextViews
-        LinearLayout workoutContainer = getView().findViewById(R.id.workout_container);
-        TextView workoutTitleTextView = getView().findViewById(R.id.tv_workout_title);
-        TextView exerciseCountTextView = getView().findViewById(R.id.tv_exercise_count);
-
-        // Check if the workout title and exercise count were successfully loaded
-        if (workoutTitle != null && !workoutTitle.equals("No workout selected")) {
-            // Make the workout container visible
+        if (!workoutTitle.equals("No workout selected")) {
+            // Make the workout container visible and update text views
             workoutContainer.setVisibility(View.VISIBLE);
-
-            // Make the title and exercise count visible and set their text
             workoutTitleTextView.setVisibility(View.VISIBLE);
-            workoutTitleTextView.setText(workoutTitle);
+            workoutTitleTextView.setText("Workout Title: " + workoutTitle);
 
             exerciseCountTextView.setVisibility(View.VISIBLE);
             exerciseCountTextView.setText("Number of Exercises: " + exerciseCount);
+
+            // Pass workoutId to the viewWorkoutDetails method
+            workoutContainer.setOnClickListener(v -> viewWorkoutDetails(workoutId));
         } else {
-            // Hide the container if there's no valid workout
-            workoutContainer.setVisibility(View.INVISIBLE);
+            workoutContainer.setVisibility(View.INVISIBLE);  // Hide the container if no workout is selected
             Toast.makeText(getContext(), "No workout selected", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void viewWorkoutDetails(int workoutId) {
+        if (workoutId > 0) {
+            // Start WorkoutDetailActivity with workout_id
+            Intent intent = new Intent(getActivity(), WorkoutDetailActivity.class);
+            intent.putExtra("workout_id", workoutId);
+            startActivity(intent);
+        } else {
+            Toast.makeText(getContext(), "Invalid workout ID.", Toast.LENGTH_SHORT).show();
         }
     }
 
 
 
 
-    private void displayWorkout(String workoutTitle, int exerciseCount) {
-        // Assuming you have a TextView to show the workout title and exercise count
-        TextView workoutTitleView = getView().findViewById(R.id.workoutTitle);
-        TextView exerciseCountView = getView().findViewById(R.id.exerciseCount);
-        // Log the data being displayed
-        Log.d("ProgressFragment", "Displaying Workout: " + workoutTitle + ", Exercises: " + exerciseCount);
-
-        // Set the workout details
-        workoutTitleView.setText(workoutTitle);
-        exerciseCountView.setText("Exercises: " + exerciseCount);
-
-
-        addWorkoutItem(workoutTitle, exerciseCount);  // Use addWorkoutItem to display the workout
-
-        // Show the workout in the UI
-        workoutContainer.setVisibility(View.VISIBLE); // Assuming you have a container for workout details
-        // Log the visibility state of the workout container
-        Log.d("ProgressFragment", "Workout container visibility: " + workoutContainer.getVisibility());
-    }
 
 
 

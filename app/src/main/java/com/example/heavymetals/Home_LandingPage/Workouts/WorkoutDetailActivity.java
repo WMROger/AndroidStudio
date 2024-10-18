@@ -8,6 +8,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.heavymetals.Models.Adapters.AdaptersExercise;
 import com.example.heavymetals.Models.Adapters.Workout;
 import com.example.heavymetals.Models.ExerciseResponse;
@@ -20,6 +21,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -56,37 +58,52 @@ public class WorkoutDetailActivity extends AppCompatActivity {
 //            updateExercisesOnServer();
             finish();
         });
-    }
-        private void updateExercisesOnServer() {
-            Retrofit retrofit = RetrofitClient.getClient(getApplicationContext());
-            ApiService exerciseApi = retrofit.create(ApiService.class);
 
-            // Convert the list of exercises to JSON
-            Gson gson = new Gson();
-            String exercisesJson = gson.toJson(adaptersExerciseList);
-
-            Call<Void> call = exerciseApi.updateExercises(sessionToken, workoutId, exercisesJson);
-            call.enqueue(new Callback<Void>() {
-                @Override
-                public void onResponse(Call<Void> call, Response<Void> response) {
-                    if (response.isSuccessful()) {
-                        Toast.makeText(WorkoutDetailActivity.this, "Exercises updated successfully!", Toast.LENGTH_SHORT).show();
-                        finish();  // Close the activity after saving
-                    } else {
-                        Toast.makeText(WorkoutDetailActivity.this, "Failed to update exercises.", Toast.LENGTH_SHORT).show();
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<Void> call, Throwable t) {
-                    Toast.makeText(WorkoutDetailActivity.this, "Error updating exercises: " + t.getMessage(), Toast.LENGTH_SHORT).show();
-                }
-            });
+        int workoutId = getIntent().getIntExtra("workout_id", -1);
+        // Validate the workout ID
+        if (workoutId > 0) {
+            Log.d("WorkoutDetailActivity", "Received workout_id: " + workoutId);
+            // Fetch and display workout details here
+            fetchWorkoutDetails(workoutId);
+        } else {
+            Log.e("WorkoutDetailActivity", "Invalid workout_id.");
+            Toast.makeText(this, "Invalid workout ID.", Toast.LENGTH_SHORT).show();
+            finish(); // Close the activity if the workout ID is invalid
         }
+    }
 
+    private void updateExercisesOnServer() {
+        Retrofit retrofit = RetrofitClient.getClient(getApplicationContext());
+        ApiService exerciseApi = retrofit.create(ApiService.class);
 
+        // Convert the list of exercises to JSON
+        Gson gson = new Gson();
+        String exercisesJson = gson.toJson(adaptersExerciseList);
 
+        Call<Void> call = exerciseApi.updateExercises(sessionToken, workoutId, exercisesJson);
+        call.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                if (response.isSuccessful()) {
+                    Toast.makeText(WorkoutDetailActivity.this, "Exercises updated successfully!", Toast.LENGTH_SHORT).show();
+                    finish();  // Close the activity after saving
+                } else {
+                    Toast.makeText(WorkoutDetailActivity.this, "Failed to update exercises.", Toast.LENGTH_SHORT).show();
+                }
+            }
 
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                Toast.makeText(WorkoutDetailActivity.this, "Error updating exercises: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void fetchWorkoutDetails(int workoutId) {
+        // Fetch workout details from the server or database using the workoutId
+        // For example, make an API call here
+        Log.d("WorkoutDetailActivity", "Fetching details for workout ID: " + workoutId);
+    }
     private void fetchExercises(int workoutId, String sessionToken) {
         Log.d("WorkoutDetailActivity", "Fetching exercises for workout ID: " + workoutId);
 
@@ -119,7 +136,6 @@ public class WorkoutDetailActivity extends AppCompatActivity {
             }
         });
     }
-
 
 
     // Method to display the fetched exercises in the LinearLayout
@@ -170,7 +186,6 @@ public class WorkoutDetailActivity extends AppCompatActivity {
             adaptersExercise.setDone(isChecked);  // Update the exercise "isDone" status in the model
         });
     }
-
 
 
     private String formatExerciseDetails(AdaptersExercise exercise) {
