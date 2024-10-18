@@ -159,9 +159,7 @@ public class WorkoutDetailActivity extends AppCompatActivity {
             adaptersExercise.setDone(isChecked);  // Update the exercise "isDone" status
         });
 
-        LinearLayout.LayoutParams checkboxParams = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        checkboxParams.setMargins(0, 8, 0, 55); // Adding margins below the checkbox
+
 
     }
 
