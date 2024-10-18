@@ -321,28 +321,41 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/btn_add_goal">
 
-            <!-- Workout Title -->
             <TextView
-                android:id="@+id/tv_workout_title"
+                android:id="@+id/workoutTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
+                android:layout_gravity="center"
                 android:text="Workout Title"
-                android:textColor="@color/white"
+                android:textColor="@android:color/white"
                 android:textSize="18sp"
-                android:textStyle="bold"
-                android:visibility="gone" /> <!-- Hide by default -->
+                />
 
-            <!-- Exercise Count -->
             <TextView
-                android:id="@+id/tv_exercise_count"
+                android:id="@+id/exerciseCount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:text="Number of Exercises: 0"
-                android:textColor="@color/white"
+                android:layout_gravity="center"
+                android:text="Exercise Count"
+                android:textColor="@android:color/white"
                 android:textSize="16sp"
-                android:visibility="gone" /> <!-- Hide by default -->
+                 />
+
+            <Button
+                android:id="@+id/btn_view_workout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="10dp"
+                android:backgroundTint="@color/custom_orange"
+                android:text="View Workout"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                app:cornerRadius="25sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/btn_add_workout" />
+
 
         </LinearLayout>
 

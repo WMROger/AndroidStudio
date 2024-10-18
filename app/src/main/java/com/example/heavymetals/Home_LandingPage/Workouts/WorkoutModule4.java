@@ -203,29 +203,32 @@ public class WorkoutModule4 extends AppCompatActivity {
             return;
         }
 
-        Workout selectedWorkout = workoutList.get(0);
+        Workout selectedWorkout = workoutList.get(0); // Assuming the first workout is selected
 
-        // Log the selected workout
-        Log.d("WorkoutModule4", "Adding to tracker: Workout Title: " + selectedWorkout.getTitle() + ", Exercises: " + selectedWorkout.getExercises().size());
+        if (selectedWorkout.getWorkoutId() > 0) {
+            // Save workout data to SharedPreferences
+            SharedPreferences sharedPreferences = getSharedPreferences("SelectedWorkout", MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putString("workout_title", selectedWorkout.getTitle());
+            editor.putInt("exercise_count", selectedWorkout.getExercises().size());
+            editor.putInt("workout_id", selectedWorkout.getWorkoutId()); // Save the workout_id here
+            editor.apply();
 
-        SharedPreferences sharedPreferences = getSharedPreferences("SelectedWorkout", MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString("workout_title", selectedWorkout.getTitle());
-        editor.putInt("exercise_count", selectedWorkout.getExercises().size());
-        editor.apply();
-
-        Toast.makeText(this, "Workout added to tracker!", Toast.LENGTH_SHORT).show();
-
-        // Redirect to the ProgressFragment
-        redirectToProgressFragment(selectedWorkout.getTitle(), selectedWorkout.getExercises().size());
+            Toast.makeText(this, "Workout added to tracker!", Toast.LENGTH_SHORT).show();
+        } else {
+            Log.e("addToTracker", "Invalid workout ID.");
+            Toast.makeText(this, "Invalid workout selection.", Toast.LENGTH_SHORT).show();
+        }
     }
 
 
+
+
+
     private void redirectToProgressFragment(String workoutTitle, int exerciseCount) {
-        // Log the workout title and exercise count
         Log.d("WorkoutModule4", "Redirecting with Workout Title: " + workoutTitle + ", Exercise Count: " + exerciseCount);
 
-        // Use an intent to start MainActivity and pass data for ProgressFragment
+        // Use an intent to start MainActivity and pass data to ProgressFragment
         Intent intent = new Intent(this, MainActivity.class);
         intent.putExtra("showProgressFragment", true);  // Flag to open ProgressFragment
         intent.putExtra("workout_title", workoutTitle); // Pass the workout title
@@ -233,6 +236,7 @@ public class WorkoutModule4 extends AppCompatActivity {
         startActivity(intent);
         finish();  // Close WorkoutModule4
     }
+
 
 
 
