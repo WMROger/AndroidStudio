@@ -22,19 +22,15 @@ import androidx.fragment.app.Fragment;
 
 import com.example.heavymetals.Home_LandingPage.HomeFragment;
 import com.example.heavymetals.Home_LandingPage.Workouts.WorkoutModule4;
-import com.example.heavymetals.Models.Adapters.Workout;
 import com.example.heavymetals.R;
 
 import me.zhanghai.android.materialprogressbar.MaterialProgressBar;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class ProgressFragment extends Fragment {
 
     private Button addScheduleButton, addWorkout, sun, mon, tue, wed, thu, fri, sat, AddGoal;
     private View scheduleContainer;
-    private TextView emptyScheduleText, trackerBack, SaveGoals, tvWorkoutTitle, tvExerciseCount;
+    private TextView emptyScheduleText, trackerBack, SaveGoals;
     private LinearLayout goalContainer, workoutContainer;
     private ImageView emptyScheduleIcon;
     private int goalCount = 0;
@@ -63,11 +59,8 @@ public class ProgressFragment extends Fragment {
 
         // Initialize views
         addScheduleButton = view.findViewById(R.id.btn_add_schedule);
-        addWorkout = view.findViewById(R.id.btn_add_workout);  // We'll use this button to toggle
+        addWorkout = view.findViewById(R.id.btn_add_workout);
         workoutContainer = view.findViewById(R.id.workout_container);  // For workout tracking UI
-        tvWorkoutTitle = view.findViewById(R.id.tv_workout_title);
-        tvExerciseCount = view.findViewById(R.id.tv_exercise_count);
-
         scheduleContainer = view.findViewById(R.id.schedule_container);
         emptyScheduleText = view.findViewById(R.id.tv_empty_schedule);
         emptyScheduleIcon = view.findViewById(R.id.iv_empty_schedule_icon);
@@ -109,9 +102,10 @@ public class ProgressFragment extends Fragment {
                 chooseAnotherWorkout();
             }
         });
+
         // Handle "Add Schedule" button click
         addScheduleButton.setOnClickListener(v -> {
-            // Hide the "Add Schedule" button and empty schedule placeholders
+            // Hide the "Add Schedule" button and other placeholders
             addScheduleButton.setVisibility(View.GONE);
             emptyScheduleText.setVisibility(View.GONE);
             emptyScheduleIcon.setVisibility(View.GONE);
@@ -119,6 +113,27 @@ public class ProgressFragment extends Fragment {
             // Show the schedule container
             scheduleContainer.setVisibility(View.VISIBLE);
         });
+
+        // Handle "Add Goal" button click to add a new goal dynamically
+        AddGoal.setOnClickListener(v -> addNewGoal());
+
+        // Handle "Save" button click to save goals
+        SaveGoals.setOnClickListener(v -> {
+            saveGoals();
+            displayProgressCircle(); // Show the progress circle when saving
+        });
+
+        // Set up toggle listeners for each day button
+        sun.setOnClickListener(v -> toggleDay(sun, "Sun"));
+        mon.setOnClickListener(v -> toggleDay(mon, "Mon"));
+        tue.setOnClickListener(v -> toggleDay(tue, "Tue"));
+        wed.setOnClickListener(v -> toggleDay(wed, "Wed"));
+        thu.setOnClickListener(v -> toggleDay(thu, "Thu"));
+        fri.setOnClickListener(v -> toggleDay(fri, "Fri"));
+        sat.setOnClickListener(v -> toggleDay(sat, "Sat"));
+
+        trackerBack.setOnClickListener(v -> handleBackAction());
+
         return view;
     }
 
@@ -128,6 +143,9 @@ public class ProgressFragment extends Fragment {
 
         // Simulate showing the workout UI
         workoutContainer.setVisibility(View.VISIBLE);
+        TextView tvWorkoutTitle = getView().findViewById(R.id.tv_workout_title);
+        TextView tvExerciseCount = getView().findViewById(R.id.tv_exercise_count);
+
         tvWorkoutTitle.setText("Selected Workout Title");
         tvExerciseCount.setText("Number of Exercises: 5");
 
@@ -145,8 +163,6 @@ public class ProgressFragment extends Fragment {
 
         Toast.makeText(getContext(), "Choose a different workout plan.", Toast.LENGTH_SHORT).show();
     }
-
-
 
     // Method to toggle the state of a day button
     private void toggleDay(Button dayButton, String day) {
@@ -217,12 +233,27 @@ public class ProgressFragment extends Fragment {
         goalNumber.setTextSize(12);
         goalNumber.setTextColor(ContextCompat.getColor(requireContext(), R.color.white));
 
+        // Set layout parameters for the goal number
+        LinearLayout.LayoutParams numberParams = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+        );
+        goalNumber.setLayoutParams(numberParams);
+
         // Create an EditText for goal input
         EditText goalInput = new EditText(requireContext());
         goalInput.setHint("Add goal here");
         goalInput.setTextSize(12);
         goalInput.setTextColor(ContextCompat.getColor(requireContext(), R.color.white));
         goalInput.setHintTextColor(ContextCompat.getColor(requireContext(), R.color.gray));
+
+        // Set layout parameters to make EditText take more space (weight=1)
+        LinearLayout.LayoutParams inputParams = new LinearLayout.LayoutParams(
+                0, // 0 width, as weight will determine the width
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                1f // weight of 1 to make it take up the remaining space
+        );
+        goalInput.setLayoutParams(inputParams);
 
         // Create a Delete button
         TextView deleteButton = new TextView(requireContext());
@@ -236,6 +267,13 @@ public class ProgressFragment extends Fragment {
             updateGoalNumbers();  // Update the numbering after deleting a goal
         });
 
+        // Set layout parameters for the delete button
+        LinearLayout.LayoutParams deleteParams = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+        );
+        deleteButton.setLayoutParams(deleteParams);
+
         // Add the TextView, EditText, and Delete button to the goal row
         goalRow.addView(goalNumber);
         goalRow.addView(goalInput);
@@ -244,6 +282,7 @@ public class ProgressFragment extends Fragment {
         // Add the newly created row to the goal container
         goalContainer.addView(goalRow);
     }
+
 
     // Method to load the saved goals from SharedPreferences
     private void loadGoals() {
@@ -383,7 +422,4 @@ public class ProgressFragment extends Fragment {
                     .commit();
         }
     }
-
-    // Method to simulate displaying a workout and change the button text
-
 }
