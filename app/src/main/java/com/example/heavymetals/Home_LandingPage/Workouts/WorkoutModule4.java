@@ -64,6 +64,7 @@ public class WorkoutModule4 extends AppCompatActivity {
     private Runnable refreshRunnable;  // Define the runnable task
     private boolean fromTracker; // Flag to indicate if the user is coming from the tracker
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -90,9 +91,26 @@ public class WorkoutModule4 extends AppCompatActivity {
             }
         };
 
+        // Add new workout button listener
+        addWorkout.setOnClickListener(v -> {
+            if (fromTracker) { // Check if the user came from the tracker
+                if (!workoutList.isEmpty()) {
+                    addToTracker(workoutList);  // Call method to add to the tracker's progress
+                    Toast.makeText(WorkoutModule4.this, "Workout added to tracker!", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(WorkoutModule4.this, "No workout to add.", Toast.LENGTH_SHORT).show();
+                }
+            } else {
+                // If not from the tracker, open the Exercises_All activity
+                Intent intent = new Intent(WorkoutModule4.this, Exercises_All.class);
+                startActivity(intent);
+            }
+        });
+
         // Start the periodic refresh
         handler.post(refreshRunnable);
     }
+
 
     @Override
     protected void onDestroy() {
@@ -102,6 +120,7 @@ public class WorkoutModule4 extends AppCompatActivity {
             handler.removeCallbacks(refreshRunnable);
         }
     }
+
 
     private void initializeUI() {
         addWorkout = findViewById(R.id.btnAddWorkout);
@@ -143,56 +162,41 @@ public class WorkoutModule4 extends AppCompatActivity {
         });
     }
 
+
     private void addToTracker(List<Workout> workoutList) {
-        String userEmail = getLoggedInUserEmail();
-        if (userEmail == null) {
-            Toast.makeText(this, "No logged-in user found. Cannot add to tracker.", Toast.LENGTH_LONG).show();
+        if (workoutList.isEmpty()) {
+            Toast.makeText(this, "No workout selected to add.", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        // Retrieve existing tracker data from SharedPreferences
-        SharedPreferences sharedPreferences = getSharedPreferences("TrackerData", MODE_PRIVATE);
+        // Assuming user selects the first workout in the list
+        Workout selectedWorkout = workoutList.get(0);
+
+        // Save the selected workout details to SharedPreferences
+        SharedPreferences sharedPreferences = getSharedPreferences("SelectedWorkout", MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        Gson gson = new Gson();
-
-        // Get previously tracked workouts, or create a new empty list if none exists
-        String trackerJson = sharedPreferences.getString("tracker_" + userEmail, "");
-        List<Workout> trackerWorkouts;
-        if (!trackerJson.isEmpty()) {
-            Type workoutListType = new TypeToken<ArrayList<Workout>>() {}.getType();
-            trackerWorkouts = gson.fromJson(trackerJson, workoutListType);
-        } else {
-            trackerWorkouts = new ArrayList<>();
-        }
-
-        // Add new workouts to the tracker list
-        trackerWorkouts.addAll(workoutList);
-
-        // Save the updated tracker list back to SharedPreferences
-        String updatedTrackerJson = gson.toJson(trackerWorkouts);
-        editor.putString("tracker_" + userEmail, updatedTrackerJson);
+        editor.putString("workout_title", selectedWorkout.getTitle());
+        editor.putInt("exercise_count", selectedWorkout.getExercises().size());  // Assuming getExercises() returns a list
         editor.apply();
 
-        Toast.makeText(this, "Workout added to your tracker progress!", Toast.LENGTH_SHORT).show();
+        // Notify the user
+        Toast.makeText(this, "Workout added to tracker!", Toast.LENGTH_SHORT).show();
+
+        // Redirect to MainActivity with flag to open ProgressFragment
+        redirectToProgressFragment();
+    }
+
+    private void redirectToProgressFragment() {
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.putExtra("showProgressFragment", true);  // Pass this flag to indicate ProgressFragment should be shown
+        startActivity(intent);
+        finish();  // Close WorkoutModule4
     }
 
 
-    private void loadTrackedWorkouts() {
-        String userEmail = getLoggedInUserEmail();
-        SharedPreferences sharedPreferences = this.getSharedPreferences("TrackerData", Context.MODE_PRIVATE);
-        String trackerJson = sharedPreferences.getString("tracker_" + userEmail, "");
 
-        if (!trackerJson.isEmpty()) {
-            Gson gson = new Gson();
-            Type workoutListType = new TypeToken<ArrayList<Workout>>() {}.getType();
-            List<Workout> trackedWorkouts = gson.fromJson(trackerJson, workoutListType);
 
-            // Update your RecyclerView or UI with the tracked workouts
-            workoutAdapter.updateWorkouts(trackedWorkouts);
-        } else {
-            Toast.makeText(this, "No workouts tracked yet!", Toast.LENGTH_SHORT).show();
-        }
-    }
+
 
 
 
@@ -226,35 +230,7 @@ public class WorkoutModule4 extends AppCompatActivity {
         });
     }
 
-    private void addNewWorkout(Workout workout) {
-        workoutList.add(workout);
 
-        if (workoutAdapter == null) {
-            workoutAdapter = new WorkoutAdapter(workoutList, new WorkoutAdapter.OnWorkoutClickListener() {
-                @Override
-                public void onViewWorkoutClick(Workout workout) {
-                    onWorkoutViewClicked(workout);
-                }
-
-                @Override
-                public void onWorkoutDeleted(Workout workout) {
-                    if (workout == null) {
-                        Log.e("WorkoutModule4", "Attempted to delete a null workout.");
-                        return;
-                    }
-
-                    Log.d("WorkoutModule4", "Deleting workout: " + workout.getTitle());
-
-                    // Call the server to delete the workout
-                    deleteWorkoutFromServer(workout);
-                }
-            }, fromTracker, this, getLoggedInUserEmail());  // Pass 'this' as context and 'getLoggedInUserEmail()'
-
-            recyclerView.setAdapter(workoutAdapter);
-        } else {
-            workoutAdapter.notifyDataSetChanged();
-        }
-    }
 
 
     private void updateRecyclerView() {
@@ -309,6 +285,7 @@ public class WorkoutModule4 extends AppCompatActivity {
         }
     }
 
+
     private void deleteWorkoutFromServer(Workout workout) {
         String sessionToken = getSessionToken();
         if (sessionToken == null) {
@@ -349,12 +326,14 @@ public class WorkoutModule4 extends AppCompatActivity {
         });
     }
 
+
     private void navigateToMainActivity() {
         Intent intent = new Intent(WorkoutModule4.this, MainActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
         startActivity(intent);
         finish();
     }
+
 
     private void saveWorkoutsForUser(List<Workout> workouts) {
         String userEmail = getLoggedInUserEmail();
@@ -376,6 +355,7 @@ public class WorkoutModule4 extends AppCompatActivity {
         saveWorkoutsToLocalStorage(userEmail, validWorkouts);
     }
 
+
     private void saveWorkoutsToLocalStorage(String userEmail, List<Workout> workouts) {
         SharedPreferences sharedPreferences = getSharedPreferences("WorkoutData", MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -385,10 +365,12 @@ public class WorkoutModule4 extends AppCompatActivity {
         editor.apply();
     }
 
+
     private String getLoggedInUserEmail() {
         SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
         return sharedPreferences.getString("loggedInUser", null);
     }
+
 
     private String getSessionToken() {
         SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
@@ -420,6 +402,7 @@ public class WorkoutModule4 extends AppCompatActivity {
             }
         });
     }
+
 
     private void displayExercises(List<AdaptersExercise> exercises) {
         RecyclerView exercisesRecyclerView = findViewById(R.id.recyclerViewWorkouts);

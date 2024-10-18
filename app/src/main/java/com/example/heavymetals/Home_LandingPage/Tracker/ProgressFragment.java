@@ -95,9 +95,6 @@ public class ProgressFragment extends Fragment {
                 Intent intent = new Intent(getActivity(), WorkoutModule4.class);
                 intent.putExtra("fromTracker", true);  // Pass 'true' when coming from the tracker
                 startActivity(intent);
-
-                // Simulate a workout being successfully added and update the UI
-                displayWorkout();
             } else {
                 // If a workout is already selected, allow the user to choose another one
                 chooseAnotherWorkout();
@@ -138,18 +135,7 @@ public class ProgressFragment extends Fragment {
         return view;
     }
 
-    private void displayWorkout() {
-        isWorkoutSelected = true;  // Mark that a workout is now selected
 
-        // Simulate showing the workout UI
-        workoutContainer.setVisibility(View.VISIBLE);
-
-        // Add workout item to the container
-        addWorkoutItem("Selected Workout Title", 5);  // Passing the title and exercise count as an example
-
-        // Change button text to "Select New Workout"
-        addWorkout.setText("Select New Workout");
-    }
 
 
     private void chooseAnotherWorkout() {
@@ -421,36 +407,64 @@ public class ProgressFragment extends Fragment {
         }
     }
 
-    private void addWorkoutItem(String workoutTitle, int exerciseCount) {
-        // Inflate the workout_item.xml layout
-        LayoutInflater inflater = LayoutInflater.from(getContext());
-        View workoutItemView = inflater.inflate(R.layout.workout_item, workoutContainer, false);
-
-        // Find the workout title and exercise count TextViews
-        TextView workoutTitleView = workoutItemView.findViewById(R.id.workoutTitle);
-        TextView exerciseCountView = workoutItemView.findViewById(R.id.exerciseCount);
-
-        // Set the title and exercise count
-        workoutTitleView.setText(workoutTitle);
-        exerciseCountView.setText("Exercises: " + exerciseCount);
-
-        // Add workout item to the container
-        workoutContainer.addView(workoutItemView);
-    }
-
-
     private void loadSelectedWorkout() {
         SharedPreferences sharedPreferences = requireContext().getSharedPreferences("SelectedWorkout", Context.MODE_PRIVATE);
         String workoutTitle = sharedPreferences.getString("workout_title", null);
         int exerciseCount = sharedPreferences.getInt("exercise_count", 0);
 
-        if (workoutTitle != null) {
-            // Workout has been selected, display it
-            isWorkoutSelected = true;
-            workoutContainer.setVisibility(View.VISIBLE);
-            addWorkoutItem(workoutTitle, exerciseCount);
-            addWorkout.setText("Select New Workout");
+        if (workoutTitle != null && exerciseCount > 0) {
+            // Display the workout in the fragment
+            displayWorkout(workoutTitle, exerciseCount);
         }
     }
+
+    private void displayWorkout(String title, int exerciseCount) {
+        // Inflate the workout_item.xml layout
+        LayoutInflater inflater = LayoutInflater.from(getContext());
+        View workoutItemView = inflater.inflate(R.layout.workout_item, workoutContainer, false);
+
+        // Find the views in the workout_item.xml layout
+        TextView workoutTitleView = workoutItemView.findViewById(R.id.workoutTitle);
+        TextView exerciseCountView = workoutItemView.findViewById(R.id.exerciseCount);
+        Button addWorkoutButton = workoutItemView.findViewById(R.id.viewWorkoutButton);
+
+        // Set the workout details
+        workoutTitleView.setText(title);
+        exerciseCountView.setText("Exercises: " + exerciseCount);
+
+        // Change button text if necessary
+        addWorkoutButton.setText("Select New Workout");
+
+        // Add the workout item to the container
+        workoutContainer.addView(workoutItemView);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        // Load the selected workout when the fragment resumes
+        loadSelectedWorkout();
+    }
+
+
+    private void addWorkoutItem(String workoutTitle, int exerciseCount) {
+        // Inflate the workout item layout (e.g., workout_item.xml)
+        LayoutInflater inflater = LayoutInflater.from(getContext());
+        View workoutItemView = inflater.inflate(R.layout.workout_item, workoutContainer, false);
+
+        // Find the TextViews for title and exercise count
+        TextView workoutTitleView = workoutItemView.findViewById(R.id.workoutTitle);
+        TextView exerciseCountView = workoutItemView.findViewById(R.id.exerciseCount);
+
+        // Set the text to display the workout's title and exercise count
+        workoutTitleView.setText(workoutTitle);
+        exerciseCountView.setText("Exercises: " + exerciseCount);
+
+        // Add the workout item to the container (LinearLayout/RecyclerView, etc.)
+        workoutContainer.addView(workoutItemView);
+    }
+
+
+
 
 }

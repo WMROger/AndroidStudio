@@ -105,8 +105,29 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         // Fetch user details from the server
         fetchUserDetails(userEmail);
-    }
 
+        // Check if the intent contains the flag to show ProgressFragment
+        if (getIntent().getBooleanExtra("showProgressFragment", false)) {
+            // Load ProgressFragment
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.fragment_container, new ProgressFragment())  // Replace with your actual fragment container ID
+                    .commit();
+        }
+    }
+    // Optionally, handle new intents in case the activity is reused
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+
+        if (intent.getBooleanExtra("showProgressFragment", false)) {
+            // Load ProgressFragment
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.fragment_container, new ProgressFragment())  // Replace with your actual fragment container ID
+                    .commit();
+        }
+    }
     // Fetch the user details from the server (asynchronous network request)
     private void fetchUserDetails(String email) {
         new Thread(() -> {

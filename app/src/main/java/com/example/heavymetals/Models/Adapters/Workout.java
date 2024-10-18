@@ -47,4 +47,13 @@ public class Workout implements Serializable {
     public void setExercises(List<AdaptersExercise> exercises) {
         this.exercises = exercises;
     }
+
+    // Add a method to return the number of exercises
+    public int getExerciseCount() {
+        if (exercises != null) {
+            return exercises.size();
+        } else {
+            return 0;  // Return 0 if the list is null
+        }
+    }
 }
