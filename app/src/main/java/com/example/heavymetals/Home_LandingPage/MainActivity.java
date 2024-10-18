@@ -134,33 +134,25 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // Check if the intent contains the flag to show the ProgressFragment
         Intent intent = getIntent();
         if (intent != null && intent.getBooleanExtra("showProgressFragment", false)) {
-            // Retrieve workout details
             String workoutTitle = intent.getStringExtra("workout_title");
             int exerciseCount = intent.getIntExtra("exercise_count", 0);
-
-            // Log the workout details for debugging
-            Log.d("MainActivity", "Received workoutTitle: " + workoutTitle + ", exerciseCount: " + exerciseCount);
-
-            // Show the ProgressFragment and pass the workout details
             showProgressFragment(workoutTitle, exerciseCount);
         }
     }
 
     private void showProgressFragment(String workoutTitle, int exerciseCount) {
-        // Create an instance of ProgressFragment (or whichever fragment shows workout progress)
         ProgressFragment progressFragment = new ProgressFragment();
-
-        // Pass the workout details to the fragment via arguments
         Bundle args = new Bundle();
         args.putString("workout_title", workoutTitle);
         args.putInt("exercise_count", exerciseCount);
         progressFragment.setArguments(args);
 
-        // Begin the fragment transaction to replace the current fragment with ProgressFragment
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fragment_container, progressFragment)  // Use your fragment container ID here
+                .replace(R.id.fragment_container, progressFragment)
                 .commit();
     }
+
+
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);

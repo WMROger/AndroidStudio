@@ -424,21 +424,38 @@ public class ProgressFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        // Load the selected workout when the fragment resumes
-        loadSelectedWorkout();
-
+        loadSelectedWorkout(); // Assuming this method loads workout details
     }
 
     private void loadSelectedWorkout() {
-        SharedPreferences sharedPreferences = requireContext().getSharedPreferences("SelectedWorkout", Context.MODE_PRIVATE);
-        String workoutTitle = sharedPreferences.getString("workout_title", null);
+        SharedPreferences sharedPreferences = getContext().getSharedPreferences("SelectedWorkout", Context.MODE_PRIVATE);
+        String workoutTitle = sharedPreferences.getString("workout_title", "No workout selected");
         int exerciseCount = sharedPreferences.getInt("exercise_count", 0);
 
-        if (workoutTitle != null && exerciseCount > 0) {
-            // Display the workout in the fragment
-            displayWorkout(workoutTitle, exerciseCount);
+        // Find the workout container and TextViews
+        LinearLayout workoutContainer = getView().findViewById(R.id.workout_container);
+        TextView workoutTitleTextView = getView().findViewById(R.id.tv_workout_title);
+        TextView exerciseCountTextView = getView().findViewById(R.id.tv_exercise_count);
+
+        // Check if the workout title and exercise count were successfully loaded
+        if (workoutTitle != null && !workoutTitle.equals("No workout selected")) {
+            // Make the workout container visible
+            workoutContainer.setVisibility(View.VISIBLE);
+
+            // Make the title and exercise count visible and set their text
+            workoutTitleTextView.setVisibility(View.VISIBLE);
+            workoutTitleTextView.setText(workoutTitle);
+
+            exerciseCountTextView.setVisibility(View.VISIBLE);
+            exerciseCountTextView.setText("Number of Exercises: " + exerciseCount);
+        } else {
+            // Hide the container if there's no valid workout
+            workoutContainer.setVisibility(View.INVISIBLE);
+            Toast.makeText(getContext(), "No workout selected", Toast.LENGTH_SHORT).show();
         }
     }
+
+
 
 
     private void displayWorkout(String workoutTitle, int exerciseCount) {

@@ -121,6 +121,7 @@ public class WorkoutModule4 extends AppCompatActivity {
         // Add new workout button listener
         addWorkout.setOnClickListener(v -> {
             if (addWorkout.getText().toString().equals("Add to Tracker")) {
+                // Add to tracker case
                 if (!workoutList.isEmpty()) {
                     addToTracker(workoutList);  // Call method to add to the tracker's progress
                     Toast.makeText(WorkoutModule4.this, "Workout added to tracker!", Toast.LENGTH_SHORT).show();
@@ -128,12 +129,39 @@ public class WorkoutModule4 extends AppCompatActivity {
                     Toast.makeText(WorkoutModule4.this, "No workout to add.", Toast.LENGTH_SHORT).show();
                 }
             } else if (addWorkout.getText().toString().equals("View Workout")) {
+                // View workout case
                 if (!workoutList.isEmpty()) {
-                    Workout selectedWorkout = workoutList.get(0); // Assuming first workout is selected
+                    Workout selectedWorkout = workoutList.get(0);  // Assuming first workout is selected
                     viewWorkoutDetails(selectedWorkout);
                 } else {
                     Toast.makeText(WorkoutModule4.this, "No workout available to view.", Toast.LENGTH_SHORT).show();
                 }
+            }
+        });
+        // Add new workout button listener
+        addWorkout.setOnClickListener(v -> {
+            if (addWorkout.getText().toString().equals("Add to Tracker")) {
+                // Add to tracker case
+                if (!workoutList.isEmpty()) {
+                    addToTracker(workoutList);  // Call method to add to the tracker's progress
+                    Toast.makeText(WorkoutModule4.this, "Workout added to tracker!", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(WorkoutModule4.this, "No workout to add.", Toast.LENGTH_SHORT).show();
+                }
+            } else if (addWorkout.getText().toString().equals("View Workout")) {
+                // View workout case
+                if (!workoutList.isEmpty()) {
+                    Workout selectedWorkout = workoutList.get(0);  // Assuming first workout is selected
+                    viewWorkoutDetails(selectedWorkout);
+                } else {
+                    Toast.makeText(WorkoutModule4.this, "No workout available to view.", Toast.LENGTH_SHORT).show();
+                }
+            } else {
+                // Navigate to the ExercisesAll activity
+                Intent intent = new Intent(WorkoutModule4.this, Exercises_All.class);
+                // You can pass any extras if needed, like the workout id
+                // intent.putExtra("workout_id", selectedWorkout.getWorkoutId());
+                startActivity(intent);
             }
         });
 
@@ -150,6 +178,8 @@ public class WorkoutModule4 extends AppCompatActivity {
             }
         });
     }
+
+
 
     private void viewWorkoutDetails(Workout selectedWorkout) {
         // Navigate to the WorkoutDetailActivity with workout details
@@ -186,6 +216,7 @@ public class WorkoutModule4 extends AppCompatActivity {
 
         Toast.makeText(this, "Workout added to tracker!", Toast.LENGTH_SHORT).show();
 
+        // Redirect to the ProgressFragment
         redirectToProgressFragment(selectedWorkout.getTitle(), selectedWorkout.getExercises().size());
     }
 
@@ -194,6 +225,7 @@ public class WorkoutModule4 extends AppCompatActivity {
         // Log the workout title and exercise count
         Log.d("WorkoutModule4", "Redirecting with Workout Title: " + workoutTitle + ", Exercise Count: " + exerciseCount);
 
+        // Use an intent to start MainActivity and pass data for ProgressFragment
         Intent intent = new Intent(this, MainActivity.class);
         intent.putExtra("showProgressFragment", true);  // Flag to open ProgressFragment
         intent.putExtra("workout_title", workoutTitle); // Pass the workout title
@@ -201,6 +233,7 @@ public class WorkoutModule4 extends AppCompatActivity {
         startActivity(intent);
         finish();  // Close WorkoutModule4
     }
+
 
 
 
