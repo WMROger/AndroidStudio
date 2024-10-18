@@ -91,7 +91,7 @@
             android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".Login_RegisterPage.RegisterPage.TermsConditionsActivity"
-            android:exported="false"
+            android:exported="true"
             android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".Login_RegisterPage.RegisterPage.RegisterActivity"

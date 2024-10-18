@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
@@ -106,16 +107,24 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // Fetch user details from the server
         fetchUserDetails(userEmail);
 
-        // Check if the intent has the flag to open ProgressFragment
+        // Check if the intent includes the "showProgressFragment" flag
         if (getIntent().getBooleanExtra("showProgressFragment", false)) {
-            // Navigate to the ProgressFragment
+            String workoutTitle = getIntent().getStringExtra("workout_title");
+            int exerciseCount = getIntent().getIntExtra("exercise_count", 0);
+
+            // Log the workout data received
+            Log.d("MainActivity", "Received Workout Title: " + workoutTitle + ", Exercise Count: " + exerciseCount);
+
+            // Pass the workout details to ProgressFragment
+            ProgressFragment progressFragment = new ProgressFragment();
+            Bundle bundle = new Bundle();
+            bundle.putString("workout_title", workoutTitle);
+            bundle.putInt("exercise_count", exerciseCount);
+            progressFragment.setArguments(bundle);
+
+            // Replace the current fragment with ProgressFragment
             getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.fragment_container, new ProgressFragment())
-                    .commit();
-        } else {
-            // Load the default fragment (HomeFragment, etc.)
-            getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.fragment_container, new HomeFragment())
+                    .replace(R.id.fragment_container, progressFragment)
                     .commit();
         }
     }

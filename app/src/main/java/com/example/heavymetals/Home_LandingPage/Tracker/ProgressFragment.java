@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.graphics.Paint;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -132,6 +133,19 @@ public class ProgressFragment extends Fragment {
 
         trackerBack.setOnClickListener(v -> handleBackAction());
 
+        // Retrieve workout data from arguments
+        Bundle args = getArguments();
+        if (args != null) {
+            String workoutTitle = args.getString("workout_title");
+            int exerciseCount = args.getInt("exercise_count");
+
+            // Log the workout details received by ProgressFragment
+            Log.d("ProgressFragment", "Workout Title: " + workoutTitle + ", Exercise Count: " + exerciseCount);
+
+            if (workoutTitle != null && exerciseCount > 0) {
+                displayWorkout(workoutTitle, exerciseCount);  // Show the workout in the UI
+            }
+        }
         return view;
     }
 
@@ -412,6 +426,7 @@ public class ProgressFragment extends Fragment {
         super.onResume();
         // Load the selected workout when the fragment resumes
         loadSelectedWorkout();
+
     }
 
     private void loadSelectedWorkout() {
@@ -426,25 +441,24 @@ public class ProgressFragment extends Fragment {
     }
 
 
-    private void displayWorkout(String title, int exerciseCount) {
-        // Inflate the workout_item.xml layout
-        LayoutInflater inflater = LayoutInflater.from(getContext());
-        View workoutItemView = inflater.inflate(R.layout.workout_item, workoutContainer, false);
-
-        // Find the views in the workout_item.xml layout
-        TextView workoutTitleView = workoutItemView.findViewById(R.id.workoutTitle);
-        TextView exerciseCountView = workoutItemView.findViewById(R.id.exerciseCount);
-        Button addWorkoutButton = workoutItemView.findViewById(R.id.viewWorkoutButton);
+    private void displayWorkout(String workoutTitle, int exerciseCount) {
+        // Assuming you have a TextView to show the workout title and exercise count
+        TextView workoutTitleView = getView().findViewById(R.id.workoutTitle);
+        TextView exerciseCountView = getView().findViewById(R.id.exerciseCount);
+        // Log the data being displayed
+        Log.d("ProgressFragment", "Displaying Workout: " + workoutTitle + ", Exercises: " + exerciseCount);
 
         // Set the workout details
-        workoutTitleView.setText(title);
+        workoutTitleView.setText(workoutTitle);
         exerciseCountView.setText("Exercises: " + exerciseCount);
 
-        // Change button text if necessary
-        addWorkoutButton.setText("Select New Workout");
 
-        // Add the workout item to the container
-        workoutContainer.addView(workoutItemView);
+        addWorkoutItem(workoutTitle, exerciseCount);  // Use addWorkoutItem to display the workout
+
+        // Show the workout in the UI
+        workoutContainer.setVisibility(View.VISIBLE); // Assuming you have a container for workout details
+        // Log the visibility state of the workout container
+        Log.d("ProgressFragment", "Workout container visibility: " + workoutContainer.getVisibility());
     }
 
 

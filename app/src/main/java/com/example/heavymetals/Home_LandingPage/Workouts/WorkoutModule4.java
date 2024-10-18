@@ -91,25 +91,39 @@ public class WorkoutModule4 extends AppCompatActivity {
             }
         };
 
-        // Add new workout button listener
-        addWorkout.setOnClickListener(v -> {
-            if (fromTracker) { // Check if the user came from the tracker
+        // Handle button text and functionality based on whether the user is from the tracker
+        if (fromTracker) {
+            // Set the button text to "Add to Tracker" if the user came from the tracker
+            addWorkout.setText("Add to Tracker");
+
+            // Set the listener for the "Add to Tracker" functionality
+            addWorkout.setOnClickListener(v -> {
                 if (!workoutList.isEmpty()) {
                     addToTracker(workoutList);  // Call method to add to the tracker's progress
                     Toast.makeText(WorkoutModule4.this, "Workout added to tracker!", Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(WorkoutModule4.this, "No workout to add.", Toast.LENGTH_SHORT).show();
                 }
-            } else {
-                // If not from the tracker, open the Exercises_All activity
-                Intent intent = new Intent(WorkoutModule4.this, Exercises_All.class);
-                startActivity(intent);
-            }
-        });
+            });
+        } else {
+            // Set the button text to "View Workout" if the user is not from the tracker
+            addWorkout.setText("View Workout");
+
+            // Set the listener for the "View Workout" functionality
+            addWorkout.setOnClickListener(v -> {
+                if (!workoutList.isEmpty()) {
+                    Workout selectedWorkout = workoutList.get(0); // Assuming the first workout is selected
+                    viewWorkoutDetails(selectedWorkout);
+                } else {
+                    Toast.makeText(WorkoutModule4.this, "No workout available to view.", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
 
         // Start the periodic refresh
         handler.post(refreshRunnable);
     }
+
 
 
     @Override
@@ -186,7 +200,7 @@ public class WorkoutModule4 extends AppCompatActivity {
             return;
         }
 
-        // Assuming user selects the first workout in the list
+        // Assuming the user selects the first workout in the list
         Workout selectedWorkout = workoutList.get(0);
 
         // Save the selected workout details to SharedPreferences
@@ -199,16 +213,25 @@ public class WorkoutModule4 extends AppCompatActivity {
         // Notify the user
         Toast.makeText(this, "Workout added to tracker!", Toast.LENGTH_SHORT).show();
 
-        // Redirect to ProgressFragment
-        redirectToProgressFragment();
+        // Redirect to MainActivity and pass workout data to ProgressFragment
+        redirectToProgressFragment(selectedWorkout.getTitle(), selectedWorkout.getExercises().size());
     }
 
-    private void redirectToProgressFragment() {
+    private void redirectToProgressFragment(String workoutTitle, int exerciseCount) {
+        // Log the workout title and exercise count
+        Log.d("WorkoutModule4", "Redirecting with Workout Title: " + workoutTitle + ", Exercise Count: " + exerciseCount);
+
         Intent intent = new Intent(this, MainActivity.class);
-        intent.putExtra("showProgressFragment", true);  // Pass this flag to indicate ProgressFragment should be shown
+        intent.putExtra("showProgressFragment", true);  // Flag to open ProgressFragment
+        intent.putExtra("workout_title", workoutTitle); // Pass the workout title
+        intent.putExtra("exercise_count", exerciseCount); // Pass the exercise count
         startActivity(intent);
         finish();  // Close WorkoutModule4
     }
+
+
+
+
 
 
 

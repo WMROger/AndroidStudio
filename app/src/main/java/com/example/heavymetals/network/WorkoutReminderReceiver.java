@@ -24,7 +24,7 @@ public class WorkoutReminderReceiver extends BroadcastReceiver {
 
         // Trigger the workout reminder notification
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, "workout_notifications")
-                .setSmallIcon(R.drawable.human_icon)  // Replace with your app's notification icon
+                .setSmallIcon(R.drawable.logovector)  // Replace with your app's notification icon
                 .setContentTitle("Workout Reminder")
                 .setContentText("You have workouts to complete. Let's get to work!")
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT);

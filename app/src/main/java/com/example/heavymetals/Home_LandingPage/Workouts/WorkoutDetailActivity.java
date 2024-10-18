@@ -151,7 +151,9 @@ public class WorkoutDetailActivity extends AppCompatActivity {
         CheckBox doneCheckbox = new CheckBox(this);
         doneCheckbox.setChecked(adaptersExercise.isDone());  // Set the checkbox based on isDone status
         doneCheckbox.setText("Completed");
-        doneCheckbox.setButtonTintList(getResources().getColorStateList(R.color.white));  // Set checkbox color
+
+        // Apply the color state list to change the checkbox tint color to orange when checked
+        doneCheckbox.setButtonTintList(getResources().getColorStateList(R.color.custom_orange));  // Use the color state list
         doneCheckbox.setTextColor(getResources().getColor(R.color.white));
 
         // Set layout parameters for the CheckBox
@@ -168,6 +170,7 @@ public class WorkoutDetailActivity extends AppCompatActivity {
             adaptersExercise.setDone(isChecked);  // Update the exercise "isDone" status in the model
         });
     }
+
 
 
     private String formatExerciseDetails(AdaptersExercise exercise) {
