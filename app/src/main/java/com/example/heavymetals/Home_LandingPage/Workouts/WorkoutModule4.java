@@ -91,34 +91,7 @@ public class WorkoutModule4 extends AppCompatActivity {
             }
         };
 
-        // Handle button text and functionality based on whether the user is from the tracker
-        if (fromTracker) {
-            // Set the button text to "Add to Tracker" if the user came from the tracker
-            addWorkout.setText("Add to Tracker");
 
-            // Set the listener for the "Add to Tracker" functionality
-            addWorkout.setOnClickListener(v -> {
-                if (!workoutList.isEmpty()) {
-                    addToTracker(workoutList);  // Call method to add to the tracker's progress
-                    Toast.makeText(WorkoutModule4.this, "Workout added to tracker!", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(WorkoutModule4.this, "No workout to add.", Toast.LENGTH_SHORT).show();
-                }
-            });
-        } else {
-            // Set the button text to "View Workout" if the user is not from the tracker
-            addWorkout.setText("View Workout");
-
-            // Set the listener for the "View Workout" functionality
-            addWorkout.setOnClickListener(v -> {
-                if (!workoutList.isEmpty()) {
-                    Workout selectedWorkout = workoutList.get(0); // Assuming the first workout is selected
-                    viewWorkoutDetails(selectedWorkout);
-                } else {
-                    Toast.makeText(WorkoutModule4.this, "No workout available to view.", Toast.LENGTH_SHORT).show();
-                }
-            });
-        }
 
         // Start the periodic refresh
         handler.post(refreshRunnable);
