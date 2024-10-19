@@ -2,6 +2,7 @@ package com.example.heavymetals.Home_LandingPage.Workouts;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -19,7 +20,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
-import com.example.heavymetals.Models.Exercise; // Ensure the correct import
+import com.example.heavymetals.Models.Exercise;
 import com.example.heavymetals.R;
 
 import org.json.JSONArray;
@@ -30,8 +31,10 @@ import java.util.ArrayList;
 
 public class Exercises_All extends AppCompatActivity {
 
+    private static final String TAG = "Exercises_All";  // Add a tag for logging
     private Button FEPAddExercise;
-    private ArrayList<Exercise> selectedExercises = new ArrayList<>(); // Store Exercise objects
+    private ArrayList<Exercise> selectedExercises = new ArrayList<>();  // Store Exercise objects
+    private ArrayList<Exercise> allExercises = new ArrayList<>();  // Declare allExercises
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +58,8 @@ public class Exercises_All extends AppCompatActivity {
             startActivityForResult(intent, 100);  // Use request code to get result back
         });
 
+        // Log start of exercise fetching
+        Log.d(TAG, "onCreate: Fetching exercises");
         fetchExercises();
     }
 
@@ -64,7 +69,7 @@ public class Exercises_All extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 100 && resultCode == RESULT_OK) {
             selectedExercises = (ArrayList<Exercise>) data.getSerializableExtra("selectedExercises");
-            // Update the UI accordingly
+            Log.d(TAG, "onActivityResult: Selected exercises updated: " + selectedExercises.size());
         }
     }
 
@@ -79,75 +84,96 @@ public class Exercises_All extends AppCompatActivity {
 
         button.setOnClickListener(v -> {
             int currentIcon = (int) button.getTag();
-
             if (currentIcon == R.drawable.additem_black) {
                 button.setImageResource(R.drawable.additem_orange);  // Change to selected state
                 button.setTag(R.drawable.additem_orange);
-
-                // Create a new Exercise object to add to the selectedExercises
-                Exercise newExercise = new Exercise(exerciseName, "Description here", "Image URL here"); // Update as needed
+                Exercise newExercise = new Exercise(exerciseName, "Category", "Image URL here");
                 selectedExercises.add(newExercise);  // Add exercise to list
+                Log.d(TAG, "setupToggleButton: Exercise added: " + exerciseName);
             } else {
                 button.setImageResource(R.drawable.additem_black);  // Change to deselected state
                 button.setTag(R.drawable.additem_black);
-
-                // Remove the exercise from the list
-                selectedExercises.removeIf(exercise -> exercise.getName().equals(exerciseName));  // Remove exercise from list
+                selectedExercises.removeIf(exercise -> exercise.getName().equals(exerciseName));
+                Log.d(TAG, "setupToggleButton: Exercise removed: " + exerciseName);
             }
         });
-
-        // Initially set to black icon (unselected)
         button.setTag(R.drawable.additem_black);
     }
 
+    private void filterExercisesByCategory(String category) {
+        LinearLayout exercisesLayout = findViewById(R.id.scrollViewLinearLayout);
+        exercisesLayout.removeAllViews();  // Clear current views
+        Log.d(TAG, "filterExercisesByCategory: Filtering by category: " + category);
+
+        for (Exercise exercise : allExercises) {
+            // Show all exercises if "All" is selected, or filter by category
+            if (category.equals("All") || exercise.getCategory().equals(category)) {
+                addExerciseToView(exercise);  // Add the exercise to the view
+                Log.d(TAG, "filterExercisesByCategory: Exercise added to view: " + exercise.getName());
+            }
+        }
+    }
+
+    private void addExerciseToView(Exercise exercise) {
+        LinearLayout exercisesLayout = findViewById(R.id.scrollViewLinearLayout);
+        RelativeLayout exerciseItemLayout = (RelativeLayout) getLayoutInflater().inflate(R.layout.exercise_item_layout, null);
+
+        // Set the text for the exercise name and description
+        TextView exerciseNameText = exerciseItemLayout.findViewById(R.id.exercise_name);
+        TextView exerciseDescriptionText = exerciseItemLayout.findViewById(R.id.exercise_description);
+        exerciseNameText.setText(exercise.getName());
+        exerciseDescriptionText.setText(exercise.getCategory());
+
+        // Handle button toggle behavior
+        ImageButton toggleButton = exerciseItemLayout.findViewById(R.id.addItemBtn);
+        setupToggleButton(toggleButton, exercise.getName());
+
+        // Load the image using Glide
+        ImageView exerciseImageView = exerciseItemLayout.findViewById(R.id.exercise_image);
+        Glide.with(Exercises_All.this)
+                .load(exercise.getImageUrl())  // Image URL from the server
+                .placeholder(R.drawable.human_icon)  // Fallback image if the URL fails
+                .into(exerciseImageView);  // Set the ImageView
+
+        exercisesLayout.addView(exerciseItemLayout);
+        Log.d(TAG, "addExerciseToView: Exercise added to layout: " + exercise.getName());
+    }
+
     private void fetchExercises() {
-        // Create a request to the server to get the exercises
         String url = "https://heavymetals.scarlet2.io/HeavyMetals/exercises_list/get_exercises_list.php";
+        Log.d(TAG, "fetchExercises: Making request to: " + url);
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null,
                 response -> {
-                    // Handle the JSON response
+                    Log.d(TAG, "fetchExercises: Received response");
                     try {
                         JSONArray exercisesArray = response.getJSONArray("exercises");
-                        // Find the LinearLayout where we'll be adding exercise views
-                        LinearLayout exercisesLayout = findViewById(R.id.scrollViewLinearLayout);  // Assuming this is where to add views
 
                         for (int i = 0; i < exercisesArray.length(); i++) {
-                            JSONObject exercise = exercisesArray.getJSONObject(i);
-                            String name = exercise.getString("exercise_name");
-                            String description = exercise.getString("description");
-                            String imageUrl = exercise.getString("image_url");  // Add image URL
+                            JSONObject exerciseJson = exercisesArray.getJSONObject(i);
+                            String name = exerciseJson.getString("exercise_name");
 
-                            // Inflate a new RelativeLayout for each exercise
-                            RelativeLayout exerciseItemLayout = (RelativeLayout) getLayoutInflater().inflate(R.layout.exercise_item_layout, null);
+                            // Use optString instead of getString to handle missing category field
+                            String category = exerciseJson.optString("category", "Unknown");  // Default to "Unknown" if not present
 
-                            // Set the text for the exercise name and description
-                            TextView exerciseNameText = exerciseItemLayout.findViewById(R.id.exercise_name);
-                            TextView exerciseDescriptionText = exerciseItemLayout.findViewById(R.id.exercise_description);
-                            exerciseNameText.setText(name);
-                            exerciseDescriptionText.setText(description);
+                            String imageUrl = exerciseJson.optString("image_url", "");  // Handle image_url similarly
+                            Log.d(TAG, "Image URL for " + name + ": " + imageUrl);
 
-                            // Handle button toggle behavior
-                            ImageButton toggleButton = exerciseItemLayout.findViewById(R.id.addItemBtn);
-                            setupToggleButton(toggleButton, name);
-
-                            // Load the image using Glide
-                            ImageView exerciseImageView = exerciseItemLayout.findViewById(R.id.exercise_image);
-                            Glide.with(Exercises_All.this)
-                                    .load(imageUrl)  // Image URL from the server
-                                    .placeholder(R.drawable.human_icon)  // Fallback image if the URL fails
-                                    .into(exerciseImageView);  // Set the ImageView
-
-                            // Add the dynamically created view to the exercises layout
-                            exercisesLayout.addView(exerciseItemLayout);
+                            // Create Exercise objects and add to the list
+                            Exercise exercise = new Exercise(name, category, imageUrl);
+                            allExercises.add(exercise);  // Add all exercises to the main list
                         }
+
+
+                        // Initially, show all exercises (default filter)
+                        filterExercisesByCategory("All");
+
                     } catch (JSONException e) {
-                        e.printStackTrace();
+                        Log.e(TAG, "fetchExercises: JSON parsing error", e);
                     }
                 },
                 error -> {
-                    // Handle error
-                    error.printStackTrace();
+                    Log.e(TAG, "fetchExercises: Volley error", error);
                 }
         );
 

@@ -93,6 +93,21 @@
             android:textColor="@color/white"
             android:textSize="10sp" />
 
+        <Spinner
+            android:id="@+id/category_filter_spinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/button_background"
+            android:padding="8dp"
+            android:spinnerMode="dropdown"
+            android:textColor="#FFFFFF"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/workout_txt" />
+
         <ScrollView
             android:id="@+id/scrollView"
             android:layout_width="360dp"

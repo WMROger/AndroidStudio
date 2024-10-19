@@ -5,13 +5,16 @@ import android.os.Parcelable;
 
 public class Exercise implements Parcelable {
     private String name;
-    private String description;
+    private String category;  // category field
     private String imageUrl;
 
-    // Constructor
-    public Exercise(String name, String description, String imageUrl) {
+    // Default constructor
+    public Exercise() {}
+
+    // Constructor with three parameters (name, category, imageUrl)
+    public Exercise(String name, String category, String imageUrl) {
         this.name = name;
-        this.description = description;
+        this.category = category;
         this.imageUrl = imageUrl;
     }
 
@@ -20,18 +23,31 @@ public class Exercise implements Parcelable {
         return name;
     }
 
-    public String getDescription() {
-        return description;
+    public String getCategory() {
+        return category;
     }
 
     public String getImageUrl() {
         return imageUrl;
     }
 
+    // Setter methods
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
     // Parcelable methods
     protected Exercise(Parcel in) {
         name = in.readString();
-        description = in.readString();
+        category = in.readString();
         imageUrl = in.readString();
     }
 
@@ -55,7 +71,16 @@ public class Exercise implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(name);
-        dest.writeString(description);
+        dest.writeString(category);
         dest.writeString(imageUrl);
+    }
+
+    @Override
+    public String toString() {
+        return "Exercise{" +
+                "name='" + name + '\'' +
+                ", category='" + category + '\'' +
+                ", imageUrl='" + imageUrl + '\'' +
+                '}';
     }
 }
