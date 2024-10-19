@@ -143,6 +143,8 @@ public class WorkoutModule2 extends AppCompatActivity {
             // Use Picasso to load the image
             Picasso.get()
                     .load(imageUrl)
+                    .resize(200, 200)  // Resize the image if you want it larger or smaller
+                    .centerCrop()      // Center and crop to make it fit the dimensions
                     .placeholder(R.drawable.human_icon)  // Show placeholder during loading
                     .error(R.drawable.human_icon)        // Show fallback image if loading fails
                     .into(exerciseIcon, new com.squareup.picasso.Callback() {
