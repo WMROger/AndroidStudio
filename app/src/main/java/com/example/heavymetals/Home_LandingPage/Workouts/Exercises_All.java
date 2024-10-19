@@ -20,6 +20,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.heavymetals.Models.Exercise;
 import com.example.heavymetals.R;
 
@@ -131,9 +132,13 @@ public class Exercises_All extends AppCompatActivity {
         // Load the image using Glide
         ImageView exerciseImageView = exerciseItemLayout.findViewById(R.id.exercise_image);
         Glide.with(Exercises_All.this)
-                .load(exercise.getImageUrl())  // Image URL from the server
-                .placeholder(R.drawable.human_icon)  // Fallback image if the URL fails
-                .into(exerciseImageView);  // Set the ImageView
+                .load(exercise.getImageUrl())
+                .placeholder(R.drawable.human_icon)
+                .error(R.drawable.orange_border)
+                .skipMemoryCache(true)  // Skip memory cache
+                .diskCacheStrategy(DiskCacheStrategy.NONE)  // Skip disk cache
+                .into(exerciseImageView);
+
 
         exercisesLayout.addView(exerciseItemLayout);
         Log.d(TAG, "addExerciseToView: Exercise added to layout: " + exercise.getName());
