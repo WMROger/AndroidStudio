@@ -3,11 +3,15 @@ package com.example.heavymetals.Home_LandingPage.Workouts;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -29,13 +33,18 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 public class Exercises_All extends AppCompatActivity {
 
-    private static final String TAG = "Exercises_All";  // Add a tag for logging
+    private static final String TAG = "Exercises_All";
     private Button FEPAddExercise;
-    private ArrayList<Exercise> selectedExercises = new ArrayList<>();  // Store Exercise objects
-    private ArrayList<Exercise> allExercises = new ArrayList<>();  // Declare allExercises
+    private ArrayList<Exercise> selectedExercises = new ArrayList<>();
+    private ArrayList<Exercise> allExercises = new ArrayList<>();
+    private Spinner categorySpinner;
+    private ArrayAdapter<String> categoryAdapter;  // Adapter for Spinner
+    private Set<String> categories = new HashSet<>();  // To store unique categories dynamically
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,10 +58,11 @@ public class Exercises_All extends AppCompatActivity {
             return insets;
         });
 
-        // Initialize buttons
-        FEPAddExercise = findViewById(R.id.FEPAddExercise);
+        // Initialize the Spinner for category filtering
+        categorySpinner = findViewById(R.id.category_filter_spinner);
 
-        // Set click listener for Add Exercise button
+        // Initialize the Add Exercise button
+        FEPAddExercise = findViewById(R.id.FEPAddExercise);
         FEPAddExercise.setOnClickListener(v -> {
             Intent intent = new Intent(Exercises_All.this, WorkoutModule2.class);
             intent.putExtra("selectedExercises", selectedExercises);  // Pass selected exercises
@@ -62,6 +72,9 @@ public class Exercises_All extends AppCompatActivity {
         // Log start of exercise fetching
         Log.d(TAG, "onCreate: Fetching exercises");
         fetchExercises();
+
+        // Setup category spinner listener
+        setupCategorySpinner();
     }
 
     // Handle the result from WorkoutModule2
@@ -139,7 +152,6 @@ public class Exercises_All extends AppCompatActivity {
                 .diskCacheStrategy(DiskCacheStrategy.NONE)  // Skip disk cache
                 .into(exerciseImageView);
 
-
         exercisesLayout.addView(exerciseItemLayout);
         Log.d(TAG, "addExerciseToView: Exercise added to layout: " + exercise.getName());
     }
@@ -159,9 +171,10 @@ public class Exercises_All extends AppCompatActivity {
                             String name = exerciseJson.getString("exercise_name");
 
                             // Use optString instead of getString to handle missing category field
-                            String category = exerciseJson.optString("category", "Unknown");  // Default to "Unknown" if not present
+                            String category = exerciseJson.optString("category", "Unknown");
+                            categories.add(category);  // Add to category list
 
-                            String imageUrl = exerciseJson.optString("image_url", "");  // Handle image_url similarly
+                            String imageUrl = exerciseJson.optString("image_url", "");
                             Log.d(TAG, "Image URL for " + name + ": " + imageUrl);
 
                             // Create Exercise objects and add to the list
@@ -169,9 +182,11 @@ public class Exercises_All extends AppCompatActivity {
                             allExercises.add(exercise);  // Add all exercises to the main list
                         }
 
-
                         // Initially, show all exercises (default filter)
                         filterExercisesByCategory("All");
+
+                        // Set categories to Spinner
+                        setupCategorySpinnerData();
 
                     } catch (JSONException e) {
                         Log.e(TAG, "fetchExercises: JSON parsing error", e);
@@ -185,5 +200,32 @@ public class Exercises_All extends AppCompatActivity {
         // Add the request to the RequestQueue
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         requestQueue.add(jsonObjectRequest);
+    }
+
+    private void setupCategorySpinnerData() {
+        // Convert the categories set to a list and add "All" option at the start
+        ArrayList<String> categoryList = new ArrayList<>(categories);
+        categoryList.add(0, "All");
+
+        // Create and set the adapter for the Spinner
+        categoryAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, categoryList);
+        categoryAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        categorySpinner.setAdapter(categoryAdapter);
+    }
+
+    private void setupCategorySpinner() {
+        categorySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String selectedCategory = (String) parent.getItemAtPosition(position);
+                Log.d(TAG, "Selected category: " + selectedCategory);
+                filterExercisesByCategory(selectedCategory);  // Filter the exercises based on the selected category
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                // No action needed
+            }
+        });
     }
 }
