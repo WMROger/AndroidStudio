@@ -87,8 +87,8 @@ public class Exercises_All extends AppCompatActivity {
         }
     }
 
-    private void setupToggleButton(ImageButton button, String exerciseName) {
-        if (selectedExercises.stream().anyMatch(exercise -> exercise.getName().equals(exerciseName))) {
+    private void setupToggleButton(ImageButton button, Exercise exercise) {
+        if (selectedExercises.stream().anyMatch(ex -> ex.getName().equals(exercise.getName()))) {
             button.setImageResource(R.drawable.additem_orange);  // Already selected
             button.setTag(R.drawable.additem_orange);
         } else {
@@ -101,18 +101,21 @@ public class Exercises_All extends AppCompatActivity {
             if (currentIcon == R.drawable.additem_black) {
                 button.setImageResource(R.drawable.additem_orange);  // Change to selected state
                 button.setTag(R.drawable.additem_orange);
-                Exercise newExercise = new Exercise(exerciseName, "Category", "Image URL here");
+
+                // Use the actual image URL from the Exercise object
+                Exercise newExercise = new Exercise(exercise.getName(), exercise.getCategory(), exercise.getImageUrl());
                 selectedExercises.add(newExercise);  // Add exercise to list
-                Log.d(TAG, "setupToggleButton: Exercise added: " + exerciseName);
+                Log.d(TAG, "setupToggleButton: Exercise added: " + exercise.getName());
             } else {
                 button.setImageResource(R.drawable.additem_black);  // Change to deselected state
                 button.setTag(R.drawable.additem_black);
-                selectedExercises.removeIf(exercise -> exercise.getName().equals(exerciseName));
-                Log.d(TAG, "setupToggleButton: Exercise removed: " + exerciseName);
+                selectedExercises.removeIf(ex -> ex.getName().equals(exercise.getName()));
+                Log.d(TAG, "setupToggleButton: Exercise removed: " + exercise.getName());
             }
         });
         button.setTag(R.drawable.additem_black);
     }
+
 
     private void filterExercisesByCategory(String category) {
         LinearLayout exercisesLayout = findViewById(R.id.scrollViewLinearLayout);
@@ -140,7 +143,7 @@ public class Exercises_All extends AppCompatActivity {
 
         // Handle button toggle behavior
         ImageButton toggleButton = exerciseItemLayout.findViewById(R.id.addItemBtn);
-        setupToggleButton(toggleButton, exercise.getName());
+        setupToggleButton(toggleButton, exercise);  // Pass the entire exercise object now
 
         // Load the image using Glide
         ImageView exerciseImageView = exerciseItemLayout.findViewById(R.id.exercise_image);
@@ -148,13 +151,14 @@ public class Exercises_All extends AppCompatActivity {
                 .load(exercise.getImageUrl())
                 .placeholder(R.drawable.human_icon)
                 .error(R.drawable.orange_border)
-                .skipMemoryCache(true)  // Skip memory cache
-                .diskCacheStrategy(DiskCacheStrategy.NONE)  // Skip disk cache
+                .skipMemoryCache(true)
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .into(exerciseImageView);
 
         exercisesLayout.addView(exerciseItemLayout);
         Log.d(TAG, "addExerciseToView: Exercise added to layout: " + exercise.getName());
     }
+
 
     private void fetchExercises() {
         String url = "https://heavymetals.scarlet2.io/HeavyMetals/exercises_list/get_exercises_list.php";

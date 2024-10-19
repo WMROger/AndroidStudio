@@ -4,27 +4,22 @@ import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
 
+
 public class AdaptersExercise implements Serializable {
     @SerializedName("exercise_name")
     private String name;
     private int sets;
     private int reps;
-    private boolean isDone;  // Tracks if the exercise is completed
+    private boolean isDone;
+    private String imageUrl;  // Add imageUrl to handle the image fetching
 
     // Constructor
-    public AdaptersExercise(String name, int sets, int reps, boolean isDone) {
+    public AdaptersExercise(String name, int sets, int reps, boolean isDone, String imageUrl) {
         this.name = name;
         this.sets = sets;
         this.reps = reps;
         this.isDone = isDone;
-    }
-
-    // Alternative constructor without isDone for backwards compatibility
-    public AdaptersExercise(String name, int sets, int reps) {
-        this.name = name;
-        this.sets = sets;
-        this.reps = reps;
-        this.isDone = false;  // Default value for isDone
+        this.imageUrl = imageUrl;
     }
 
     // Getters and Setters
@@ -59,4 +54,13 @@ public class AdaptersExercise implements Serializable {
     public void setDone(boolean done) {
         isDone = done;
     }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
 }
+

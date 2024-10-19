@@ -35,10 +35,13 @@ dependencies {
     implementation libs.activity.v123
     implementation libs.constraintlayout.v210
 
+    implementation libs.picasso
     implementation libs.glide
     implementation libs.glide.v4110
     annotationProcessor libs.compiler.v4110
     annotationProcessor libs.compiler
+
+
     // Retrofit for network calls
     implementation libs.retrofit
     // Gson for JSON parsing
