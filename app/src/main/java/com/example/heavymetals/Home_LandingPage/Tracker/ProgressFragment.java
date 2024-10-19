@@ -133,9 +133,10 @@ public class ProgressFragment extends Fragment {
         if (args != null) {
             String workoutTitle = args.getString("workout_title");
             int exerciseCount = args.getInt("exercise_count");
+            int workoutId = sharedPreferences.getInt("workout_id", -1);  // Retrieve workout ID from SharedPreferences
 
-            if (workoutTitle != null && exerciseCount > 0) {
-                displayWorkout(workoutTitle, exerciseCount);
+            if (workoutTitle != null && exerciseCount > 0 && workoutId > 0) {
+                displayWorkout(workoutTitle, exerciseCount, workoutId);
             }
         }
 
@@ -161,7 +162,6 @@ public class ProgressFragment extends Fragment {
     }
 
 
-
     private void chooseAnotherWorkout() {
         workoutContainer.setVisibility(View.GONE);
         isWorkoutSelected = false;
@@ -169,7 +169,7 @@ public class ProgressFragment extends Fragment {
         Toast.makeText(getContext(), "Choose a different workout plan.", Toast.LENGTH_SHORT).show();
     }
 
-    private void displayWorkout(String workoutTitle, int exerciseCount) {
+    private void displayWorkout(String workoutTitle, int exerciseCount, int workoutId) {
         // Hide the first workout details
         workoutTitleTextView.setVisibility(View.GONE);  // Hide the first workout title
         exerciseCountTextView.setVisibility(View.GONE);  // Hide the first exercise count
@@ -179,8 +179,9 @@ public class ProgressFragment extends Fragment {
         workoutContainer.setVisibility(View.GONE);  // Hide the container entirely
 
         // Add the workout item to the container below (second one)
-        addWorkoutItem(workoutTitle, exerciseCount);  // Add to tracker
+        addWorkoutItem(workoutTitle, exerciseCount, workoutId);  // Pass workoutId to the method
     }
+
 
 
 
@@ -197,24 +198,35 @@ public class ProgressFragment extends Fragment {
         int exerciseCount = sharedPreferences.getInt("exercise_count", 0);
         int workoutId = sharedPreferences.getInt("workout_id", -1); // Retrieve workout_id
 
+        // Clear any previous workout items to avoid duplicates
+        workoutContainer.removeAllViews();
+
         if (!workoutTitle.equals("No workout selected")) {
-            // Make the workout container visible and update text views
-            workoutContainer.setVisibility(View.VISIBLE);
-            workoutTitleTextView.setVisibility(View.VISIBLE);
-            workoutTitleTextView.setText("Workout Title: " + workoutTitle);
+            // Inflate the workout item layout (from workout_item.xml)
+            LayoutInflater inflater = LayoutInflater.from(getContext());
+            View workoutItemView = inflater.inflate(R.layout.workout_item, workoutContainer, false);
 
-            exerciseCountTextView.setVisibility(View.VISIBLE);
-            exerciseCountTextView.setText("Number of Exercises: " + exerciseCount);
+            // Find the TextViews for title and exercise count in the inflated layout
+            TextView workoutTitleView = workoutItemView.findViewById(R.id.workoutTitle);
+            TextView exerciseCountView = workoutItemView.findViewById(R.id.exerciseCount);
+            Button viewWorkoutButton = workoutItemView.findViewById(R.id.viewWorkoutButton);
 
-            // Pass workoutId to the viewWorkoutDetails method
-            workoutContainer.setOnClickListener(v -> viewWorkoutDetails(workoutId));
-            viewWorkoutButton.setVisibility(View.VISIBLE); // Ensure the view button is visible
+            // Set the workout details to the inflated view
+            workoutTitleView.setText(workoutTitle);
+            exerciseCountView.setText("Exercises: " + exerciseCount);
+
+            // Handle the view workout button click
+            viewWorkoutButton.setOnClickListener(v -> viewWorkoutDetails(workoutId));
+
+
+
+            // Add the workout item to the container
+            workoutContainer.addView(workoutItemView);
         } else {
-            workoutContainer.setVisibility(View.INVISIBLE);  // Hide the container if no workout is selected
-            viewWorkoutButton.setVisibility(View.GONE);  // Hide the "View Workout" button if no workout is selected
             Toast.makeText(getContext(), "No workout selected", Toast.LENGTH_SHORT).show();
         }
     }
+
 
     private void viewWorkoutDetails(int workoutId) {
         if (workoutId > 0) {
@@ -491,7 +503,7 @@ public class ProgressFragment extends Fragment {
     }
 
 
-    private void addWorkoutItem(String workoutTitle, int exerciseCount) {
+    private void addWorkoutItem(String workoutTitle, int exerciseCount, int workoutId) {
         // Inflate the workout item layout (e.g., workout_item.xml)
         LayoutInflater inflater = LayoutInflater.from(getContext());
         View workoutItemView = inflater.inflate(R.layout.workout_item, workoutContainer, false);
@@ -499,17 +511,23 @@ public class ProgressFragment extends Fragment {
         // Find the TextViews for title and exercise count
         TextView workoutTitleView = workoutItemView.findViewById(R.id.workoutTitle);
         TextView exerciseCountView = workoutItemView.findViewById(R.id.exerciseCount);
-        Button viewWorkoutButton = workoutItemView.findViewById(R.id.btn_view_workout);
+
+        // Ensure that btn_view_workout is a Button
+        Button viewWorkoutButton = workoutItemView.findViewById(R.id.viewWorkoutButton);
 
         // Set the text to display the workout's title and exercise count
-        workoutTitleView.setText(workoutTitle);
-        exerciseCountView.setText("Exercises: " + exerciseCount);
+        workoutTitleView.setText(workoutTitle);  // Ensure workoutTitle is not empty
+        exerciseCountView.setText("Exercises: " + exerciseCount);  // Ensure exerciseCount is a valid number
 
+        // Handle the view workout button click
+        viewWorkoutButton.setOnClickListener(v -> viewWorkoutDetails(workoutId));  // Pass the workoutId here
 
-
-        // Add the workout item to the container (LinearLayout/RecyclerView, etc.)
+        // Add the workout item to the container
         workoutContainer.addView(workoutItemView);
     }
+
+
+
 
 
 
