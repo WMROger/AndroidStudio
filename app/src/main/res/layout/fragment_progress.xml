@@ -319,8 +319,8 @@
                 android:id="@+id/workout_container"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:layout_marginBottom="16dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="26dp"
                 android:orientation="vertical"
                 android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -407,6 +407,7 @@
                     android:background="@drawable/bg_blackgradient"
                     android:padding="12dp">
 
+
                     <TextView
                         android:id="@+id/tv_last_week"
                         android:layout_width="wrap_content"
@@ -457,6 +458,14 @@
                         app:layout_constraintTop_toBottomOf="@id/week_days_row" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <Button
+                    android:id="@+id/btn_reset"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="Reset"
+                    app:cornerRadius="25dp" />
             </LinearLayout>
         </ScrollView>
 

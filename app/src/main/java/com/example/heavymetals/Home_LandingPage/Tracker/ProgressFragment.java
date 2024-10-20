@@ -31,7 +31,7 @@ import me.zhanghai.android.materialprogressbar.MaterialProgressBar;
 public class ProgressFragment extends Fragment {
 
     private TextView workoutTitleTextView, exerciseCountTextView;
-    private Button addScheduleButton, viewWorkoutButton, addWorkout, sun, mon, tue, wed, thu, fri, sat, AddGoal;
+    private Button addScheduleButton, viewWorkoutButton, addWorkout, sun, mon, tue, wed, thu, fri, sat, AddGoal, ResetButton;
     private View scheduleContainer;
     private TextView emptyScheduleText, trackerBack, SaveGoals;
     private LinearLayout goalContainer, workoutContainer;
@@ -75,6 +75,7 @@ public class ProgressFragment extends Fragment {
         SaveGoals = view.findViewById(R.id.tv_save);
         progressCircle = view.findViewById(R.id.circular_progress_bar);
         progressCircle.setMax(100); // Max value for progress
+        ResetButton = view.findViewById(R.id.btn_reset);  // Button to reset all goals and schedule
 
         sun = view.findViewById(R.id.tv_sunday);
         mon = view.findViewById(R.id.tv_monday);
@@ -108,16 +109,20 @@ public class ProgressFragment extends Fragment {
         // Handle "View Workout" button click
         viewWorkoutButton.setOnClickListener(v -> {
             int workoutId = sharedPreferences.getInt("workout_id", -1);  // Get workout ID
+            SharedPreferences sharedPreferences = getContext().getSharedPreferences("UserPrefs", Context.MODE_PRIVATE);
+            String sessionToken = sharedPreferences.getString("auth_token", null);  // Fetch the session token
+
             if (workoutId > 0) {
                 Intent intent = new Intent(getActivity(), WorkoutDetailActivity.class);
                 intent.putExtra("workout_id", workoutId);  // Pass workout ID
+                intent.putExtra("session_token", sessionToken);  // Pass session token, even if it might be null
                 startActivity(intent);
             } else {
                 Toast.makeText(getContext(), "No workout selected.", Toast.LENGTH_SHORT).show();
             }
         });
 
-        // Handle "Add Schedule" button click
+        // When saving the schedule
         addScheduleButton.setOnClickListener(v -> {
             // Hide the "Add Schedule" button and other placeholders
             addScheduleButton.setVisibility(View.GONE);
@@ -126,7 +131,15 @@ public class ProgressFragment extends Fragment {
 
             // Show the schedule container
             scheduleContainer.setVisibility(View.VISIBLE);
+
+            // Save the state of the schedule being added in SharedPreferences
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putBoolean("schedule_saved", true); // Save the flag to indicate schedule was saved
+            editor.apply();
         });
+
+        // Handle Reset button click (this will reset all goals and the schedule)
+        ResetButton.setOnClickListener(v -> resetAll());
 
         // Get workout details from arguments
         Bundle args = getArguments();
@@ -185,19 +198,6 @@ public class ProgressFragment extends Fragment {
         addWorkoutItem(workoutTitle, exerciseCount, workoutId);  // Pass workoutId to the method
     }
 
-    // Save the selected workout details in SharedPreferences when returning from WorkoutModule4
-    @Override
-    public void onResume() {
-        super.onResume();
-
-        // Ensure the workout container is visible if workout is selected
-        workoutContainer.setVisibility(View.VISIBLE);
-
-        // Load the selected workout details into the UI
-        loadSelectedWorkout(workoutTitleTextView, exerciseCountTextView, workoutContainer);
-    }
-
-
     private void loadSelectedWorkout(TextView workoutTitleTextView, TextView exerciseCountTextView, LinearLayout workoutContainer) {
         SharedPreferences sharedPreferences = getContext().getSharedPreferences("SelectedWorkout", Context.MODE_PRIVATE);
 
@@ -240,10 +240,14 @@ public class ProgressFragment extends Fragment {
     }
 
     private void viewWorkoutDetails(int workoutId) {
+        SharedPreferences sharedPreferences = getContext().getSharedPreferences("UserPrefs", Context.MODE_PRIVATE);
+        String sessionToken = sharedPreferences.getString("auth_token", null);  // Fetch the session token
+
         if (workoutId > 0) {
             // Start WorkoutDetailActivity with workout_id
             Intent intent = new Intent(getActivity(), WorkoutDetailActivity.class);
             intent.putExtra("workout_id", workoutId);
+            intent.putExtra("session_token", sessionToken);  // Pass session token, even if it's null
             startActivity(intent);
         } else {
             Toast.makeText(getContext(), "Invalid workout ID.", Toast.LENGTH_SHORT).show();
@@ -381,28 +385,48 @@ public class ProgressFragment extends Fragment {
                 View goalRow = goalContainer.getChildAt(goalContainer.getChildCount() - 1);  // Get the added row
                 if (goalRow instanceof LinearLayout) {
                     EditText goalInput = (EditText) ((LinearLayout) goalRow).getChildAt(1);
+                    TextView deleteButton = (TextView) ((LinearLayout) goalRow).getChildAt(2);
+
                     goalInput.setText(goalText);
+
+                    // Check if the goal was marked as done
+                    boolean isDone = sharedPreferences.getBoolean("goal_done_" + i, false);
+                    if (isDone) {
+                        goalInput.setPaintFlags(goalInput.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                        goalInput.setTextColor(ContextCompat.getColor(requireContext(), R.color.custom_orange));
+                        deleteButton.setText("Done");  // Set text to Done
+                        deleteButton.setTextColor(ContextCompat.getColor(requireContext(), R.color.white));
+                        deleteButton.setEnabled(false);  // Disable the button
+
+                        // Ensure no click listener is set for "Done" goals
+                        deleteButton.setOnClickListener(null);  // Remove click listener
+                        doneCount++;
+                    } else {
+                        deleteButton.setText("Delete");  // Set text to Delete if not done
+                        deleteButton.setTextColor(ContextCompat.getColor(requireContext(), R.color.custom_orange));
+
+                        // Add click listener to mark as done
+                        deleteButton.setOnClickListener(v -> {
+                            goalInput.setPaintFlags(goalInput.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                            goalInput.setTextColor(ContextCompat.getColor(requireContext(), R.color.custom_orange));
+                            deleteButton.setText("Done");
+                            deleteButton.setTextColor(ContextCompat.getColor(requireContext(), R.color.white));
+                            deleteButton.setEnabled(false);  // Disable the button after marking as done
+                            doneCount++;
+                            updateProgress();  // Update progress
+                        });
+                    }
                 }
             }
         }
 
         goalCount = goalContainer.getChildCount();
         updateGoalNumbers();
+        updateProgress();
     }
 
-    // Method to update goal numbers after a change
-    private void updateGoalNumbers() {
-        for (int i = 0; i < goalContainer.getChildCount(); i++) {
-            View goalRow = goalContainer.getChildAt(i);
-            if (goalRow instanceof LinearLayout) {
-                TextView goalNumber = (TextView) ((LinearLayout) goalRow).getChildAt(0);
-                goalNumber.setText(String.valueOf(i + 1));
-            }
-        }
-        goalCount = goalContainer.getChildCount(); // Ensure goalCount reflects the actual number of goals
-    }
 
-    // Method to save the goals in SharedPreferences
+    // Save the goals and update the saved state
     private void saveGoals() {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.clear(); // Clear previous data
@@ -418,24 +442,38 @@ public class ProgressFragment extends Fragment {
                 String goalText = goalInput.getText().toString().trim();
 
                 if (!goalText.isEmpty()) {
+                    // Save the goal text
                     editor.putString("goal_" + i, goalText);
+
+                    // Check if the goal is marked as done (has strikethrough)
+                    boolean isDone = (goalInput.getPaintFlags() & Paint.STRIKE_THRU_TEXT_FLAG) != 0;
+                    editor.putBoolean("goal_done_" + i, isDone); // Save the done state
+
                     hasValidGoal = true;
 
                     // Make EditText uneditable
                     goalInput.setEnabled(false);
                     goalInput.setTextColor(ContextCompat.getColor(requireContext(), R.color.white));
 
-                    deleteButton.setText("Done");
-                    deleteButton.setTextColor(ContextCompat.getColor(requireContext(), R.color.white));
-
-                    deleteButton.setOnClickListener(v -> {
-                        goalInput.setPaintFlags(goalInput.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-                        goalInput.setTextColor(ContextCompat.getColor(requireContext(), R.color.custom_orange));
-
-                        doneCount++;
-                        updateProgress();  // Update progress here
-                        deleteButton.setEnabled(false);
-                    });
+                    // Update the "Delete" button to say "Done" if goal is marked as done
+                    if (isDone) {
+                        deleteButton.setText("Done");
+                        deleteButton.setTextColor(ContextCompat.getColor(requireContext(), R.color.white));
+                        deleteButton.setEnabled(false); // Disable the button when done
+                    } else {
+                        deleteButton.setText("Delete");
+                        deleteButton.setTextColor(ContextCompat.getColor(requireContext(), R.color.custom_orange));
+                        // Set up the "Done" click listener
+                        deleteButton.setOnClickListener(v -> {
+                            goalInput.setPaintFlags(goalInput.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                            goalInput.setTextColor(ContextCompat.getColor(requireContext(), R.color.custom_orange));
+                            deleteButton.setText("Done");
+                            deleteButton.setTextColor(ContextCompat.getColor(requireContext(), R.color.white));
+                            doneCount++;
+                            updateProgress();  // Update progress
+                            deleteButton.setEnabled(false);  // Disable the button when done
+                        });
+                    }
                 } else {
                     goalContainer.removeView(goalRow);
                     i--;
@@ -444,17 +482,117 @@ public class ProgressFragment extends Fragment {
         }
 
         if (hasValidGoal) {
+            editor.putBoolean("goals_saved", true); // Save the flag to indicate goals were saved
             editor.apply();
             Toast.makeText(requireContext(), "Goals saved!", Toast.LENGTH_SHORT).show();
+
+            // Disable day buttons after saving goals
             disableDayButtons();
+
+            // Update goal numbers
             updateGoalNumbers();
+
+            // Hide "Add" and "Save" buttons after saving
             AddGoal.setVisibility(View.GONE);
             SaveGoals.setVisibility(View.GONE);
+            addWorkout.setVisibility(View.GONE);
 
-            // Call displayProgressCircle after goals are saved successfully
+            // Show the progress circle and update the layout
             displayProgressCircle();
         } else {
             Toast.makeText(requireContext(), "Please add at least one goal before saving.", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+
+    // Method to update goal numbers after a change
+    private void updateGoalNumbers() {
+        for (int i = 0; i < goalContainer.getChildCount(); i++) {
+            View goalRow = goalContainer.getChildAt(i);
+            if (goalRow instanceof LinearLayout) {
+                TextView goalNumber = (TextView) ((LinearLayout) goalRow).getChildAt(0);
+                goalNumber.setText(String.valueOf(i + 1));
+            }
+        }
+        goalCount = goalContainer.getChildCount(); // Ensure goalCount reflects the actual number of goals
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        // Load the saved state of goals
+        boolean areGoalsSaved = sharedPreferences.getBoolean("goals_saved", false);
+
+        if (areGoalsSaved) {
+            // Hide buttons permanently if goals are already saved
+            AddGoal.setVisibility(View.GONE);
+            SaveGoals.setVisibility(View.GONE);
+            addWorkout.setVisibility(View.GONE);
+            disableDayButtons();
+            displayProgressCircle();
+        }
+
+        // Load the saved state of the schedule
+        boolean isScheduleSaved = sharedPreferences.getBoolean("schedule_saved", false);
+
+        if (isScheduleSaved) {
+            // Make schedule container visible permanently if schedule was saved
+            scheduleContainer.setVisibility(View.VISIBLE);
+            addScheduleButton.setVisibility(View.GONE);
+            emptyScheduleText.setVisibility(View.GONE);
+            emptyScheduleIcon.setVisibility(View.GONE);
+        } else {
+            // Initially, hide the schedule container and show the add schedule button
+            scheduleContainer.setVisibility(View.INVISIBLE);
+            addScheduleButton.setVisibility(View.VISIBLE);
+            emptyScheduleText.setVisibility(View.VISIBLE);
+            emptyScheduleIcon.setVisibility(View.VISIBLE);
+        }
+
+        // Ensure the workout container is visible if workout is selected
+        workoutContainer.setVisibility(View.VISIBLE);
+
+        // Load the selected workout details into the UI
+        loadSelectedWorkout(workoutTitleTextView, exerciseCountTextView, workoutContainer);
+    }
+
+
+
+
+    // Reset method that clears all the saved goals, schedule, and resets the UI state
+    private void resetAll() {
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.clear();
+        editor.apply();
+
+        // Reset the UI elements
+        goalContainer.removeAllViews();
+        workoutContainer.removeAllViews();
+        scheduleContainer.setVisibility(View.INVISIBLE);
+        emptyScheduleText.setVisibility(View.VISIBLE);
+        emptyScheduleIcon.setVisibility(View.VISIBLE);
+        addScheduleButton.setVisibility(View.VISIBLE);
+        addWorkout.setVisibility(View.VISIBLE);
+        AddGoal.setVisibility(View.VISIBLE);
+        SaveGoals.setVisibility(View.VISIBLE);
+        progressCircle.setVisibility(View.GONE);
+        Toast.makeText(requireContext(), "Reset successful!", Toast.LENGTH_SHORT).show();
+    }
+
+    private void handleBackAction() {
+        if (scheduleContainer.getVisibility() == View.VISIBLE) {
+            scheduleContainer.setVisibility(View.INVISIBLE);
+            addScheduleButton.setVisibility(View.VISIBLE);
+            emptyScheduleText.setVisibility(View.VISIBLE);
+            emptyScheduleIcon.setVisibility(View.VISIBLE);
+        } else {
+            // After saving goals, navigate to the HomeFragment
+            requireActivity().getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.fragment_container, new HomeFragment())
+                    .addToBackStack(null)
+                    .commit();
         }
     }
 
@@ -496,21 +634,6 @@ public class ProgressFragment extends Fragment {
         }
     }
 
-    private void handleBackAction() {
-        if (scheduleContainer.getVisibility() == View.VISIBLE) {
-            scheduleContainer.setVisibility(View.INVISIBLE);
-            addScheduleButton.setVisibility(View.VISIBLE);
-            emptyScheduleText.setVisibility(View.VISIBLE);
-            emptyScheduleIcon.setVisibility(View.VISIBLE);
-        } else {
-            requireActivity().getSupportFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.fragment_container, new HomeFragment())
-                    .addToBackStack(null)
-                    .commit();
-        }
-    }
-
     private void addWorkoutItem(String workoutTitle, int exerciseCount, int workoutId) {
         // Inflate the workout item layout
         LayoutInflater inflater = LayoutInflater.from(getContext());
@@ -534,5 +657,4 @@ public class ProgressFragment extends Fragment {
         // Add the workout item to the container
         workoutContainer.addView(workoutItemView);
     }
-
 }

@@ -118,10 +118,8 @@ public class WorkoutModule4 extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         workoutList = new ArrayList<>(); // Ensure workoutList is initialized
 
-        // Add new workout button listener
         addWorkout.setOnClickListener(v -> {
             if (addWorkout.getText().toString().equals("Add to Tracker")) {
-                // Add to tracker case
                 if (!workoutList.isEmpty()) {
                     addToTracker(workoutList);  // Call method to add to the tracker's progress
                     Toast.makeText(WorkoutModule4.this, "Workout added to tracker!", Toast.LENGTH_SHORT).show();
@@ -129,27 +127,6 @@ public class WorkoutModule4 extends AppCompatActivity {
                     Toast.makeText(WorkoutModule4.this, "No workout to add.", Toast.LENGTH_SHORT).show();
                 }
             } else if (addWorkout.getText().toString().equals("View Workout")) {
-                // View workout case
-                if (!workoutList.isEmpty()) {
-                    Workout selectedWorkout = workoutList.get(0);  // Assuming first workout is selected
-                    viewWorkoutDetails(selectedWorkout);
-                } else {
-                    Toast.makeText(WorkoutModule4.this, "No workout available to view.", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-        // Add new workout button listener
-        addWorkout.setOnClickListener(v -> {
-            if (addWorkout.getText().toString().equals("Add to Tracker")) {
-                // Add to tracker case
-                if (!workoutList.isEmpty()) {
-                    addToTracker(workoutList);  // Call method to add to the tracker's progress
-                    Toast.makeText(WorkoutModule4.this, "Workout added to tracker!", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(WorkoutModule4.this, "No workout to add.", Toast.LENGTH_SHORT).show();
-                }
-            } else if (addWorkout.getText().toString().equals("View Workout")) {
-                // View workout case
                 if (!workoutList.isEmpty()) {
                     Workout selectedWorkout = workoutList.get(0);  // Assuming first workout is selected
                     viewWorkoutDetails(selectedWorkout);
@@ -157,13 +134,11 @@ public class WorkoutModule4 extends AppCompatActivity {
                     Toast.makeText(WorkoutModule4.this, "No workout available to view.", Toast.LENGTH_SHORT).show();
                 }
             } else {
-                // Navigate to the ExercisesAll activity
                 Intent intent = new Intent(WorkoutModule4.this, Exercises_All.class);
-                // You can pass any extras if needed, like the workout id
-                // intent.putExtra("workout_id", selectedWorkout.getWorkoutId());
                 startActivity(intent);
             }
         });
+
 
         // Navigate back to the main activity
         wm4_Back_txt.setOnClickListener(v -> navigateToMainActivity());
@@ -180,22 +155,21 @@ public class WorkoutModule4 extends AppCompatActivity {
     }
 
 
-
     private void viewWorkoutDetails(Workout selectedWorkout) {
-        // Navigate to the WorkoutDetailActivity with workout details
         SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
-        String sessionToken = sharedPreferences.getString("auth_token", null);
+        String sessionToken = sharedPreferences.getString("auth_token", null);  // Fetch the session token
 
-        if (sessionToken != null && selectedWorkout != null) {
+        if (selectedWorkout != null) {
             Intent intent = new Intent(this, WorkoutDetailActivity.class);
             intent.putExtra("workout_id", selectedWorkout.getWorkoutId());
-            intent.putExtra("session_token", sessionToken);
+            intent.putExtra("session_token", sessionToken);  // Pass session token, even if it's null
             startActivity(intent);
         } else {
-            Log.e("WorkoutModule4", "Workout ID is invalid or session token is null.");
+            Log.e("WorkoutModule4", "Workout ID is invalid.");
             Toast.makeText(this, "Unable to open workout details. Please try again.", Toast.LENGTH_SHORT).show();
         }
     }
+
 
     private void addToTracker(List<Workout> workoutList) {
         if (workoutList.isEmpty()) {
