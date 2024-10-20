@@ -108,9 +108,13 @@ public class ProgressFragment extends Fragment {
         // Handle "View Workout" button click
         viewWorkoutButton.setOnClickListener(v -> {
             int workoutId = sharedPreferences.getInt("workout_id", -1);  // Get workout ID
+            SharedPreferences sharedPreferences = getContext().getSharedPreferences("UserPrefs", Context.MODE_PRIVATE);
+            String sessionToken = sharedPreferences.getString("auth_token", null);  // Fetch the session token
+
             if (workoutId > 0) {
                 Intent intent = new Intent(getActivity(), WorkoutDetailActivity.class);
                 intent.putExtra("workout_id", workoutId);  // Pass workout ID
+                intent.putExtra("session_token", sessionToken);  // Pass session token, even if it might be null
                 startActivity(intent);
             } else {
                 Toast.makeText(getContext(), "No workout selected.", Toast.LENGTH_SHORT).show();
@@ -240,10 +244,14 @@ public class ProgressFragment extends Fragment {
     }
 
     private void viewWorkoutDetails(int workoutId) {
+        SharedPreferences sharedPreferences = getContext().getSharedPreferences("UserPrefs", Context.MODE_PRIVATE);
+        String sessionToken = sharedPreferences.getString("auth_token", null);  // Fetch the session token
+
         if (workoutId > 0) {
             // Start WorkoutDetailActivity with workout_id
             Intent intent = new Intent(getActivity(), WorkoutDetailActivity.class);
             intent.putExtra("workout_id", workoutId);
+            intent.putExtra("session_token", sessionToken);  // Pass session token, even if it's null
             startActivity(intent);
         } else {
             Toast.makeText(getContext(), "Invalid workout ID.", Toast.LENGTH_SHORT).show();

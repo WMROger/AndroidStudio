@@ -1,5 +1,6 @@
 package com.example.heavymetals.Home_LandingPage.Workouts;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.CheckBox;
@@ -42,35 +43,72 @@ public class WorkoutDetailActivity extends AppCompatActivity {
         detailSave = findViewById(R.id.detailSave);
 
         // Get the workout_id and session_token from the intent
-        workoutId = getIntent().getIntExtra("workout_id", -1);
-        sessionToken = getIntent().getStringExtra("session_token");
+        Intent intent = getIntent();
+        workoutId = intent.getIntExtra("workout_id", -1);  // Default to -1 if missing
+        sessionToken = intent.getStringExtra("session_token");  // May return null if missing
 
-        // Add debugging to check the received workout ID
+        // Log the received values for debugging
         Log.d("WorkoutDetailActivity", "Received workout_id: " + workoutId);
+        Log.d("WorkoutDetailActivity", "Received session_token: " + sessionToken);
 
         if (workoutId != -1) {
-            fetchExercises(workoutId, sessionToken);  // Fetch exercises based on the workoutId
-        } else {
-            Log.e("WorkoutDetailActivity", "Invalid workout_id or session_token.");
-        }
-        detailSave.setOnClickListener(v -> {
-            // Send the updated exercise statuses back to the server
-//            updateExercisesOnServer();
-            finish();
-        });
+            if (sessionToken != null) {
+                // Fetch exercises from the server with the session token
+                fetchExercises(workoutId, sessionToken);
+            } else {
+                // Handle missing session token (e.g., show a message or skip server interaction)
+                Log.e("WorkoutDetailActivity", "Session token is missing, limited functionality available.");
+                Toast.makeText(this, "Session token is missing. Some features may be unavailable.", Toast.LENGTH_SHORT).show();
 
-        int workoutId = getIntent().getIntExtra("workout_id", -1);
-        // Validate the workout ID
-        if (workoutId > 0) {
-            Log.d("WorkoutDetailActivity", "Received workout_id: " + workoutId);
-            // Fetch and display workout details here
-            fetchWorkoutDetails(workoutId);
+                // You might still fetch local data or show static workout details
+                fetchWorkoutDetailsLocally(workoutId);
+            }
         } else {
             Log.e("WorkoutDetailActivity", "Invalid workout_id.");
             Toast.makeText(this, "Invalid workout ID.", Toast.LENGTH_SHORT).show();
-            finish(); // Close the activity if the workout ID is invalid
+            finish();  // Close the activity if workout_id is missing
         }
+
+        // Save button to finish the activity
+        detailSave.setOnClickListener(v -> finish());
     }
+
+    // Fetch workout details locally if no session token is available
+    private void fetchWorkoutDetailsLocally(int workoutId) {
+        // Your logic to fetch local data
+        Log.d("WorkoutDetailActivity", "Fetching workout details locally for workout ID: " + workoutId);
+    }
+
+    // Example fetchExercises method with session token
+    private void fetchExercises(int workoutId, String sessionToken) {
+        Log.d("WorkoutDetailActivity", "Fetching exercises for workout ID: " + workoutId);
+
+        Retrofit retrofit = RetrofitClient.getClient(getApplicationContext());
+        ApiService exerciseApi = retrofit.create(ApiService.class);
+
+        // Make the call to fetch exercises using the session token
+        Call<ExerciseResponse> call = exerciseApi.getExercises(sessionToken, workoutId);
+        call.enqueue(new Callback<ExerciseResponse>() {
+            @Override
+            public void onResponse(Call<ExerciseResponse> call, Response<ExerciseResponse> response) {
+                if (response.isSuccessful() && response.body() != null && response.body().isSuccess()) {
+                    adaptersExerciseList = response.body().getExercises();
+
+                    // Display the fetched exercises
+                    displayExercises(adaptersExerciseList);
+                } else {
+                    Log.e("WorkoutDetailActivity", "Failed to fetch exercises.");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ExerciseResponse> call, Throwable t) {
+                Log.e("WorkoutDetailActivity", "Error fetching exercises: " + t.getMessage());
+            }
+        });
+    }
+
+
 
     private void updateExercisesOnServer() {
         Retrofit retrofit = RetrofitClient.getClient(getApplicationContext());
@@ -104,38 +142,8 @@ public class WorkoutDetailActivity extends AppCompatActivity {
         // For example, make an API call here
         Log.d("WorkoutDetailActivity", "Fetching details for workout ID: " + workoutId);
     }
-    private void fetchExercises(int workoutId, String sessionToken) {
-        Log.d("WorkoutDetailActivity", "Fetching exercises for workout ID: " + workoutId);
 
-        Retrofit retrofit = RetrofitClient.getClient(getApplicationContext());
-        ApiService exerciseApi = retrofit.create(ApiService.class);
 
-        // Make the call to fetch exercises
-        Call<ExerciseResponse> call = exerciseApi.getExercises(sessionToken, workoutId);
-        call.enqueue(new Callback<ExerciseResponse>() {
-            @Override
-            public void onResponse(Call<ExerciseResponse> call, Response<ExerciseResponse> response) {
-                if (response.isSuccessful() && response.body() != null && response.body().isSuccess()) {
-                    adaptersExerciseList = response.body().getExercises();
-
-                    // Debugging to log the number of exercises fetched
-                    Log.d("WorkoutDetailActivity", "Number of exercises fetched: " + adaptersExerciseList.size());
-
-                    displayExercises(adaptersExerciseList);  // Display the fetched exercises
-                } else {
-                    Log.e("WorkoutDetailActivity", "Failed to fetch exercises.");
-                    if (response.body() != null) {
-                        Log.e("WorkoutDetailActivity", "Error message: " + response.body().getMessage());
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(Call<ExerciseResponse> call, Throwable t) {
-                Log.e("WorkoutDetailActivity", "Error fetching exercises: " + t.getMessage());
-            }
-        });
-    }
 
 
     // Method to display the fetched exercises in the LinearLayout
