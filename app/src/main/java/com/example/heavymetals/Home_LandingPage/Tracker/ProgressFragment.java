@@ -128,24 +128,22 @@ public class ProgressFragment extends Fragment {
             scheduleContainer.setVisibility(View.VISIBLE);
         });
 
-        // Retrieve workout data from arguments
+        // Get workout details from arguments
         Bundle args = getArguments();
         if (args != null) {
             String workoutTitle = args.getString("workout_title");
             int exerciseCount = args.getInt("exercise_count");
-            int workoutId = sharedPreferences.getInt("workout_id", -1);  // Retrieve workout ID from SharedPreferences
+            int workoutId = args.getInt("workout_id", -1);  // Default to -1 if not passed
 
-            Log.d("ProgressFragment", "Workout ID: " + workoutId); // Add this log
+            Log.d("ProgressFragment", "Workout Title: " + workoutTitle + ", Exercise Count: " + exerciseCount + ", Workout ID: " + workoutId);
 
-            if (workoutTitle != null && exerciseCount > 0 && workoutId > 0) {
+            if (workoutId > 0) {
+                // Call method to display the workout
                 displayWorkout(workoutTitle, exerciseCount, workoutId);
             } else {
                 Log.d("ProgressFragment", "Workout details are missing or invalid");
             }
         }
-        workoutContainer.setVisibility(View.VISIBLE);
-
-
         // Handle "Save Goals" button click
         SaveGoals.setOnClickListener(v -> saveGoals());  // Save goals when Save button is clicked
 
@@ -175,7 +173,8 @@ public class ProgressFragment extends Fragment {
     }
 
     private void displayWorkout(String workoutTitle, int exerciseCount, int workoutId) {
-        Log.d("ProgressFragment", "Displaying workout: " + workoutTitle + ", ID: " + workoutId);
+        // Logic to display the workout in the UI
+        Log.d("ProgressFragment", "Displaying workout: " + workoutTitle + " with " + exerciseCount + " exercises, ID: " + workoutId);
 
         // Hide the first workout details
         workoutTitleTextView.setVisibility(View.GONE);  // Hide the first workout title
@@ -190,38 +189,52 @@ public class ProgressFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+
+        // Ensure the workout container is visible if workout is selected
+        workoutContainer.setVisibility(View.VISIBLE);
+
+        // Load the selected workout details into the UI
         loadSelectedWorkout(workoutTitleTextView, exerciseCountTextView, workoutContainer);
     }
 
+
     private void loadSelectedWorkout(TextView workoutTitleTextView, TextView exerciseCountTextView, LinearLayout workoutContainer) {
         SharedPreferences sharedPreferences = getContext().getSharedPreferences("SelectedWorkout", Context.MODE_PRIVATE);
+
+        // Retrieve workout details from SharedPreferences
         String workoutTitle = sharedPreferences.getString("workout_title", "No workout selected");
         int exerciseCount = sharedPreferences.getInt("exercise_count", 0);
-        int workoutId = sharedPreferences.getInt("workout_id", -1); // Retrieve workout_id
+        int workoutId = sharedPreferences.getInt("workout_id", -1); // Retrieve workout ID
 
-        // Clear any previous workout items to avoid duplicates
+        // Clear previous workout items to avoid duplicates
         workoutContainer.removeAllViews();
 
-        if (!workoutTitle.equals("No workout selected")) {
-            // Inflate the workout item layout (from workout_item.xml)
+        // Check if the workout has been selected
+        if (workoutId != -1 && !workoutTitle.equals("No workout selected")) {
+            // Inflate the workout item layout
             LayoutInflater inflater = LayoutInflater.from(getContext());
             View workoutItemView = inflater.inflate(R.layout.workout_item, workoutContainer, false);
 
-            // Find the TextViews for title and exercise count in the inflated layout
+            // Find the TextViews for workout details
             TextView workoutTitleView = workoutItemView.findViewById(R.id.workoutTitle);
             TextView exerciseCountView = workoutItemView.findViewById(R.id.exerciseCount);
             Button viewWorkoutButton = workoutItemView.findViewById(R.id.viewWorkoutButton);
 
-            // Set the workout details to the inflated view
+            // Set the workout data to the views
             workoutTitleView.setText(workoutTitle);
             exerciseCountView.setText("Exercises: " + exerciseCount);
 
-            // Handle the view workout button click
+            // Set up the 'View Workout' button
             viewWorkoutButton.setOnClickListener(v -> viewWorkoutDetails(workoutId));
 
             // Add the workout item to the container
             workoutContainer.addView(workoutItemView);
+
+            // Ensure the container is visible
+            workoutContainer.setVisibility(View.VISIBLE);
         } else {
+            // Hide the workout container if no workout is selected
+            workoutContainer.setVisibility(View.GONE);
             Toast.makeText(getContext(), "No workout selected", Toast.LENGTH_SHORT).show();
         }
     }

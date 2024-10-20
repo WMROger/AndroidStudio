@@ -211,15 +211,18 @@ public class WorkoutModule4 extends AppCompatActivity {
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.putString("workout_title", selectedWorkout.getTitle());
             editor.putInt("exercise_count", selectedWorkout.getExercises().size());
-            editor.putInt("workout_id", selectedWorkout.getWorkoutId()); // Save the workout_id here
-            editor.apply();
+            editor.putInt("workout_id", selectedWorkout.getWorkoutId()); // Ensure workout ID is properly saved
+            editor.apply(); // Make sure to commit the changes
 
-            Toast.makeText(this, "Workout added to tracker!", Toast.LENGTH_SHORT).show();
+            // Redirect back to MainActivity (if needed)
+            redirectToProgressFragment(selectedWorkout.getTitle(), selectedWorkout.getExercises().size());
         } else {
             Log.e("addToTracker", "Invalid workout ID.");
             Toast.makeText(this, "Invalid workout selection.", Toast.LENGTH_SHORT).show();
         }
     }
+
+
 
 
 
@@ -236,6 +239,7 @@ public class WorkoutModule4 extends AppCompatActivity {
         startActivity(intent);
         finish();  // Close WorkoutModule4
     }
+
 
 
 

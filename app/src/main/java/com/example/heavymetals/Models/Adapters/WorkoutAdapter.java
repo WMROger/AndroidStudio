@@ -186,6 +186,7 @@ public class WorkoutAdapter extends RecyclerView.Adapter<WorkoutAdapter.WorkoutV
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString("workout_title", workout.getTitle());
         editor.putInt("exercise_count", workout.getExercises().size());
+        editor.putInt("workout_id", workout.getWorkoutId());  // Add this line to save workout ID
         editor.apply();
 
         // Notify the user
@@ -196,6 +197,7 @@ public class WorkoutAdapter extends RecyclerView.Adapter<WorkoutAdapter.WorkoutV
         intent.putExtra("showProgressFragment", true);
         intent.putExtra("workout_title", workout.getTitle());
         intent.putExtra("exercise_count", workout.getExercises().size());
+        intent.putExtra("workout_id", workout.getWorkoutId());  // Pass workout ID via intent
         context.startActivity(intent);
     }
 

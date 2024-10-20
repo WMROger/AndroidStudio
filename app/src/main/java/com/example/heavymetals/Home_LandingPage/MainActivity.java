@@ -138,20 +138,50 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             int exerciseCount = intent.getIntExtra("exercise_count", 0);
             showProgressFragment(workoutTitle, exerciseCount);
         }
+
+
+        // Open HomeFragment as default if savedInstanceState is null
+        if (savedInstanceState == null) {
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_container, new HomeFragment())
+                    .commit();
+        }
+
+
+        handleIntent(intent);
     }
 
+    // Centralized method for handling incoming intent
+    private void handleIntent(Intent intent) {
+        if (intent != null && intent.getBooleanExtra("showProgressFragment", false)) {
+            String workoutTitle = intent.getStringExtra("workout_title");
+            int exerciseCount = intent.getIntExtra("exercise_count", 0);
+            showProgressFragment(workoutTitle, exerciseCount);
+        }
+    }
+    
     private void showProgressFragment(String workoutTitle, int exerciseCount) {
         ProgressFragment progressFragment = new ProgressFragment();
+
+        // Retrieve workout_id from SharedPreferences
+        SharedPreferences sharedPreferences = getSharedPreferences("SelectedWorkout", MODE_PRIVATE);
+        int workoutId = sharedPreferences.getInt("workout_id", -1);  // Default to -1 if not found
+
+        Log.d("MainActivity", "Workout ID passed: " + workoutId);
+
+        // Pass the workout details to the ProgressFragment via Bundle
         Bundle args = new Bundle();
         args.putString("workout_title", workoutTitle);
         args.putInt("exercise_count", exerciseCount);
+        args.putInt("workout_id", workoutId);  // Pass workout ID to fragment
         progressFragment.setArguments(args);
 
+        // Replace the current fragment with the ProgressFragment
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragment_container, progressFragment)
+                .addToBackStack(null)  // Add this transaction to the back stack, if needed
                 .commit();
     }
-
 
     @Override
     protected void onNewIntent(Intent intent) {
