@@ -461,10 +461,10 @@
 
                 <Button
                     android:id="@+id/btn_reset"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:text="Reset"
+                    android:layout_width="31dp"
+                    android:layout_height="13dp"
+                    android:layout_gravity="left"
+                    android:text=""
                     app:cornerRadius="25dp" />
             </LinearLayout>
         </ScrollView>
