@@ -18,6 +18,8 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.android.volley.toolbox.StringRequest;
+import com.example.heavymetals.Home_LandingPage.MainActivity;
 import com.example.heavymetals.Models.Adapters.Workout;
 import com.example.heavymetals.Login_RegisterPage.LoginPage.LoginActivity;
 import com.example.heavymetals.Models.Adapters.AdaptersExercise;
@@ -25,9 +27,22 @@ import com.example.heavymetals.Models.Exercise;
 import com.example.heavymetals.R;
 import com.squareup.picasso.Picasso;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+
 
 public class WorkoutModule2 extends AppCompatActivity {
     private TextView WM2discard_txt;
@@ -82,6 +97,7 @@ public class WorkoutModule2 extends AppCompatActivity {
      */
     private AdaptersExercise convertToAdaptersExercise(Exercise exercise) {
         return new AdaptersExercise(
+                exercise.getId(),      // Ensure you are using exercise_list_id here
                 exercise.getName(),
                 1,  // Default sets
                 10, // Default reps
@@ -94,32 +110,176 @@ public class WorkoutModule2 extends AppCompatActivity {
      * Save or discard workout based on the current state.
      */
     private void handleSaveOrDiscard() {
+        String workoutName = workoutNameInput.getText().toString().trim();  // Ensure no leading/trailing spaces
+
         if (WM2discard_txt.getText().toString().equals("Save")) {
-            String workoutName = workoutNameInput.getText().toString();
+            // Save action
             if (workoutName.isEmpty()) {
-                workoutName = "Unnamed Workout";
+                Toast.makeText(this, "Please enter a workout name", Toast.LENGTH_SHORT).show();
+                return;  // Stop further processing
             }
 
-            List<AdaptersExercise> adaptersExerciseList = new ArrayList<>();
-            for (AdaptersExercise adaptersExercise : selectedAdaptersExercises) {
-                int sets = exerciseSetsMap.getOrDefault(adaptersExercise.getName(), 1); // Ensure 1 set minimum
-                adaptersExercise.setSets(sets);
-                adaptersExercise.setReps(10);  // Default reps
-                adaptersExerciseList.add(adaptersExercise);
-            }
+            // Create a new workout with ID 0 initially
+            Workout newWorkout = new Workout(0, workoutName, selectedAdaptersExercises);
 
-            Workout newWorkout = new Workout(0, workoutName, adaptersExerciseList);
-            saveWorkoutIdToPreferences(newWorkout.getWorkoutId());
-            saveWorkoutForUser(newWorkout);
-
-            Intent intent = new Intent(this, WorkoutModule4.class);
-            intent.putExtra("workout", newWorkout);
-            startActivity(intent);
-
+            // Now create the workout on the server (First request)
+            createWorkoutOnServer(newWorkout);
         } else {
-            finish();  // Discard changes
+            // Discard action: Return to MainActivity (Home Fragment)
+            Intent intent = new Intent(WorkoutModule2.this, MainActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+            finish(); // To prevent coming back to this activity
         }
     }
+
+    /**
+     * Sends the workout name and session token to the server to create the workout.
+     */
+    private void createWorkoutOnServer(Workout newWorkout) {
+        String url = "https://heavymetals.scarlet2.io/HeavyMetals/workout_save/add_workout.php";
+
+        // Send request as form data using StringRequest
+        StringRequest stringRequest = new StringRequest(
+                Request.Method.POST, url,
+                response -> {
+                    try {
+                        JSONObject jsonResponse = new JSONObject(response);
+                        if (jsonResponse.getInt("success") == 1) {
+                            int workoutId = jsonResponse.getInt("workout_id");
+                            Log.d(TAG, "Workout created successfully with ID: " + workoutId);
+
+                            // Now save the exercises using the newly created workout_id
+                            newWorkout.setWorkoutId(workoutId);
+                            sendExercisesToServer(newWorkout);
+                        } else {
+                            Toast.makeText(WorkoutModule2.this, jsonResponse.getString("message"), Toast.LENGTH_SHORT).show();
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                },
+                error -> {
+                    Log.e(TAG, "Error response from server: " + error.getMessage());
+                    Toast.makeText(WorkoutModule2.this, "Error creating workout", Toast.LENGTH_SHORT).show();
+                }
+        ) {
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+                params.put("workout_name", newWorkout.getTitle());  // Send workout name as form data
+                params.put("session_token", getSessionToken());     // Send session token as form data
+                return params;
+            }
+        };
+
+        // Add the request to the request queue
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        requestQueue.add(stringRequest);
+    }
+
+    /**
+     * Sends the exercises to the server after the workout has been created.
+     */
+    private void sendExercisesToServer(Workout newWorkout) {
+        String url = "https://heavymetals.scarlet2.io/HeavyMetals/workout_save/add_exercise.php";  // Adjust URL
+
+        // Create JSON object for exercises
+        JSONObject exercisesData = new JSONObject();
+        try {
+            exercisesData.put("workout_id", newWorkout.getWorkoutId());  // Get workout_id from the model
+            exercisesData.put("session_token", getSessionToken());       // Add session token
+
+            // Create exercises array
+            JSONArray exercisesArray = new JSONArray();
+            for (AdaptersExercise exercise : newWorkout.getExercises()) {
+                JSONObject exerciseJson = new JSONObject();
+                exerciseJson.put("exercise_name", exercise.getName());  // Set exercise name
+                exerciseJson.put("sets", exercise.getSets());           // Set sets
+                exerciseJson.put("reps", exercise.getReps());           // Set reps
+                exerciseJson.put("exercise_list_id", exercise.getId()); // Set exercise list ID
+                exercisesArray.put(exerciseJson);                       // Add exercise to array
+            }
+            exercisesData.put("exercises", exercisesArray);
+
+            // Log the constructed JSON for debugging
+            Log.d(TAG, "Sending exercises data to server: " + exercisesData.toString());
+
+            // Send request to save exercises
+            RequestQueue requestQueue = Volley.newRequestQueue(this);
+
+            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
+                    Request.Method.POST, url, exercisesData,
+                    response -> {
+                        Log.d(TAG, "Server response: " + response.toString());
+                        Toast.makeText(WorkoutModule2.this, "Workout and exercises saved successfully!", Toast.LENGTH_SHORT).show();
+
+                        // Redirect to WorkoutModule4 after saving the workout
+                        Intent intent = new Intent(WorkoutModule2.this, WorkoutModule4.class);
+                        intent.putExtra("workout_id", newWorkout.getWorkoutId());
+                        startActivity(intent);
+                        finish(); // To prevent returning to this activity
+
+                    },
+                    error -> {
+                        Log.e(TAG, "Error response from server: " + error.getMessage());
+                        Toast.makeText(WorkoutModule2.this, "Error saving exercises", Toast.LENGTH_SHORT).show();
+                    }
+            );
+
+            // Add the request to the queue
+            requestQueue.add(jsonObjectRequest);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Retrieves the session token from SharedPreferences.
+     */
+    private String getSessionToken() {
+        SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
+        String token = sharedPreferences.getString("auth_token", null);
+        Log.d("WorkoutModule2", "Retrieved Session Token: " + token);
+        return token;
+    }
+
+
+
+
+    /**
+     * Sends the workout data (in JSON format) to the server using Volley.
+     */
+    private void sendJsonToServer(JSONObject workoutData) {
+        String url = "https://heavymetals.scarlet2.io/HeavyMetals/workout_save/add_exercise.php";
+
+        // Log the JSON data being sent to the server
+        Log.d(TAG, "Sending workout data to server: " + workoutData.toString());
+
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
+                Request.Method.POST, url, workoutData,
+                response -> {
+                    // Handle successful response
+                    Log.d(TAG, "Server response: " + response.toString());
+                    Toast.makeText(WorkoutModule2.this, "Workout saved successfully!", Toast.LENGTH_SHORT).show();
+                },
+                error -> {
+                    // Handle error response
+                    if (error.networkResponse != null) {
+                        Log.e(TAG, "Error response from server: " + error.networkResponse.statusCode);
+                        Log.e(TAG, "Error details: " + new String(error.networkResponse.data));
+                    }
+                    Toast.makeText(WorkoutModule2.this, "Error saving workout: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+        );
+
+        // Add the request to the Volley queue
+        requestQueue.add(jsonObjectRequest);
+    }
+
 
     /**
      * Add an exercise to the workout UI.
@@ -159,7 +319,7 @@ public class WorkoutModule2 extends AppCompatActivity {
                     .into(exerciseIcon);
         }
 
-        // Rest of the logic to add exercise UI components...
+        // Remove exercise logic
         removeButton.setOnClickListener(v -> {
             workoutContainer.removeView(exerciseCard);
             exerciseSetsMap.remove(adaptersExercise.getName());
@@ -232,8 +392,6 @@ public class WorkoutModule2 extends AppCompatActivity {
         setsContainer.addView(setLayout);
     }
 
-
-
     /**
      * Update reps for all sets based on the first set's reps.
      */
@@ -243,18 +401,7 @@ public class WorkoutModule2 extends AppCompatActivity {
             View setLayout = setsContainer.getChildAt(i);
             EditText repsEditText = setLayout.findViewById(R.id.reps_edit_text);  // Make sure it's EditText
 
-            // Temporarily remove the TextWatcher before updating the text to avoid triggering it recursively
-            TextWatcher watcher = (TextWatcher) repsEditText.getTag();  // Retrieve the previously stored TextWatcher, if any
-            if (watcher != null) {
-                repsEditText.removeTextChangedListener(watcher);  // Temporarily remove the watcher
-            }
-
             repsEditText.setText(String.valueOf(reps));  // Set the reps text
-
-            // Reattach the TextWatcher after updating the text
-            if (watcher != null) {
-                repsEditText.addTextChangedListener(watcher);  // Reattach the watcher
-            }
         }
     }
 
@@ -266,11 +413,6 @@ public class WorkoutModule2 extends AppCompatActivity {
         EditText firstSetRepsEditText = firstSetLayout.findViewById(R.id.reps_edit_text);  // Ensure this is EditText
         return firstSetRepsEditText.getText().toString();
     }
-
-    /**
-     * Adds a set to the provided container.
-     */
-
 
     /**
      * Check workout container height and adjust "Save" or "Discard" label.

@@ -4,6 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 public class Exercise implements Parcelable {
+    private int id;  // Add id field to represent exercise_list_id
     private String name;
     private String category;  // category field
     private String imageUrl;
@@ -11,14 +12,19 @@ public class Exercise implements Parcelable {
     // Default constructor
     public Exercise() {}
 
-    // Constructor with three parameters (name, category, imageUrl)
-    public Exercise(String name, String category, String imageUrl) {
+    // Constructor with all parameters (id, name, category, imageUrl)
+    public Exercise(int id, String name, String category, String imageUrl) {
+        this.id = id;
         this.name = name;
         this.category = category;
         this.imageUrl = imageUrl;
     }
 
     // Getter methods
+    public int getId() {  // Add getter for id
+        return id;
+    }
+
     public String getName() {
         return name;
     }
@@ -32,6 +38,10 @@ public class Exercise implements Parcelable {
     }
 
     // Setter methods
+    public void setId(int id) {  // Add setter for id
+        this.id = id;
+    }
+
     public void setName(String name) {
         this.name = name;
     }
@@ -46,6 +56,7 @@ public class Exercise implements Parcelable {
 
     // Parcelable methods
     protected Exercise(Parcel in) {
+        id = in.readInt();  // Add id to Parcel
         name = in.readString();
         category = in.readString();
         imageUrl = in.readString();
@@ -70,6 +81,7 @@ public class Exercise implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(id);  // Add id to Parcel
         dest.writeString(name);
         dest.writeString(category);
         dest.writeString(imageUrl);
@@ -78,7 +90,8 @@ public class Exercise implements Parcelable {
     @Override
     public String toString() {
         return "Exercise{" +
-                "name='" + name + '\'' +
+                "id=" + id +  // Include id in toString()
+                ", name='" + name + '\'' +
                 ", category='" + category + '\'' +
                 ", imageUrl='" + imageUrl + '\'' +
                 '}';

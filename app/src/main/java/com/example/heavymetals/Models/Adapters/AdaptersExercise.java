@@ -1,11 +1,11 @@
 package com.example.heavymetals.Models.Adapters;
 
 import com.google.gson.annotations.SerializedName;
-
 import java.io.Serializable;
 
-
 public class AdaptersExercise implements Serializable {
+    @SerializedName("exercise_list_id") // This should match your JSON key
+    private int id;  // Add id field to represent exercise_list_id
     @SerializedName("exercise_name")
     private String name;
     private int sets;
@@ -14,7 +14,8 @@ public class AdaptersExercise implements Serializable {
     private String imageUrl;  // Add imageUrl to handle the image fetching
 
     // Constructor
-    public AdaptersExercise(String name, int sets, int reps, boolean isDone, String imageUrl) {
+    public AdaptersExercise(int id, String name, int sets, int reps, boolean isDone, String imageUrl) {
+        this.id = id;  // Initialize id
         this.name = name;
         this.sets = sets;
         this.reps = reps;
@@ -23,6 +24,14 @@ public class AdaptersExercise implements Serializable {
     }
 
     // Getters and Setters
+    public int getId() {  // Add getter for id
+        return id;
+    }
+
+    public void setId(int id) {  // Add setter for id
+        this.id = id;
+    }
+
     public String getName() {
         return name;
     }
@@ -63,4 +72,3 @@ public class AdaptersExercise implements Serializable {
         this.imageUrl = imageUrl;
     }
 }
-

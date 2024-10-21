@@ -102,8 +102,9 @@ public class Exercises_All extends AppCompatActivity {
                 button.setImageResource(R.drawable.additem_orange);  // Change to selected state
                 button.setTag(R.drawable.additem_orange);
 
-                // Use the actual image URL from the Exercise object
-                Exercise newExercise = new Exercise(exercise.getName(), exercise.getCategory(), exercise.getImageUrl());
+                // Provide an ID, either explicitly or by default
+                int defaultId = exercise.getId();  // Assuming you have access to the ID, or use a placeholder
+                Exercise newExercise = new Exercise(defaultId, exercise.getName(), exercise.getCategory(), exercise.getImageUrl());
                 selectedExercises.add(newExercise);  // Add exercise to list
                 Log.d(TAG, "setupToggleButton: Exercise added: " + exercise.getName());
             } else {
@@ -113,6 +114,7 @@ public class Exercises_All extends AppCompatActivity {
                 Log.d(TAG, "setupToggleButton: Exercise removed: " + exercise.getName());
             }
         });
+
         button.setTag(R.drawable.additem_black);
     }
 
@@ -172,6 +174,7 @@ public class Exercises_All extends AppCompatActivity {
 
                         for (int i = 0; i < exercisesArray.length(); i++) {
                             JSONObject exerciseJson = exercisesArray.getJSONObject(i);
+                            int id = exerciseJson.getInt("id");  // Fetch the id from the JSON response
                             String name = exerciseJson.getString("exercise_name");
 
                             // Use optString instead of getString to handle missing category field
@@ -182,7 +185,7 @@ public class Exercises_All extends AppCompatActivity {
                             Log.d(TAG, "Image URL for " + name + ": " + imageUrl);
 
                             // Create Exercise objects and add to the list
-                            Exercise exercise = new Exercise(name, category, imageUrl);
+                            Exercise exercise = new Exercise(id, name, category, imageUrl);  // Include the id
                             allExercises.add(exercise);  // Add all exercises to the main list
                         }
 

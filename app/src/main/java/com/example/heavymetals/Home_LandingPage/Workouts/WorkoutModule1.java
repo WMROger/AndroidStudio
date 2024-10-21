@@ -34,12 +34,13 @@ public class WorkoutModule1 extends Fragment {
         ImageButton addItemBtn6 = view.findViewById(R.id.addItemBtn6);
 
         // Setup toggle buttons for exercises
-        setupToggleButton(addItemBtn1, new Exercise("Bench Press", "Chest exercise", "image_url"));
-        setupToggleButton(addItemBtn2, new Exercise("Treadmill", "Cardio exercise", "image_url"));
-        setupToggleButton(addItemBtn3, new Exercise("Dead lift", "Back exercise", "image_url"));
-        setupToggleButton(addItemBtn4, new Exercise("Plank", "Core exercise", "image_url"));
-        setupToggleButton(addItemBtn5, new Exercise("Pull ups", "Back exercise", "image_url"));
-        setupToggleButton(addItemBtn6, new Exercise("Bicep Curls", "Arm exercise", "image_url"));
+        // Setup toggle buttons for exercises
+        setupToggleButton(addItemBtn1, new Exercise(120, "Bench Press", "Chest exercise", "image_url"));
+        setupToggleButton(addItemBtn2, new Exercise(121, "Treadmill", "Cardio exercise", "image_url"));
+        setupToggleButton(addItemBtn3, new Exercise(122, "Dead lift", "Back exercise", "image_url"));
+        setupToggleButton(addItemBtn4, new Exercise(123, "Plank", "Core exercise", "image_url"));
+        setupToggleButton(addItemBtn5, new Exercise(124, "Pull ups", "Back exercise", "image_url"));
+        setupToggleButton(addItemBtn6, new Exercise(125, "Bicep Curls", "Arm exercise", "image_url"));
 
         // Retrieve workout count from SharedPreferences
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences("WorkoutData", getActivity().MODE_PRIVATE);

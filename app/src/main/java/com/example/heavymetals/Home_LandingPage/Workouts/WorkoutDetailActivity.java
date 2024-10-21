@@ -69,7 +69,7 @@ public class WorkoutDetailActivity extends AppCompatActivity {
         detailSave.setOnClickListener(v -> {
             if (detailSave.getText().toString().equals("Save")) {
                 saveExercisesLocally(adaptersExerciseList);  // Save the updated exercises list locally
-                Toast.makeText(this, "Exercises saved locally.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Exercises saved.", Toast.LENGTH_SHORT).show();
 
                 // Redirect to WorkoutModule4 or finish the current activity
                 Intent intent1 = new Intent(WorkoutDetailActivity.this, WorkoutModule4.class); // Update the class with your correct module/activity name
