@@ -3,6 +3,8 @@ package com.example.heavymetals.Home_LandingPage.Workouts;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -147,17 +149,7 @@ public class WorkoutModule2 extends AppCompatActivity {
                     .centerCrop()      // Center and crop to make it fit the dimensions
                     .placeholder(R.drawable.human_icon)  // Show placeholder during loading
                     .error(R.drawable.human_icon)        // Show fallback image if loading fails
-                    .into(exerciseIcon, new com.squareup.picasso.Callback() {
-                        @Override
-                        public void onSuccess() {
-                            Log.d(TAG, "Successfully loaded image: " + imageUrl);
-                        }
-
-                        @Override
-                        public void onError(Exception e) {
-                            Log.e(TAG, "Error loading image: " + imageUrl, e);
-                        }
-                    });
+                    .into(exerciseIcon);
 
         } else {
             // Handle empty or invalid URL case
@@ -176,14 +168,14 @@ public class WorkoutModule2 extends AppCompatActivity {
 
         // Default 1 set when exercise is added
         exerciseSetsMap.put(adaptersExercise.getName(), 1);
-        addSetToContainer(setsContainer, 1);
+        addSetToContainer(setsContainer, 1, true);  // First set is editable
 
         // Add set button logic
         addSetButton.setOnClickListener(v -> {
             int currentSetCount = exerciseSetsMap.getOrDefault(adaptersExercise.getName(), 0);
             currentSetCount++;
             exerciseSetsMap.put(adaptersExercise.getName(), currentSetCount);
-            addSetToContainer(setsContainer, currentSetCount);
+            addSetToContainer(setsContainer, currentSetCount, false);  // Subsequent sets follow first
         });
 
         workoutContainer.addView(exerciseCard);
@@ -192,17 +184,93 @@ public class WorkoutModule2 extends AppCompatActivity {
 
     /**
      * Adds a set to the provided container.
+     * If it's the first set, the reps are editable.
+     * Subsequent sets will follow the reps set in the first set.
      */
-    private void addSetToContainer(LinearLayout setsContainer, int setCount) {
+    private void addSetToContainer(LinearLayout setsContainer, int setCount, boolean isFirstSet) {
         View setLayout = LayoutInflater.from(this).inflate(R.layout.set_item_layout, setsContainer, false);
         TextView setNumberTextView = setLayout.findViewById(R.id.set_value);
-        TextView repsTextView = setLayout.findViewById(R.id.reps_edit_text);
+        EditText repsEditText = setLayout.findViewById(R.id.reps_edit_text);  // Ensure this is an EditText
 
         setNumberTextView.setText(String.valueOf(setCount));  // Display the set number
-        repsTextView.setText("10");  // Set default reps to 10
+
+        if (isFirstSet) {
+            // Create a TextWatcher for the first set
+            TextWatcher repsTextWatcher = new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                    // No need to handle
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    if (!s.toString().isEmpty()) {
+                        int reps;
+                        try {
+                            reps = Integer.parseInt(s.toString());
+                        } catch (NumberFormatException e) {
+                            reps = 10; // Default reps if input is invalid
+                        }
+                        updateRepsForAllSets(setsContainer, reps);  // Update reps for all sets
+                    }
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+                    // No need to handle
+                }
+            };
+
+            // Add the TextWatcher to the first set's EditText
+            repsEditText.addTextChangedListener(repsTextWatcher);
+        } else {
+            // For subsequent sets, disable editing and follow the first set's reps
+            repsEditText.setEnabled(false);
+            repsEditText.setText(getFirstSetReps(setsContainer));  // Get the reps from the first set
+        }
 
         setsContainer.addView(setLayout);
     }
+
+
+
+    /**
+     * Update reps for all sets based on the first set's reps.
+     */
+    private void updateRepsForAllSets(LinearLayout setsContainer, int reps) {
+        // Loop through all the sets and update the reps, but without triggering the TextWatcher
+        for (int i = 0; i < setsContainer.getChildCount(); i++) {
+            View setLayout = setsContainer.getChildAt(i);
+            EditText repsEditText = setLayout.findViewById(R.id.reps_edit_text);  // Make sure it's EditText
+
+            // Temporarily remove the TextWatcher before updating the text to avoid triggering it recursively
+            TextWatcher watcher = (TextWatcher) repsEditText.getTag();  // Retrieve the previously stored TextWatcher, if any
+            if (watcher != null) {
+                repsEditText.removeTextChangedListener(watcher);  // Temporarily remove the watcher
+            }
+
+            repsEditText.setText(String.valueOf(reps));  // Set the reps text
+
+            // Reattach the TextWatcher after updating the text
+            if (watcher != null) {
+                repsEditText.addTextChangedListener(watcher);  // Reattach the watcher
+            }
+        }
+    }
+
+    /**
+     * Get the reps from the first set in the container.
+     */
+    private String getFirstSetReps(LinearLayout setsContainer) {
+        View firstSetLayout = setsContainer.getChildAt(0);
+        EditText firstSetRepsEditText = firstSetLayout.findViewById(R.id.reps_edit_text);  // Ensure this is EditText
+        return firstSetRepsEditText.getText().toString();
+    }
+
+    /**
+     * Adds a set to the provided container.
+     */
+
 
     /**
      * Check workout container height and adjust "Save" or "Discard" label.
