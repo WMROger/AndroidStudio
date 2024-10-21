@@ -24,7 +24,6 @@ import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -58,19 +57,12 @@ public class WorkoutDetailActivity extends AppCompatActivity {
         Log.d("WorkoutDetailActivity", "Received workout_id: " + workoutId);
         Log.d("WorkoutDetailActivity", "Received session_token: " + sessionToken);
 
-        // Load exercises from local storage if available
-        List<AdaptersExercise> savedExercises = loadExercisesFromLocal();
-        if (!savedExercises.isEmpty()) {
-            adaptersExerciseList = savedExercises;  // Store the loaded exercises in the list
-            displayExercises(savedExercises);
+        // Always fetch exercises from the server
+        if (workoutId != -1 && sessionToken != null) {
+            fetchExercises(workoutId, sessionToken);
         } else {
-            // Fetch from server if not available locally
-            if (workoutId != -1 && sessionToken != null) {
-                fetchExercises(workoutId, sessionToken);
-            } else {
-                Toast.makeText(this, "Invalid workout ID or session token.", Toast.LENGTH_SHORT).show();
-                finish();  // Close the activity if workout_id or session_token is missing
-            }
+            Toast.makeText(this, "Invalid workout ID or session token.", Toast.LENGTH_SHORT).show();
+            finish();  // Close the activity if workout_id or session_token is missing
         }
 
         // Save button logic
@@ -129,22 +121,28 @@ public class WorkoutDetailActivity extends AppCompatActivity {
                 } else {
                     Log.e("WorkoutDetailActivity", "Failed to update exercises. Response code: " + response.code());
                     handleResponseError(response);
+
+                    // If the server request fails, load exercises from local storage
+                    loadAndDisplayExercisesFromLocal();
                 }
             }
 
             @Override
             public void onFailure(Call<ExerciseResponse> call, Throwable t) {
                 Log.e("WorkoutDetailActivity", "Error fetching exercises: " + t.getMessage());
+
+                // On failure, load exercises from local storage
+                loadAndDisplayExercisesFromLocal();
             }
         });
     }
 
-    // Method to save the list of exercises locally in SharedPreferences
+    // Method to save the list of exercises locally in SharedPreferences, including completed status
     private void saveExercisesLocally(List<AdaptersExercise> exercises) {
         SharedPreferences sharedPreferences = getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
 
-        // Convert the list of exercises to JSON
+        // Convert the list of exercises to JSON, including the "completed" status
         Gson gson = new Gson();
         String exercisesJson = gson.toJson(exercises);
 
@@ -155,7 +153,19 @@ public class WorkoutDetailActivity extends AppCompatActivity {
         Log.d("WorkoutDetailActivity", "Exercises saved locally.");
     }
 
-    // Method to load the exercises list from SharedPreferences
+    // Method to load the exercises list from SharedPreferences and display them
+    private void loadAndDisplayExercisesFromLocal() {
+        List<AdaptersExercise> savedExercises = loadExercisesFromLocal();
+
+        if (!savedExercises.isEmpty()) {
+            adaptersExerciseList = savedExercises;
+            displayExercises(savedExercises);
+        } else {
+            Log.d("WorkoutDetailActivity", "No exercises found in local storage.");
+        }
+    }
+
+    // Load the exercises list from SharedPreferences, including the "completed" status
     private List<AdaptersExercise> loadExercisesFromLocal() {
         SharedPreferences sharedPreferences = getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
 
@@ -163,7 +173,7 @@ public class WorkoutDetailActivity extends AppCompatActivity {
         String exercisesJson = sharedPreferences.getString(KEY_EXERCISES, null);
 
         if (exercisesJson != null) {
-            // Convert the JSON string back to a list of exercises
+            // Convert the JSON string back to a list of exercises, including the "completed" status
             Gson gson = new Gson();
             Type type = new TypeToken<List<AdaptersExercise>>() {}.getType();
             List<AdaptersExercise> exercises = gson.fromJson(exercisesJson, type);
@@ -172,7 +182,6 @@ public class WorkoutDetailActivity extends AppCompatActivity {
             return exercises;
         }
 
-        Log.d("WorkoutDetailActivity", "No exercises found in local storage.");
         return new ArrayList<>();  // Return an empty list if no exercises are found
     }
 
@@ -190,8 +199,18 @@ public class WorkoutDetailActivity extends AppCompatActivity {
 
     // Method to display exercises in the UI
     private void displayExercises(List<AdaptersExercise> exercises) {
-        for (AdaptersExercise adaptersExercise : exercises) {
-            addExerciseToContainer(adaptersExercise);
+        // Load saved completed states from local storage
+        List<AdaptersExercise> savedExercises = loadExercisesFromLocal();
+
+        for (AdaptersExercise fetchedExercise : exercises) {
+            // Check if the fetched exercise exists in the saved list and update the completed status
+            for (AdaptersExercise savedExercise : savedExercises) {
+                if (fetchedExercise.getName().equals(savedExercise.getName())) {  // Use ID for better comparison if available
+                    fetchedExercise.setDone(savedExercise.isDone());
+                    break;
+                }
+            }
+            addExerciseToContainer(fetchedExercise);
         }
     }
 
