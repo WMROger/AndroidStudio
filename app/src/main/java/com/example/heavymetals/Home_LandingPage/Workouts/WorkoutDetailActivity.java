@@ -72,8 +72,6 @@ public class WorkoutDetailActivity extends AppCompatActivity {
                 Toast.makeText(this, "Exercises saved.", Toast.LENGTH_SHORT).show();
 
                 // Redirect to WorkoutModule4 or finish the current activity
-                Intent intent1 = new Intent(WorkoutDetailActivity.this, WorkoutModule4.class); // Update the class with your correct module/activity name
-                startActivity(intent1);
 
                 // Optionally, call finish() if you want to close this activity after the redirect
                 finish();
