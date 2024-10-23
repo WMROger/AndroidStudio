@@ -7,6 +7,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -18,6 +20,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.res.ResourcesCompat;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
@@ -29,6 +32,7 @@ import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -43,7 +47,7 @@ import java.util.Locale;
 
 public class ProfileCreation extends AppCompatActivity {
     private Button btnPFDnext;
-    private EditText dateEditText;
+    private EditText dateEditText,numberEditText;
     private TextView ProfileAdd_create, PCFirstName, PCLastName, PC_Skip;
     private ImageView ProfilePicture;
     private static final int PICK_IMAGE_REQUEST = 100;
@@ -54,6 +58,7 @@ public class ProfileCreation extends AppCompatActivity {
     private static final String PROGRESS_KEY = "progress";
     private static final String STEP1_COMPLETED_KEY = "profile_creation_completed";
     private static final int PROFILE_CREATION_PROGRESS = 25;
+    private static final String PHILIPPINE_PHONE_REGEX = "^(\\+63|0)9\\d{9}$";  // Philippine mobile number regex
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,6 +81,7 @@ public class ProfileCreation extends AppCompatActivity {
         PCFirstName = findViewById(R.id.PCFirstName);
         PCLastName = findViewById(R.id.PCLastName);
         ProfilePicture = findViewById(R.id.ProfilePicture);
+        numberEditText = findViewById(R.id.edit_phonenumber);  // EditText for phone number
         dateEditText = findViewById(R.id.editTextText6);
         btnPFDnext = findViewById(R.id.btnPFDnext);
         PC_Skip = findViewById(R.id.PC_Skip);
@@ -97,15 +103,16 @@ public class ProfileCreation extends AppCompatActivity {
         });
 
         // Handle "Next" button click
+        // Handle "Next" button click
         btnPFDnext.setOnClickListener(v -> {
-            if (areFieldsFilled() && isAgeValid()) {
-                String profilePicUrl = (selectedImageUri != null) ? selectedImageUri.toString() : "https://heavymetals.scarlet2.io/HeavyMetals/assets/default_profile_pic.png";
+            if (areFieldsFilled() && isAgeValid() && isValidPhilippineNumber(numberEditText.getText().toString())) {
+                String profilePicUrl = (selectedImageUri != null) ? selectedImageUri.toString() : "https://heavymetals.scarlet2.io/HeavyMetals/assets/ic_profile.svg";
 
                 // Format date for the server
                 String dateOfBirthFormatted = formatDateForServer(dateEditText.getText().toString());
 
                 // Save the user profile with formatted date
-                saveUserProfile(userId, Uri.parse(profilePicUrl), dateOfBirthFormatted);
+                saveUserProfile(userId, Uri.parse(profilePicUrl), dateOfBirthFormatted, numberEditText.getText().toString());
 
                 // Mark step as completed and proceed
                 markStepAsCompleted();
@@ -114,6 +121,8 @@ public class ProfileCreation extends AppCompatActivity {
                 startActivity(intent);
             } else if (!isAgeValid()) {
                 Toast.makeText(ProfileCreation.this, "You must be at least 10 years old to proceed.", Toast.LENGTH_SHORT).show();
+            } else if (!isValidPhilippineNumber(numberEditText.getText().toString())) {
+                numberEditText.setError("Invalid Philippine phone number. Must start with +639 or 09 and contain 10 digits.");
             } else {
                 Toast.makeText(ProfileCreation.this, "Please fill all the fields", Toast.LENGTH_SHORT).show();
             }
@@ -121,21 +130,37 @@ public class ProfileCreation extends AppCompatActivity {
 
     }
 
-    private void saveUserProfile(String userId, Uri profilePicUri, String dateOfBirth) {
+    // Save user profile, including phone number, first name, and last name
+    private void saveUserProfile(String userId, Uri profilePicUri, String dateOfBirth, String phoneNumber) {
+        // Fetch first name and last name from the UI
+        String firstName = PCFirstName.getText().toString().trim();
+        String lastName = PCLastName.getText().toString().trim();
+
+        // Check if any required field is missing
+        if (firstName.isEmpty() || lastName.isEmpty() || phoneNumber.isEmpty() || userId == null || userId.isEmpty()) {
+            runOnUiThread(() -> Toast.makeText(ProfileCreation.this, "Error: Missing required fields (user_id, first_name, last_name, phone_number)", Toast.LENGTH_LONG).show());
+            return;  // Don't proceed if any field is missing
+        }
+
         new Thread(() -> {
             try {
-                File profilePicFile = new File(getRealPathFromURI(profilePicUri)); // Convert Uri to File
-
-                // Create Multipart body
+                // Create Multipart body without the profile picture by default
                 okhttp3.MultipartBody.Builder builder = new okhttp3.MultipartBody.Builder()
                         .setType(okhttp3.MultipartBody.FORM)
                         .addFormDataPart("user_id", userId)
-                        .addFormDataPart("date_of_birth", dateOfBirth);
+                        .addFormDataPart("first_name", firstName)  // Include first name
+                        .addFormDataPart("last_name", lastName)    // Include last name
+                        .addFormDataPart("date_of_birth", dateOfBirth)
+                        .addFormDataPart("phone_number", phoneNumber);  // Add phone number
 
-                // Add the profile picture if it exists
-                if (profilePicFile != null) {
-                    builder.addFormDataPart("profile_pic", profilePicFile.getName(),
-                            okhttp3.RequestBody.create(profilePicFile, okhttp3.MediaType.parse("image/*")));
+                // Check if profile picture is selected, otherwise proceed without the picture
+                if (profilePicUri != null) {
+                    File profilePicFile = new File(getRealPathFromURI(profilePicUri));
+                    if (profilePicFile.exists()) {
+                        // Add selected profile picture to the request
+                        builder.addFormDataPart("profile_pic", profilePicFile.getName(),
+                                okhttp3.RequestBody.create(profilePicFile, okhttp3.MediaType.parse("image/*")));
+                    }
                 }
 
                 okhttp3.RequestBody requestBody = builder.build();
@@ -158,21 +183,19 @@ public class ProfileCreation extends AppCompatActivity {
                     runOnUiThread(() -> {
                         if (success) {
                             Toast.makeText(ProfileCreation.this, "Profile saved successfully!", Toast.LENGTH_LONG).show();
-
-                            // Intent to move to the next activity upon successful profile save
+                            // Proceed to FitnessDeclaration activity after success response
                             markStepAsCompleted();
                             updateProgress(PROFILE_CREATION_PROGRESS);
-
-                            // Move to FitnessDeclaration activity
                             Intent intent = new Intent(ProfileCreation.this, FitnessDeclaration.class);
                             startActivity(intent);
-                            finish();  // Optional: Finish current activity so it cannot be returned to
-
+                            finish();  // Optional: Finish current activity
                         } else {
                             String message = jsonResponse.optString("message", "Unknown error occurred");
                             Toast.makeText(ProfileCreation.this, "Error: " + message, Toast.LENGTH_LONG).show();
                         }
                     });
+                } else {
+                    runOnUiThread(() -> Toast.makeText(ProfileCreation.this, "Error: Failed to save profile", Toast.LENGTH_LONG).show());
                 }
 
             } catch (Exception e) {
@@ -180,6 +203,18 @@ public class ProfileCreation extends AppCompatActivity {
                 runOnUiThread(() -> Toast.makeText(ProfileCreation.this, "Error saving profile. Please try again.", Toast.LENGTH_LONG).show());
             }
         }).start();
+    }
+
+
+    // Validate phone number based on Philippine format
+    private boolean isValidPhilippineNumber(String phoneNumber) {
+        return phoneNumber.matches(PHILIPPINE_PHONE_REGEX);
+    }
+
+    // Check if fields are filled
+    private boolean areFieldsFilled() {
+        return !dateEditText.getText().toString().trim().isEmpty() &&
+                !numberEditText.getText().toString().trim().isEmpty();  // Ensure phone number field is filled
     }
 
     private String getRealPathFromURI(Uri uri) {
@@ -270,10 +305,6 @@ public class ProfileCreation extends AppCompatActivity {
         editor.apply();
     }
 
-    // Check if fields are filled
-    private boolean areFieldsFilled() {
-        return !dateEditText.getText().toString().trim().isEmpty();
-    }
 
     // Date picker dialog
     private void showDatePickerDialog() {

@@ -139,22 +139,6 @@ public class MeasurementsActivity extends AppCompatActivity {
         originalValues.put("right_calf", rightCalfTextView.getText().toString());
     }
 
-    private void restoreOriginalValues() {
-        // Restore the original values if editing is canceled
-        weightTextView.setText(originalValues.get("weight"));
-        heightTextView.setText(originalValues.get("height"));
-        chestTextView.setText(originalValues.get("chest"));
-        shoulderTextView.setText(originalValues.get("shoulder"));
-        waistTextView.setText(originalValues.get("waist"));
-        hipsTextView.setText(originalValues.get("hips"));
-        leftBicepTextView.setText(originalValues.get("left_bicep"));
-        rightBicepTextView.setText(originalValues.get("right_bicep"));
-        leftForearmTextView.setText(originalValues.get("left_forearm"));
-        rightForearmTextView.setText(originalValues.get("right_forearm"));
-        leftCalfTextView.setText(originalValues.get("left_calf"));
-        rightCalfTextView.setText(originalValues.get("right_calf"));
-    }
-
     private void enableEditing() {
         // Enable all the EditText fields except for BMI
         weightTextView.setEnabled(true);
@@ -213,22 +197,76 @@ public class MeasurementsActivity extends AppCompatActivity {
     }
 
     private void saveMeasurements() {
-        // First, calculate the new BMI before saving
-        double weight = Double.parseDouble(weightTextView.getText().toString());
-        double height = Double.parseDouble(heightTextView.getText().toString()) / 100; // Convert cm to meters
-        double bmi = calculateBMI(weight, height);
+        try {
+            // Map to hold the updated values
+            Map<String, String> params = new HashMap<>();
 
-        // Send the updated measurements and BMI back to the server
+            SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
+            String userId = sharedPreferences.getString("user_id", null);
+
+            if (userId != null) {
+                params.put("user_id", userId);
+
+                // Use parseOrDefault for all fields to handle numeric parsing
+                params.put("body_weight", String.valueOf(parseOrDefault(weightTextView, originalValues.get("weight"))));
+                params.put("height", String.valueOf(parseOrDefault(heightTextView, originalValues.get("height"))));
+                params.put("chest", String.valueOf(parseOrDefault(chestTextView, originalValues.get("chest"))));
+                params.put("shoulder", String.valueOf(parseOrDefault(shoulderTextView, originalValues.get("shoulder"))));
+                params.put("waist", String.valueOf(parseOrDefault(waistTextView, originalValues.get("waist"))));
+                params.put("hips", String.valueOf(parseOrDefault(hipsTextView, originalValues.get("hips"))));
+                params.put("left_bicep", String.valueOf(parseOrDefault(leftBicepTextView, originalValues.get("left_bicep"))));
+                params.put("right_bicep", String.valueOf(parseOrDefault(rightBicepTextView, originalValues.get("right_bicep"))));
+                params.put("left_forearm", String.valueOf(parseOrDefault(leftForearmTextView, originalValues.get("left_forearm"))));
+                params.put("right_forearm", String.valueOf(parseOrDefault(rightForearmTextView, originalValues.get("right_forearm"))));
+                params.put("left_calf", String.valueOf(parseOrDefault(leftCalfTextView, originalValues.get("left_calf"))));
+                params.put("right_calf", String.valueOf(parseOrDefault(rightCalfTextView, originalValues.get("right_calf"))));
+
+                // Calculate BMI only if weight or height have changed
+                double weight = parseOrDefault(weightTextView, originalValues.get("weight"));
+                double height = parseOrDefault(heightTextView, originalValues.get("height")) / 100; // Convert cm to meters
+                double bmi = calculateBMI(weight, height);
+                params.put("bmi", String.format("%.2f", bmi));  // Send calculated BMI
+
+                // Send the updated values to the server
+                sendUpdateRequest(params);
+            }
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+            Toast.makeText(this, "Invalid measurement input. Please check your values.", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+
+    // Helper method to parse or fall back to default value (from original)
+    private double parseOrDefault(EditText editText, String originalValue) throws NumberFormatException {
+        String text = editText.getText().toString().trim();
+        if (text.isEmpty()) {
+            // If empty, use the original value
+            return Double.parseDouble(originalValue.replaceAll("[^\\d.]", ""));
+        }
+        // If non-empty, parse the current value
+        return Double.parseDouble(text.replaceAll("[^\\d.]", ""));
+    }
+
+
+    // Method to calculate BMI
+    private double calculateBMI(double weight, double heightInMeters) {
+        return weight / (heightInMeters * heightInMeters);
+    }
+
+    private void sendUpdateRequest(Map<String, String> params) {
+        // Define the URL for the update request
         String url = "https://heavymetals.scarlet2.io/HeavyMetals/user_details/update_measurements.php";
+
+        // Create a request queue using Volley
         RequestQueue queue = Volley.newRequestQueue(this);
 
+        // Create a new StringRequest
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
                 response -> {
-                    // Log the raw response for debugging
+                    // Handle the server's response
                     Log.d("ServerResponse", "Response: " + response);
-
                     try {
-                        // Try to parse the JSON response
                         JSONObject jsonResponse = new JSONObject(response);
                         boolean success = jsonResponse.getBoolean("success");
 
@@ -243,44 +281,20 @@ public class MeasurementsActivity extends AppCompatActivity {
                     }
                 },
                 error -> {
+                    // Handle network or request errors
                     error.printStackTrace();
                     Toast.makeText(MeasurementsActivity.this, "Network error. Please try again.", Toast.LENGTH_SHORT).show();
                 }) {
             @Override
             protected Map<String, String> getParams() {
-                Map<String, String> params = new HashMap<>();
-                SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
-                String userId = sharedPreferences.getString("user_id", null);
-
-                if (userId != null) {
-                    params.put("user_id", userId);
-                    params.put("body_weight", weightTextView.getText().toString());
-                    params.put("height", heightTextView.getText().toString());
-                    params.put("chest", chestTextView.getText().toString());
-                    params.put("shoulder", shoulderTextView.getText().toString());
-                    params.put("waist", waistTextView.getText().toString());
-                    params.put("hips", hipsTextView.getText().toString());
-                    params.put("left_bicep", leftBicepTextView.getText().toString());
-                    params.put("right_bicep", rightBicepTextView.getText().toString());
-                    params.put("left_forearm", leftForearmTextView.getText().toString());
-                    params.put("right_forearm", rightForearmTextView.getText().toString());
-                    params.put("left_calf", leftCalfTextView.getText().toString());
-                    params.put("right_calf", rightCalfTextView.getText().toString());
-                    params.put("bmi", String.format("%.2f", bmi));  // Send calculated BMI
-                }
+                // Return the params that will be sent in the POST request
                 return params;
             }
         };
 
-    // Add the request to the RequestQueue
+        // Add the request to the queue
         queue.add(stringRequest);
     }
-
-    // Method to calculate BMI
-    private double calculateBMI(double weight, double heightInMeters) {
-        return weight / (heightInMeters * heightInMeters);
-    }
-
 
 
     private void fetchMeasurements() {
