@@ -24,7 +24,7 @@
         android:layout_width="334dp"
         android:layout_height="36dp"
         android:paddingTop="1dp"
-        android:text="The info you share will help us. We’ll do out best  fully personalized your experience and time with us."
+        android:text="The info you share will help us. We’ll do our best  fully personalized your experience and time with us."
         android:textAlignment="center"
         android:textColor="#FFFFFF"
         android:textSize="12sp"

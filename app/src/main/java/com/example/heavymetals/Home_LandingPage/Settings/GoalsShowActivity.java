@@ -1,5 +1,6 @@
 package com.example.heavymetals.Home_LandingPage.Settings;
 
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.widget.Button;
@@ -84,9 +85,18 @@ public class GoalsShowActivity extends AppCompatActivity {
             @Override
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<>();
-                params.put("user_id", "1"); // Replace with dynamic user_id
+                // Retrieve the logged-in user ID from SharedPreferences
+                SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
+                String userId = sharedPreferences.getString("user_id", null);
+
+                if (userId != null) {
+                    params.put("user_id", userId); // Use the actual user_id
+                } else {
+                    Toast.makeText(GoalsShowActivity.this, "User ID not found", Toast.LENGTH_SHORT).show();
+                }
                 return params;
             }
+
         };
 
         queue.add(stringRequest);
