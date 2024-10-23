@@ -188,7 +188,30 @@
             android:paddingLeft="20sp"
             android:textColor="@color/white"
             android:textColorHint="#FDFDFD" />
+        <TextView
+            android:id="@+id/textView29"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Phone Number"
+            android:textColor="#FFFFFF"
+            android:textSize="12sp" />
 
+
+        <EditText
+            android:id="@+id/edit_phonenumber"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginBottom="10sp"
+            android:background="@drawable/button_background"
+            android:ems="10"
+            android:hint="+63"
+            android:inputType="text"
+            android:paddingLeft="20sp"
+            android:paddingEnd="20sp"
+            android:paddingBottom="0sp"
+            android:paddingTop="0sp"
+            android:textColor="@color/white"
+            android:textColorHint="@color/gray" />
         <!-- Date of Birth Input -->
         <TextView
             android:id="@+id/textView38"
@@ -216,6 +239,7 @@
     </LinearLayout>
 
     <!-- Next Button -->
+
     <Button
         android:id="@+id/btnPFDnext"
         android:layout_width="290dp"
@@ -225,9 +249,10 @@
         app:cornerRadius="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout2"
-        app:layout_constraintVertical_bias="0.337" />
+        app:layout_constraintVertical_bias="0.496" />
 
     <TextView
         android:id="@+id/PC_Skip"
