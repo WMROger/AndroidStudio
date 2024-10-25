@@ -19,7 +19,7 @@
         android:fontFamily="@font/konkhmer_sleokchher"
         android:gravity="center"
         android:text="@string/BUG"
-        android:textColor="#FFFFFF"
+        android:textColor="@color/white"
         android:textSize="14sp"
         app:layout_constraintBottom_toTopOf="@+id/textView36"
         app:layout_constraintEnd_toEndOf="parent"
@@ -31,7 +31,7 @@
     <Button
         android:id="@+id/Settings_LogoutButton"
         android:layout_width="357dp"
-        android:layout_height="58dp"
+        android:layout_height="55dp"
         android:text="Log out"
         android:textAllCaps="false"
         app:cornerRadius="20dp"
@@ -62,7 +62,7 @@
     <LinearLayout
         android:id="@+id/linearLayout8"
         android:layout_width="357dp"
-        android:layout_height="180dp"
+        android:layout_height="200dp"
         android:orientation="vertical"
         app:layout_constraintBottom_toTopOf="@+id/Delete_account"
         app:layout_constraintEnd_toEndOf="parent"
@@ -77,14 +77,13 @@
             android:layout_marginStart="15dp"
             android:fontFamily="@font/konkhmer_sleokchher"
             android:text="Application"
-            android:textColor="#FFFFFF"
+            android:textColor="@color/white"
             android:textSize="18sp" />
 
         <Button
             android:id="@+id/Settings_Help_Center"
             android:layout_width="357dp"
             android:layout_height="58dp"
-            android:layout_marginBottom="-10dp"
             android:backgroundTint="#000000"
             android:drawableEnd="@drawable/right_arrow_icon"
             android:text="Help Center"
@@ -98,7 +97,6 @@
             android:id="@+id/Settings_Licenses"
             android:layout_width="357dp"
             android:layout_height="58dp"
-            android:layout_marginBottom="-10dp"
             android:backgroundTint="#000000"
             android:drawableEnd="@drawable/right_arrow_icon"
             android:text="Licenses"
@@ -140,7 +138,7 @@
 
     <LinearLayout
         android:layout_width="357dp"
-        android:layout_height="180dp"
+        android:layout_height="200dp"
         android:orientation="vertical"
         app:layout_constraintBottom_toTopOf="@+id/linearLayout8"
         app:layout_constraintEnd_toEndOf="parent"
@@ -155,14 +153,13 @@
             android:layout_marginStart="15dp"
             android:fontFamily="@font/konkhmer_sleokchher"
             android:text="Account"
-            android:textColor="#FFFFFF"
+            android:textColor="@color/white"
             android:textSize="18sp" />
 
         <Button
             android:id="@+id/Settings_Profile"
             android:layout_width="357dp"
             android:layout_height="58dp"
-            android:layout_marginBottom="-10dp"
             android:backgroundTint="#000000"
             android:drawableEnd="@drawable/right_arrow_icon"
             android:text="Profile"
@@ -176,7 +173,6 @@
             android:id="@+id/Settings_Goals"
             android:layout_width="357dp"
             android:layout_height="58dp"
-            android:layout_marginBottom="-10dp"
             android:backgroundTint="#000000"
             android:drawableEnd="@drawable/right_arrow_icon"
             android:text="Goals"
